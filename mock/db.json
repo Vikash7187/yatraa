@@ -1,0 +1,122 @@
+{
+  "packages": [
+    {
+      "id": 1,
+      "name": "Taj Lake Palace Experience",
+      "location": "Udaipur, Rajasthan",
+      "price": 75000,
+      "duration": "3 Days / 2 Nights",
+      "rating": 4.9,
+      "image": "/images/packages/taj-lake-palace.jpg",
+      "mealPlan": "All Inclusive",
+      "description": "Experience royal luxury in this floating palace on Lake Pichola",
+      "amenities": ["Swimming Pool", "Spa", "Fine Dining", "Lake View"],
+      "category": "Palace",
+      "rooms": ["Luxury Room", "Royal Suite", "Grand Royal Suite"],
+      "activities": ["Heritage Walk", "Boat Ride", "Cultural Show"]
+    },
+    {
+      "id": 2,
+      "name": "Santorini Grace",
+      "location": "Santorini, Greece",
+      "price": 95000,
+      "duration": "5 Days / 4 Nights",
+      "rating": 4.8,
+      "image": "/images/packages/santorini-grace.jpg",
+      "mealPlan": "Breakfast & Dinner",
+      "description": "Luxurious cliffside retreat with stunning Aegean Sea views",
+      "amenities": ["Infinity Pool", "Mediterranean Spa", "Sunset Terrace", "Wine Cellar"],
+      "category": "Resort",
+      "rooms": ["Sea View Suite", "Plunge Pool Suite", "Grace Suite"],
+      "activities": ["Wine Tasting", "Sunset Cruise", "Greek Cooking Class"]
+    },
+    {
+      "id": 3,
+      "name": "Burj Al Arab Experience",
+      "location": "Dubai, UAE",
+      "price": 150000,
+      "duration": "4 Days / 3 Nights",
+      "rating": 4.9,
+      "image": "/images/packages/burj-al-arab.jpg",
+      "mealPlan": "All Inclusive",
+      "description": "Ultimate luxury in the world's most iconic seven-star hotel",
+      "amenities": ["Private Beach", "Helipad", "Gold-Plated Interiors", "Underwater Restaurant"],
+      "category": "Ultra Luxury",
+      "rooms": ["Deluxe Suite", "Panoramic Suite", "Royal Suite"],
+      "activities": ["Desert Safari", "Yacht Tour", "Sky View Restaurant"]
+    },
+    {
+      "id": 4,
+      "name": "Amalfi Coast Retreat",
+      "location": "Positano, Italy",
+      "price": 85000,
+      "duration": "6 Days / 5 Nights",
+      "rating": 4.7,
+      "image": "/images/packages/amalfi-retreat.jpg",
+      "mealPlan": "Breakfast & Dinner",
+      "description": "Cliffside luxury with breathtaking Mediterranean views",
+      "amenities": ["Panoramic Pool", "Italian Spa", "Michelin Restaurant", "Private Beach Access"],
+      "category": "Boutique",
+      "rooms": ["Sea View Room", "Deluxe Suite", "Presidential Suite"],
+      "activities": ["Cooking Class", "Boat Tours", "Wine Tasting"]
+    },
+    {
+      "id": 5,
+      "name": "Rambagh Palace Heritage",
+      "location": "Jaipur, India",
+      "price": 65000,
+      "duration": "3 Days / 2 Nights",
+      "rating": 4.7,
+      "image": "/images/packages/rambagh-palace.jpg",
+      "mealPlan": "All Inclusive",
+      "description": "Indulge in Rajasthani hospitality at its finest",
+      "amenities": ["Royal Garden", "Polo Bar", "Spa", "Indoor Pool"],
+      "category": "Palace",
+      "rooms": ["Palace Room", "Historical Suite", "Royal Suite"],
+      "activities": ["Heritage Walk", "Polo Match", "Afternoon Tea"]
+    },
+    {
+      "id": 6,
+      "name": "Maldives Water Villa",
+      "location": "Male, Maldives",
+      "price": 120000,
+      "duration": "5 Days / 4 Nights",
+      "rating": 4.8,
+      "image": "/images/packages/maldives-villa.jpg",
+      "mealPlan": "All Inclusive",
+      "description": "Overwater luxury in pristine tropical paradise",
+      "amenities": ["Private Pool", "Glass Floor", "Direct Ocean Access", "Sunset Deck"],
+      "category": "Resort",
+      "rooms": ["Water Villa", "Sunset Villa", "Ocean Suite"],
+      "activities": ["Snorkeling", "Spa Treatments", "Sunset Cruise"]
+    }
+  ],
+  "featured": [1, 2, 3],
+  "profiles": [
+    {
+      "id": 1,
+      "name": "Suhan Kumar",
+      "email": "suhan@example.com",
+      "bookings": [1]
+    },
+    {
+      "id": 2,
+      "name": "Priya Sharma",
+      "email": "priya@example.com",
+      "bookings": []
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "profileId": 1,
+      "packageId": 2,
+      "guests": 2,
+      "startDate": "2025-09-15",
+      "endDate": "2025-09-19",
+      "roomType": "Sea View Suite",
+      "status": "confirmed",
+      "createdAt": "2025-09-11T10:00:00Z"
+    }
+  ]
+}
