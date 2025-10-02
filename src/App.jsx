@@ -7,15 +7,22 @@ import PackageDetail from './components/Packages/PackageDetail';
 import Bookings from './components/Bookings/Bookings';
 import BookingForm from './components/Booking/BookingForm';
 import About from './components/About/About';
+import Contact from './components/Contact/Contact';
 import Footer from './components/Footer/Footer';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
+import UserProfile from './components/Profile/UserProfile';
+import AddPackage from './components/Profile/AddPackage';
+import ClerkConfigError from './components/ErrorBoundary/ClerkConfigError';
+import PackageErrorBoundary from './components/ErrorBoundary/PackageErrorBoundary';
 import { useAuth } from './context/AuthContext';
 import { SignIn, SignUp } from '@clerk/clerk-react';
 import './App.css';
 
 function App() {
   const { user } = useAuth();
+  const hasClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  
   return (
     <div className="App">
       <Navbar />
@@ -23,12 +30,24 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/destinations" element={<Destinations />} />
         <Route path="/packages" element={<Packages />} />
-        <Route path="/packages/:id" element={<PackageDetail />} />
-        <Route path="/bookings" element={<Bookings />} />
+        <Route path="/packages/:id" element={
+          <PackageErrorBoundary>
+            <PackageDetail />
+          </PackageErrorBoundary>
+        } />
         <Route path="/booking/:id" element={<BookingForm />} />
-        <Route path="/login" element={<SignIn redirectUrl="/bookings" />} />
-        <Route path="/register" element={<SignUp redirectUrl="/bookings" />} />
+        <Route path="/profile" element={<UserProfile />} />
+        <Route path="/add-package" element={<AddPackage />} />
+        <Route 
+          path="/login" 
+          element={hasClerkKey ? <SignIn redirectUrl="/" /> : <ClerkConfigError />} 
+        />
+        <Route 
+          path="/register" 
+          element={hasClerkKey ? <SignUp redirectUrl="/" /> : <ClerkConfigError />} 
+        />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
       <Footer />
     </div>

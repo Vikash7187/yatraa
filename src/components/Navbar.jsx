@@ -20,7 +20,6 @@ const pages = [
   { name: 'Home', path: '/' },
   { name: 'Destinations', path: '/destinations' },
   { name: 'Packages', path: '/packages' },
-  { name: 'Bookings', path: '/bookings' },
   { name: 'About', path: '/about' },
 ];
 
@@ -170,7 +169,8 @@ const Navbar = () => {
               <Button color="inherit" component={RouterLink} to="/register">Register</Button>
             </SignedOut>
             <SignedIn>
-              <Button color="inherit" component={RouterLink} to="/bookings">My Bookings</Button>
+              <Button color="inherit" component={RouterLink} to="/profile">My Profile</Button>
+              <Button color="inherit" component={RouterLink} to="/add-package">Add Package</Button>
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
           </Box>

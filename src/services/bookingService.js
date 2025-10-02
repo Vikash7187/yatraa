@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Replace with your actual API endpoint
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+// Use local API endpoint for mock server
+const API_BASE_URL = 'http://localhost:3002/api';
 
 export const checkAvailability = async (packageId, startDate, endDate, guests) => {
   try {
@@ -31,6 +31,24 @@ export const createBooking = async (bookingData) => {
     return response.data;
   } catch (error) {
     throw new Error('Failed to create booking');
+  }
+};
+
+export const getUserBookings = async (userId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/bookings?profileId=${userId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get user bookings');
+  }
+};
+
+export const getPackageById = async (packageId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/packages/${packageId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get package details');
   }
 };
 

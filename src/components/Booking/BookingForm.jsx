@@ -102,6 +102,18 @@ const BookingForm = () => {
   const [availability, setAvailability] = useState(null);
 
   useEffect(() => {
+    // Pre-fill user data if available
+    if (clerkUser) {
+      setFormData(prev => ({
+        ...prev,
+        firstName: clerkUser.firstName || '',
+        lastName: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0]?.emailAddress || '',
+      }));
+    }
+  }, [clerkUser]);
+
+  useEffect(() => {
     // Fetch package details based on ID (replace with actual API call)
     const fetchedPackage = {
       id: 1,
@@ -211,20 +223,29 @@ const BookingForm = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      if (!isSignedIn) { navigate('/login'); return; }
+      if (!isSignedIn) { 
+        navigate('/login'); 
+        return; 
+      }
+      
       const bookingResponse = await createBooking({
         ...formData,
         packageId: id,
         profileId: user?.id,
         clerkUserId: clerkUser?.id,
-        totalPrice: dynamicPrice?.total || packageDetails.price * formData.guests,
+        totalPrice: dynamicPrice?.total || (packageDetails?.price * formData.guests) || 0,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        name: `${formData.firstName} ${formData.lastName}`
       });
       
-      // Navigate to confirmation page with booking details
-      navigate('/bookings', { 
+      // Navigate to home page with success message, then they can check profile for bookings
+      navigate('/', { 
         state: { 
           bookingConfirmed: true,
-          bookingDetails: bookingResponse 
+          bookingDetails: bookingResponse,
+          message: 'Booking confirmed successfully! Check your profile to view booking details.'
         } 
       });
     } catch (error) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -13,6 +13,7 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Alert,
 } from '@mui/material';
 import {
   LocationOn,
@@ -36,14 +37,68 @@ import Newsletter from './Newsletter';
 const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [showBookingSuccess, setShowBookingSuccess] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // Simple loading state
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Check if user came from successful booking
+  React.useEffect(() => {
+    if (location.state?.bookingConfirmed) {
+      setShowBookingSuccess(true);
+      // Clear the state to prevent showing the message on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleGetQuote = () => {
     navigate('/packages');
   };
 
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Typography variant="h4">Loading...</Typography>
+      </Box>
+    );
+  }
+
   return (
-    <Box>
+    <Box sx={{ minHeight: '100vh' }}>
+      {/* Success Alert for New Bookings */}
+      {showBookingSuccess && (
+        <Container maxWidth="lg" sx={{ pt: 12, pb: 2 }}>
+          <Alert 
+            severity="success" 
+            onClose={() => setShowBookingSuccess(false)}
+            sx={{ mb: 2 }}
+          >
+            <Typography variant="h6" gutterBottom>
+              🎉 Booking Confirmed Successfully!
+            </Typography>
+            <Typography>
+              {location.state?.message || 'Your hotel booking has been confirmed. Check your profile to view booking details.'}
+            </Typography>
+            <Button 
+              variant="outlined" 
+              size="small" 
+              onClick={() => navigate('/profile')} 
+              sx={{ mt: 1 }}
+            >
+              View My Bookings
+            </Button>
+          </Alert>
+        </Container>
+      )}
+      
       <Hero />
       <TopDestinations />
       <FeaturedPackages />

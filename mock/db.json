@@ -2,107 +2,453 @@
   "packages": [
     {
       "id": 1,
-      "name": "Taj Lake Palace Experience",
+      "name": "Taj Lake Palace Udaipur",
+      "type": "Palace",
       "location": "Udaipur, Rajasthan",
-      "price": 75000,
-      "duration": "3 Days / 2 Nights",
+      "price": 45000,
+      "duration": 3,
       "rating": 4.9,
-      "image": "/images/packages/taj-lake-palace.jpg",
+      "reviews": 324,
+      "image": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       "mealPlan": "All Inclusive",
-      "description": "Experience royal luxury in this floating palace on Lake Pichola",
-      "amenities": ["Swimming Pool", "Spa", "Fine Dining", "Lake View"],
+      "description": "Experience royal luxury in this floating palace on Lake Pichola, one of India's most iconic heritage hotels",
+      "highlights": [
+        "Floating Palace Hotel",
+        "Lake Pichola Views",
+        "Royal Heritage Experience",
+        "Fine Dining",
+        "Luxury Spa"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Royal Arrival",
+          "description": "Airport pickup, boat transfer to palace, welcome ceremony with royal treatment"
+        },
+        {
+          "day": 2,
+          "title": "Palace Exploration",
+          "description": "Heritage walk, spa treatments, sunset dinner by the lake"
+        },
+        {
+          "day": 3,
+          "title": "Cultural Experience",
+          "description": "Cultural show, city tour, departure with royal memories"
+        }
+      ],
+      "inclusions": [
+        "5-star palace accommodation",
+        "All meals included",
+        "Airport transfers",
+        "Guided heritage tours",
+        "Spa session",
+        "Cultural show"
+      ],
+      "exclusions": [
+        "Domestic flights",
+        "Travel insurance",
+        "Personal expenses",
+        "Additional activities"
+      ],
+      "amenities": [
+        "Swimming Pool",
+        "Spa",
+        "Fine Dining",
+        "Lake View"
+      ],
       "category": "Palace",
-      "rooms": ["Luxury Room", "Royal Suite", "Grand Royal Suite"],
-      "activities": ["Heritage Walk", "Boat Ride", "Cultural Show"]
+      "rooms": [
+        "Luxury Room",
+        "Royal Suite",
+        "Grand Royal Suite"
+      ],
+      "activities": [
+        "Heritage Walk",
+        "Boat Ride",
+        "Cultural Show"
+      ]
     },
     {
       "id": 2,
-      "name": "Santorini Grace",
-      "location": "Santorini, Greece",
-      "price": 95000,
-      "duration": "5 Days / 4 Nights",
+      "name": "The Oberoi Mumbai",
+      "type": "Luxury Business",
+      "location": "Mumbai, Maharashtra",
+      "price": 35000,
+      "duration": 4,
       "rating": 4.8,
-      "image": "/images/packages/santorini-grace.jpg",
+      "reviews": 287,
+      "image": "https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       "mealPlan": "Breakfast & Dinner",
-      "description": "Luxurious cliffside retreat with stunning Aegean Sea views",
-      "amenities": ["Infinity Pool", "Mediterranean Spa", "Sunset Terrace", "Wine Cellar"],
-      "category": "Resort",
-      "rooms": ["Sea View Suite", "Plunge Pool Suite", "Grace Suite"],
-      "activities": ["Wine Tasting", "Sunset Cruise", "Greek Cooking Class"]
+      "description": "Luxury business hotel in the heart of Mumbai with stunning views of the Arabian Sea",
+      "highlights": [
+        "Arabian Sea Views",
+        "Business Center",
+        "Rooftop Pool",
+        "Award-winning Restaurants",
+        "Luxury Spa"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Mumbai Arrival",
+          "description": "Airport pickup, hotel check-in, welcome drink with city views"
+        },
+        {
+          "day": 2,
+          "title": "City Exploration",
+          "description": "Mumbai city tour, Gateway of India, Marine Drive, local markets"
+        },
+        {
+          "day": 3,
+          "title": "Bollywood Experience",
+          "description": "Film City tour, Bollywood studio visit, traditional Indian dinner"
+        },
+        {
+          "day": 4,
+          "title": "Relaxation & Departure",
+          "description": "Spa treatments, pool time, shopping, departure transfer"
+        }
+      ],
+      "inclusions": [
+        "Luxury hotel accommodation",
+        "Daily breakfast and dinner",
+        "Airport transfers",
+        "City tours",
+        "Bollywood studio visit",
+        "Spa session"
+      ],
+      "exclusions": [
+        "Domestic flights",
+        "Travel insurance",
+        "Personal expenses",
+        "Optional activities"
+      ],
+      "amenities": [
+        "Infinity Pool",
+        "Business Center",
+        "Multiple Restaurants",
+        "Spa & Fitness"
+      ],
+      "category": "Business Hotel",
+      "rooms": [
+        "Deluxe Room",
+        "Executive Suite",
+        "Presidential Suite"
+      ],
+      "activities": [
+        "City Tours",
+        "Bollywood Experience",
+        "Fine Dining"
+      ]
     },
     {
       "id": 3,
-      "name": "Burj Al Arab Experience",
-      "location": "Dubai, UAE",
-      "price": 150000,
-      "duration": "4 Days / 3 Nights",
-      "rating": 4.9,
-      "image": "/images/packages/burj-al-arab.jpg",
+      "name": "ITC Grand Chola Chennai",
+      "type": "Heritage Luxury",
+      "location": "Chennai, Tamil Nadu",
+      "price": 28000,
+      "duration": 3,
+      "rating": 4.7,
+      "reviews": 412,
+      "image": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2080&q=80",
       "mealPlan": "All Inclusive",
-      "description": "Ultimate luxury in the world's most iconic seven-star hotel",
-      "amenities": ["Private Beach", "Helipad", "Gold-Plated Interiors", "Underwater Restaurant"],
-      "category": "Ultra Luxury",
-      "rooms": ["Deluxe Suite", "Panoramic Suite", "Royal Suite"],
-      "activities": ["Desert Safari", "Yacht Tour", "Sky View Restaurant"]
+      "description": "Magnificent hotel inspired by Chola dynasty architecture with world-class amenities",
+      "highlights": [
+        "Chola Architecture",
+        "Multiple Restaurants",
+        "Grand Ballroom",
+        "Luxury Spa",
+        "Business Facilities"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Chennai Welcome",
+          "description": "Airport pickup, hotel check-in, traditional Tamil welcome"
+        },
+        {
+          "day": 2,
+          "title": "Cultural Exploration",
+          "description": "Mahabalipuram temples, local crafts, classical dance performance"
+        },
+        {
+          "day": 3,
+          "title": "Culinary Journey",
+          "description": "South Indian cooking class, spice market tour, farewell dinner"
+        }
+      ],
+      "inclusions": [
+        "Luxury hotel accommodation",
+        "All meals and beverages",
+        "Airport transfers",
+        "Temple tours",
+        "Cooking class",
+        "Cultural performances"
+      ],
+      "exclusions": [
+        "Domestic flights",
+        "Travel insurance",
+        "Personal shopping",
+        "Additional excursions"
+      ],
+      "amenities": [
+        "Multiple Pools",
+        "World-class Spa",
+        "Fine Dining",
+        "Conference Facilities"
+      ],
+      "category": "Heritage Luxury",
+      "rooms": [
+        "Deluxe Room",
+        "Club Suite",
+        "Presidential Suite"
+      ],
+      "activities": [
+        "Temple Tours",
+        "Cooking Classes",
+        "Cultural Shows"
+      ]
     },
     {
       "id": 4,
-      "name": "Amalfi Coast Retreat",
-      "location": "Positano, Italy",
-      "price": 85000,
-      "duration": "6 Days / 5 Nights",
-      "rating": 4.7,
-      "image": "/images/packages/amalfi-retreat.jpg",
+      "name": "The Leela Palace New Delhi",
+      "type": "Urban Palace",
+      "location": "New Delhi, Delhi",
+      "price": 40000,
+      "duration": 4,
+      "rating": 4.8,
+      "reviews": 298,
+      "image": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2032&q=80",
       "mealPlan": "Breakfast & Dinner",
-      "description": "Cliffside luxury with breathtaking Mediterranean views",
-      "amenities": ["Panoramic Pool", "Italian Spa", "Michelin Restaurant", "Private Beach Access"],
-      "category": "Boutique",
-      "rooms": ["Sea View Room", "Deluxe Suite", "Presidential Suite"],
-      "activities": ["Cooking Class", "Boat Tours", "Wine Tasting"]
+      "description": "Palatial luxury hotel in India's capital with impeccable service and royal ambiance",
+      "highlights": [
+        "Royal Architecture",
+        "Fine Dining Restaurants",
+        "Luxury Spa",
+        "Butler Service",
+        "Central Location"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Capital Arrival",
+          "description": "Airport pickup, luxury hotel check-in, evening at India Gate"
+        },
+        {
+          "day": 2,
+          "title": "Historic Delhi",
+          "description": "Red Fort, Jama Masjid, Chandni Chowk, rickshaw ride"
+        },
+        {
+          "day": 3,
+          "title": "Modern Delhi",
+          "description": "Lotus Temple, Akshardham, Connaught Place shopping"
+        },
+        {
+          "day": 4,
+          "title": "Cultural Farewell",
+          "description": "Spa treatments, cultural performance, departure"
+        }
+      ],
+      "inclusions": [
+        "Palace hotel accommodation",
+        "Daily breakfast and dinner",
+        "Airport transfers",
+        "Delhi city tours",
+        "Cultural experiences",
+        "Spa treatments"
+      ],
+      "exclusions": [
+        "Domestic flights",
+        "Travel insurance",
+        "Personal expenses",
+        "Optional tours"
+      ],
+      "amenities": [
+        "Royal Spa",
+        "Multiple Restaurants",
+        "Butler Service",
+        "Business Center"
+      ],
+      "category": "Urban Palace",
+      "rooms": [
+        "Deluxe Room",
+        "Royal Suite",
+        "Presidential Suite"
+      ],
+      "activities": [
+        "Heritage Tours",
+        "Cultural Shows",
+        "Fine Dining"
+      ]
     },
     {
       "id": 5,
-      "name": "Rambagh Palace Heritage",
-      "location": "Jaipur, India",
-      "price": 65000,
-      "duration": "3 Days / 2 Nights",
-      "rating": 4.7,
-      "image": "/images/packages/rambagh-palace.jpg",
+      "name": "Rambagh Palace Jaipur",
+      "type": "Royal Palace",
+      "location": "Jaipur, Rajasthan",
+      "price": 50000,
+      "duration": 3,
+      "rating": 4.9,
+      "reviews": 356,
+      "image": "https://images.unsplash.com/photo-1596436889106-be35e843f974?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       "mealPlan": "All Inclusive",
-      "description": "Indulge in Rajasthani hospitality at its finest",
-      "amenities": ["Royal Garden", "Polo Bar", "Spa", "Indoor Pool"],
-      "category": "Palace",
-      "rooms": ["Palace Room", "Historical Suite", "Royal Suite"],
-      "activities": ["Heritage Walk", "Polo Match", "Afternoon Tea"]
+      "description": "Former residence of Maharaja of Jaipur, now a luxury palace hotel showcasing royal heritage",
+      "highlights": [
+        "Maharaja's Palace",
+        "Royal Gardens",
+        "Polo Ground",
+        "Heritage Spa",
+        "Traditional Architecture"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Royal Welcome",
+          "description": "Airport pickup with vintage car, royal check-in, heritage walk"
+        },
+        {
+          "day": 2,
+          "title": "Pink City Exploration",
+          "description": "Amber Fort, City Palace, Hawa Mahal, local bazaars"
+        },
+        {
+          "day": 3,
+          "title": "Royal Experience",
+          "description": "Elephant ride, royal dinner, cultural performance, departure"
+        }
+      ],
+      "inclusions": [
+        "Palace accommodation",
+        "All meals included",
+        "Airport transfers",
+        "City tours with guide",
+        "Royal experiences",
+        "Cultural performances"
+      ],
+      "exclusions": [
+        "Domestic flights",
+        "Travel insurance",
+        "Personal expenses",
+        "Optional activities"
+      ],
+      "amenities": [
+        "Royal Gardens",
+        "Polo Ground",
+        "Heritage Spa",
+        "Multiple Restaurants"
+      ],
+      "category": "Royal Palace",
+      "rooms": [
+        "Palace Room",
+        "Historical Suite",
+        "Royal Suite"
+      ],
+      "activities": [
+        "Heritage Tours",
+        "Elephant Rides",
+        "Cultural Shows"
+      ]
     },
     {
       "id": 6,
-      "name": "Maldives Water Villa",
-      "location": "Male, Maldives",
-      "price": 120000,
-      "duration": "5 Days / 4 Nights",
-      "rating": 4.8,
-      "image": "/images/packages/maldives-villa.jpg",
+      "name": "Kumarakom Lake Resort Kerala",
+      "type": "Backwater Resort",
+      "location": "Kumarakom, Kerala",
+      "price": 32000,
+      "duration": 4,
+      "rating": 4.7,
+      "reviews": 445,
+      "image": "https://images.unsplash.com/photo-1520637836862-4d197d17c91a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80",
       "mealPlan": "All Inclusive",
-      "description": "Overwater luxury in pristine tropical paradise",
-      "amenities": ["Private Pool", "Glass Floor", "Direct Ocean Access", "Sunset Deck"],
-      "category": "Resort",
-      "rooms": ["Water Villa", "Sunset Villa", "Ocean Suite"],
-      "activities": ["Snorkeling", "Spa Treatments", "Sunset Cruise"]
+      "description": "Luxury backwater resort in Kerala's scenic Vembanad Lake with traditional houseboats and Ayurvedic spa",
+      "highlights": [
+        "Backwater Views",
+        "Traditional Houseboats",
+        "Ayurvedic Spa",
+        "Kerala Cuisine",
+        "Bird Sanctuary"
+      ],
+      "itinerary": [
+        {
+          "day": 1,
+          "title": "Backwater Welcome",
+          "description": "Airport pickup, resort check-in, sunset cruise on Vembanad Lake"
+        },
+        {
+          "day": 2,
+          "title": "Houseboat Experience",
+          "description": "Full day on traditional houseboat, local village visits, fishing"
+        },
+        {
+          "day": 3,
+          "title": "Ayurvedic Wellness",
+          "description": "Ayurvedic spa treatments, yoga session, cooking demonstration"
+        },
+        {
+          "day": 4,
+          "title": "Nature Farewell",
+          "description": "Bird sanctuary visit, final backwater cruise, departure"
+        }
+      ],
+      "inclusions": [
+        "Luxury resort accommodation",
+        "All meals and beverages",
+        "Airport transfers",
+        "Houseboat experience",
+        "Ayurvedic treatments",
+        "Nature activities"
+      ],
+      "exclusions": [
+        "Domestic flights",
+        "Travel insurance",
+        "Personal expenses",
+        "Additional excursions"
+      ],
+      "amenities": [
+        "Lakefront Views",
+        "Ayurvedic Spa",
+        "Traditional Architecture",
+        "Infinity Pool"
+      ],
+      "category": "Backwater Resort",
+      "rooms": [
+        "Lake View Villa",
+        "Heritage Suite",
+        "Presidential Villa"
+      ],
+      "activities": [
+        "Houseboat Cruises",
+        "Ayurvedic Treatments",
+        "Bird Watching"
+      ]
     }
   ],
-  "featured": [1, 2, 3],
+  "featured": [
+    1,
+    2,
+    3
+  ],
   "profiles": [
     {
       "id": 1,
       "name": "Suhan Kumar",
       "email": "suhan@example.com",
-      "bookings": [1]
+      "bookings": [
+        1
+      ]
     },
     {
       "id": 2,
       "name": "Priya Sharma",
       "email": "priya@example.com",
+      "bookings": []
+    },
+    {
+      "id": 3,
+      "name": "New User",
+      "email": "user3@example.com",
+      "clerkUserId": "user_33VjZsm2bQbpFXNqWSD4lDojw42",
       "bookings": []
     }
   ],
@@ -117,6 +463,17 @@
       "roomType": "Sea View Suite",
       "status": "confirmed",
       "createdAt": "2025-09-11T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "profileId": 3,
+      "packageId": 6,
+      "guests": 1,
+      "startDate": "2025-10-03",
+      "endDate": "2025-10-04",
+      "roomType": "Standard Room",
+      "status": "confirmed",
+      "createdAt": "2025-10-02T14:44:36.339Z"
     }
   ]
 }

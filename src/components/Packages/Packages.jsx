@@ -213,7 +213,7 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/packages');
+        const response = await fetch('http://localhost:3002/api/packages');
         if (!response.ok) {
           throw new Error('Failed to fetch packages');
         }
@@ -361,22 +361,50 @@ const Packages = () => {
   }
 
   return (
-    <Box sx={{ py: 8, backgroundColor: 'background.default' }}>
+    <Box sx={{ 
+      py: 8, 
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+      minHeight: '100vh'
+    }}>
       <Container maxWidth="lg">
-        <Typography
-          variant="h2"
-          component="h1"
-          align="center"
-          gutterBottom
-          sx={{ 
-            mb: 6, 
-            fontWeight: 'bold',
-            fontSize: { xs: '2.5rem', md: '3.5rem' },
-            color: 'text.primary' 
-          }}
-        >
-          Luxury Hotel Packages
-        </Typography>
+        {/* Enhanced Hero Section */}
+        <Box sx={{ textAlign: 'center', mb: 8 }}>
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{ 
+              fontWeight: 800,
+              fontSize: { xs: '2.5rem', md: '4rem' },
+              background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 2
+            }}
+          >
+            Luxury Hotel Packages
+          </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              color: 'text.secondary',
+              fontWeight: 300,
+              maxWidth: 600,
+              mx: 'auto',
+              mb: 4
+            }}
+          >
+            Discover India's finest heritage hotels and luxury experiences
+          </Typography>
+          <Box
+            sx={{
+              width: 100,
+              height: 4,
+              background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+              mx: 'auto',
+              borderRadius: 2
+            }}
+          />
+        </Box>
 
         {error && (
           <Alert severity="info" sx={{ mb: 4 }}>
@@ -391,19 +419,42 @@ const Packages = () => {
           favorites={favorites}
         />
 
-        {/* Search and Filter Controls */}
-        <Paper sx={{ p: 3, mb: 4 }}>
-          <Grid container spacing={2} alignItems="center">
+        {/* Enhanced Search and Filter Controls */}
+        <Paper 
+          elevation={8}
+          sx={{ 
+            p: 4, 
+            mb: 6,
+            borderRadius: 4,
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)'
+          }}
+        >
+          <Grid container spacing={3} alignItems="center">
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
-                placeholder="Search packages by name or location..."
+                placeholder="Search luxury hotels by name or destination..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange('search', e.target.value)}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 3,
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                    },
+                    '&.Mui-focused': {
+                      backgroundColor: 'white',
+                      boxShadow: '0 4px 20px rgba(33, 150, 243, 0.2)'
+                    }
+                  }
+                }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon />
+                      <SearchIcon color="primary" />
                     </InputAdornment>
                   ),
                 }}
@@ -416,9 +467,16 @@ const Packages = () => {
                   value={sortBy}
                   onChange={handleSortChange}
                   label="Sort By"
+                  sx={{
+                    borderRadius: 3,
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)'
+                    }
+                  }}
                   startAdornment={
                     <InputAdornment position="start">
-                      <SortIcon />
+                      <SortIcon color="primary" />
                     </InputAdornment>
                   }
                 >
@@ -433,12 +491,33 @@ const Packages = () => {
             <Grid item xs={12} md={3}>
               <Button
                 fullWidth
-                variant="outlined"
+                variant={showFilters ? "contained" : "outlined"}
                 onClick={toggleFilters}
                 startIcon={<FilterIcon />}
                 endIcon={showFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                sx={{
+                  borderRadius: 3,
+                  py: 1.5,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  ...(showFilters ? {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'primary.dark'
+                    }
+                  } : {
+                    borderColor: 'primary.main',
+                    color: 'primary.main',
+                    '&:hover': {
+                      backgroundColor: 'primary.light',
+                      borderColor: 'primary.dark'
+                    }
+                  })
+                }}
               >
-                Filters
+                Advanced Filters
               </Button>
             </Grid>
           </Grid>
@@ -562,15 +641,37 @@ const Packages = () => {
           </Collapse>
         </Paper>
 
-        {/* Results Summary */}
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" color="text.secondary">
-            {filteredPackages.length} packages found
-            {filters.search && ` for "${filters.search}"`}
-          </Typography>
+        {/* Enhanced Results Summary */}
+        <Box sx={{ 
+          mb: 6,
+          p: 3,
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          borderRadius: 3,
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.3)'
+        }}>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Box
+              sx={{
+                width: 8,
+                height: 40,
+                background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+                borderRadius: 1
+              }}
+            />
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                {filteredPackages.length} Luxury Packages Available
+                {filters.search && ` for "${filters.search}"`}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Curated collection of India's finest heritage hotels
+              </Typography>
+            </Box>
+          </Stack>
         </Box>
 
-        {/* Package Grid */}
+        {/* Enhanced Package Grid */}
         <Grid container spacing={4}>
           {currentPackages.map((pkg) => (
             <Grid item xs={12} sm={6} md={4} key={pkg.id}>
@@ -579,116 +680,317 @@ const Packages = () => {
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'transform 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                  },
                   position: 'relative',
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:hover': {
+                    transform: 'translateY(-12px) scale(1.02)',
+                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
+                    '& .card-image': {
+                      transform: 'scale(1.1)'
+                    },
+                    '& .price-badge': {
+                      transform: 'scale(1.05)'
+                    }
+                  },
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={pkg.image}
-                  alt={pkg.name}
-                />
-                <IconButton
-                  sx={{
-                    position: 'absolute',
-                    top: 8,
-                    right: 8,
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 1)',
-                    },
-                  }}
-                  onClick={() => handleFavoriteToggle(pkg.id)}
-                >
-                  {favorites.includes(pkg.id) ? (
-                    <FavoriteIcon color="error" />
-                  ) : (
-                    <FavoriteBorderIcon />
-                  )}
-                </IconButton>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h2">
+                {/* Image with overlay effects */}
+                <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+                  <CardMedia
+                    component="img"
+                    height="240"
+                    image={pkg.image}
+                    alt={pkg.name}
+                    className="card-image"
+                    sx={{
+                      objectFit: 'cover',
+                      transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                    onError={(e) => {
+                      console.log('Image failed to load:', pkg.image);
+                      e.target.src = 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                    }}
+                  />
+                  
+                  {/* Gradient overlay */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%)'
+                    }}
+                  />
+                  
+                  {/* Package type badge */}
+                  <Chip
+                    label={pkg.type}
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      left: 16,
+                      backgroundColor: 'rgba(33, 150, 243, 0.9)',
+                      color: 'white',
+                      fontWeight: 600,
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)'
+                    }}
+                  />
+                  
+                  {/* Favorite button */}
+                  <IconButton
+                    className="favorite-btn"
+                    sx={{
+                      position: 'absolute',
+                      top: 12,
+                      right: 12,
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backdropFilter: 'blur(10px)',
+                      border: '1px solid rgba(255, 255, 255, 0.3)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        backgroundColor: 'white',
+                        transform: 'scale(1.1)',
+                        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)'
+                      },
+                    }}
+                    onClick={() => handleFavoriteToggle(pkg.id)}
+                  >
+                    {favorites.includes(pkg.id) ? (
+                      <FavoriteIcon sx={{ color: '#ff4757' }} />
+                    ) : (
+                      <FavoriteBorderIcon color="action" />
+                    )}
+                  </IconButton>
+                </Box>
+                {/* Enhanced Card Content */}
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography 
+                    gutterBottom 
+                    variant="h5" 
+                    component="h2"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: '1.25rem',
+                      color: 'text.primary',
+                      mb: 2,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
+                    }}
+                  >
                     {pkg.name}
                   </Typography>
                   
+                  {/* Location with enhanced styling */}
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                    <LocationIcon color="primary" fontSize="small" />
-                    <Typography variant="body2" color="text.secondary">
+                    <Box
+                      sx={{
+                        p: 0.5,
+                        borderRadius: 1,
+                        backgroundColor: 'primary.light',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <LocationIcon sx={{ fontSize: 16, color: 'primary.main' }} />
+                    </Box>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: 'text.secondary',
+                        fontWeight: 500
+                      }}
+                    >
                       {pkg.location}
                     </Typography>
                   </Stack>
 
+                  {/* Duration with enhanced styling */}
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                    <TimeIcon color="primary" fontSize="small" />
-                    <Typography variant="body2" color="text.secondary">
-                      {pkg.duration} days
+                    <Box
+                      sx={{
+                        p: 0.5,
+                        borderRadius: 1,
+                        backgroundColor: 'success.light',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <TimeIcon sx={{ fontSize: 16, color: 'success.main' }} />
+                    </Box>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: 'text.secondary',
+                        fontWeight: 500
+                      }}
+                    >
+                      {pkg.duration} days / {pkg.duration - 1} nights
                     </Typography>
                   </Stack>
 
+                  {/* Rating with enhanced design */}
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                    <Rating value={pkg.rating} precision={0.1} size="small" readOnly />
-                    <Typography variant="body2" color="text.secondary">
-                      ({pkg.reviews})
+                    <Rating 
+                      value={pkg.rating} 
+                      precision={0.1} 
+                      size="small" 
+                      readOnly
+                      sx={{
+                        '& .MuiRating-iconFilled': {
+                          color: '#ffd700'
+                        }
+                      }}
+                    />
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        color: 'text.secondary',
+                        fontWeight: 500
+                      }}
+                    >
+                      ({pkg.reviews} reviews)
                     </Typography>
                   </Stack>
 
+                  {/* Availability status */}
                   {availabilityMap[pkg.id] && (
                     <Alert 
                       severity={availabilityMap[pkg.id].available ? "success" : "warning"}
-                      sx={{ mb: 2 }}
+                      sx={{ 
+                        mb: 2,
+                        borderRadius: 2,
+                        fontSize: '0.875rem',
+                        '& .MuiAlert-message': {
+                          fontWeight: 500
+                        }
+                      }}
                       icon={false}
                     >
                       {availabilityMap[pkg.id].available 
-                        ? `${availabilityMap[pkg.id].remainingSpots} spots available`
-                        : "Limited availability"}
+                        ? `✓ ${availabilityMap[pkg.id].remainingSpots} spots available`
+                        : "⚠️ Limited availability"}
                     </Alert>
                   )}
 
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    sx={{ mt: 2 }}
+                  {/* Price section with enhanced styling */}
+                  <Box
+                    className="price-badge"
+                    sx={{
+                      mt: 'auto',
+                      p: 2,
+                      borderRadius: 3,
+                      backgroundColor: 'primary.main',
+                      color: 'white',
+                      textAlign: 'center',
+                      transition: 'transform 0.3s ease'
+                    }}
                   >
-                    <Typography variant="h6" color="primary">
-                      ${pkg.price}
-                      <Typography component="span" variant="body2" color="text.secondary">
-                        {' '}/ person
-                      </Typography>
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        fontWeight: 700,
+                        fontSize: '1.5rem',
+                        mb: 0.5
+                      }}
+                    >
+                      ₹{pkg.price?.toLocaleString() || 'N/A'}
                     </Typography>
-                  </Stack>
+                    <Typography 
+                      variant="body2"
+                      sx={{ 
+                        opacity: 0.9,
+                        fontWeight: 500
+                      }}
+                    >
+                      per person
+                    </Typography>
+                  </Box>
                 </CardContent>
 
-                <Button 
-                  component={RouterLink} 
-                  to={`/packages/${pkg.id}`}
-                  variant="contained" 
-                  fullWidth
-                  sx={{ 
-                    borderTopLeftRadius: 0,
-                    borderTopRightRadius: 0,
-                  }}
-                >
-                  View Details
-                </Button>
+                {/* Enhanced Action Button */}
+                <Box sx={{ p: 3, pt: 0 }}>
+                  <Button 
+                    component={RouterLink} 
+                    to={`/packages/${pkg.id}`}
+                    variant="contained" 
+                    fullWidth
+                    size="large"
+                    sx={{ 
+                      borderRadius: 3,
+                      py: 1.5,
+                      fontWeight: 600,
+                      fontSize: '1rem',
+                      textTransform: 'none',
+                      backgroundColor: 'primary.main',
+                      color: 'white',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        backgroundColor: 'primary.dark',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
+                  >
+                    Explore Package
+                  </Button>
+                </Box>
               </Card>
             </Grid>
           ))}
         </Grid>
 
-        {/* Pagination */}
+        {/* Enhanced Pagination */}
         {totalPages > 1 && (
-          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+          <Box 
+            sx={{ 
+              mt: 8, 
+              display: 'flex', 
+              justifyContent: 'center',
+              p: 4,
+              backgroundColor: 'rgba(255, 255, 255, 0.8)',
+              borderRadius: 4,
+              backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.3)'
+            }}
+          >
             <Pagination
               count={totalPages}
               page={page}
               onChange={(e, value) => setPage(value)}
               color="primary"
               size="large"
+              sx={{
+                '& .MuiPaginationItem-root': {
+                  borderRadius: 2,
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  margin: '0 4px',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 4px 12px rgba(25, 118, 210, 0.2)'
+                  }
+                },
+                '& .Mui-selected': {
+                  backgroundColor: 'primary.main',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: 'primary.dark'
+                  }
+                }
+              }}
             />
           </Box>
         )}

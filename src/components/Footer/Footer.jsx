@@ -55,8 +55,8 @@ function Footer() {
                 lineHeight: 1.6,
               }}
             >
-              Discover the world with us. We create unforgettable travel experiences
-              and make your dream vacations come true.
+              Experience India's royal heritage through luxury palace hotels and authentic cultural journeys. 
+              We create unforgettable memories in India's most magnificent heritage properties.
             </Typography>
             <Stack direction="row" spacing={1}>
               {[
@@ -135,7 +135,7 @@ function Footer() {
               {[
                 {
                   icon: <Phone sx={{ color: '#FF9F43' }} />,
-                  text: '+1 234 567 8900',
+                  text: '+91 959 603 6035',
                 },
                 {
                   icon: <Email sx={{ color: '#FF9F43' }} />,
@@ -143,7 +143,7 @@ function Footer() {
                 },
                 {
                   icon: <LocationOn sx={{ color: '#FF9F43' }} />,
-                  text: '123 Travel Street, Adventure City, AC 12345',
+                  text: 'Greater Noida, Uttar Pradesh, India',
                 },
               ].map((contact, index) => (
                 <Stack

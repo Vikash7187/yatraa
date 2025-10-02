@@ -49,7 +49,7 @@ const destinations = [
   {
     id: 1,
     name: 'Taj Lake Palace, Udaipur',
-    image: '/images/destinations/udaipur-lake-palace.jpg',
+    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
     description: 'Luxury heritage hotel floating on Lake Pichola with stunning views of the City Palace',
     rating: 4.9,
     activities: ['Heritage', 'Luxury', 'Culture'],
@@ -59,7 +59,7 @@ const destinations = [
   {
     id: 2,
     name: 'The Oberoi Amarvilas, Agra',
-    image: '/images/destinations/agra-amarvilas.jpg',
+    image: 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2032&q=80',
     description: 'Every room offers breathtaking views of the iconic Taj Mahal',
     rating: 4.9,
     activities: ['Heritage', 'Luxury', 'Romance'],
@@ -69,7 +69,7 @@ const destinations = [
   {
     id: 3,
     name: 'Rambagh Palace, Jaipur',
-    image: '/images/destinations/jaipur-rambagh.jpg',
+    image: 'https://images.unsplash.com/photo-1596436889106-be35e843f974?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
     description: 'Former residence of the Maharaja of Jaipur, now a luxury heritage hotel',
     rating: 4.8,
     activities: ['Royal Experience', 'Heritage', 'Culture'],
@@ -79,7 +79,7 @@ const destinations = [
   {
     id: 4,
     name: 'The Leela Palace, Kerala',
-    image: '/images/destinations/kerala-leela.jpg',
+    image: 'https://images.unsplash.com/photo-1520637836862-4d197d17c91a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2069&q=80',
     description: 'Backwater luxury resort with private lagoon and Ayurvedic spa',
     rating: 4.8,
     activities: ['Ayurveda', 'Backwaters', 'Nature'],
@@ -89,7 +89,7 @@ const destinations = [
   {
     id: 5,
     name: 'Umaid Bhawan Palace, Jodhpur',
-    image: '/images/destinations/jodhpur-umaid.jpg',
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
     description: 'One of the world\'s largest private residences, part luxury hotel',
     rating: 4.9,
     activities: ['Heritage', 'Museum', 'Luxury'],
@@ -99,7 +99,7 @@ const destinations = [
   {
     id: 6,
     name: 'The Taj Mahal Palace, Mumbai',
-    image: '/images/destinations/mumbai-taj.jpg',
+    image: 'https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
     description: 'Iconic seafront luxury hotel with stunning Gateway of India views',
     rating: 4.9,
     activities: ['Heritage', 'Luxury', 'Dining'],
@@ -255,6 +255,10 @@ const TopDestinations = () => {
                         alt={destination.name}
                         sx={{
                           objectFit: 'cover',
+                        }}
+                        onError={(e) => {
+                          console.log('Image failed to load:', destination.image);
+                          e.target.src = 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
                         }}
                       />
                       <IconButton

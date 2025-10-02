@@ -29,6 +29,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -39,6 +40,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { styled } from '@mui/material/styles';
 import BookingConfirmation from './BookingConfirmation';
 import { checkAvailability, getDynamicPrice } from '../../services/bookingService';
+import { getPackageById } from '../../services/packageService';
 import { format, addDays } from 'date-fns';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -269,10 +271,13 @@ const packagesData = [
 
 const PackageDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { isSignedIn } = useUser();
   const [packageData, setPackageData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [availability, setAvailability] = useState(null);
   const [dynamicPrice, setDynamicPrice] = useState(null);
+  const [error, setError] = useState(null);
   const [bookingForm, setBookingForm] = useState({
     name: '',
     email: '',
@@ -284,23 +289,49 @@ const PackageDetail = () => {
   const [formErrors, setFormErrors] = useState({});
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [openBooking, setOpenBooking] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    // Find the package with matching id
-    const foundPackage = packagesData.find(pkg => pkg.id === parseInt(id));
-    if (foundPackage) {
-      setPackageData(foundPackage);
+    const fetchPackageData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log('Fetching package with ID:', id); // Debug log
+        const data = await getPackageById(id);
+        console.log('API returned package data:', data); // Debug log
+        setPackageData(data);
+      } catch (error) {
+        console.error('Failed to fetch package:', error);
+        console.log('Using fallback data for package ID:', id); // Debug log
+        // Use fallback data if API fails
+        const fallbackPackage = packagesData.find(pkg => pkg.id === parseInt(id));
+        if (fallbackPackage) {
+          console.log('Found fallback package:', fallbackPackage); // Debug log
+          setPackageData(fallbackPackage);
+        } else {
+          console.log('No fallback package found for ID:', id); // Debug log
+          setError('Package not found');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchPackageData();
+    } else {
+      setError('No package ID provided');
+      setLoading(false);
     }
   }, [id]);
 
   useEffect(() => {
     const checkCurrentAvailability = async () => {
-      if (!id) return;
+      if (!id || !packageData) return;
+      
       try {
-        setLoading(true);
         const startDate = format(new Date(), 'yyyy-MM-dd');
-        const endDate = format(addDays(new Date(), packageData?.duration || 7), 'yyyy-MM-dd');
+        const duration = typeof packageData.duration === 'number' ? packageData.duration : parseInt(packageData.duration) || 7;
+        const endDate = format(addDays(new Date(), duration), 'yyyy-MM-dd');
         
         const [availabilityData, priceData] = await Promise.all([
           checkAvailability(id, startDate, endDate, 1),
@@ -311,8 +342,9 @@ const PackageDetail = () => {
         setDynamicPrice(priceData);
       } catch (error) {
         console.error('Failed to fetch availability:', error);
-      } finally {
-        setLoading(false);
+        // Set default values if availability check fails
+        setAvailability({ available: true, remainingSpots: 5, maxGuests: 10 });
+        setDynamicPrice({ perPerson: packageData?.price || 0, total: packageData?.price || 0 });
       }
     };
 
@@ -366,7 +398,11 @@ const PackageDetail = () => {
   };
 
   const handleBookingOpen = () => {
-    navigate(`/booking-form/${id}`);
+    if (!isSignedIn) {
+      navigate('/login');
+      return;
+    }
+    navigate(`/booking/${id}`);
   };
 
   const handleBookingClose = () => setOpenBooking(false);
@@ -374,11 +410,33 @@ const PackageDetail = () => {
   // Get today's date in YYYY-MM-DD format for min date in date picker
   const today = new Date().toISOString().split('T')[0];
 
-  if (!packageData) {
+  if (loading) {
     return (
       <Container>
-        <Box sx={{ py: 8 }}>
-          <Typography variant="h4">Package not found</Typography>
+        <Box sx={{ py: 8, textAlign: 'center' }}>
+          <CircularProgress size={50} />
+          <Typography variant="h5" sx={{ mt: 2 }}>Loading package details...</Typography>
+        </Box>
+      </Container>
+    );
+  }
+
+  if (error || !packageData) {
+    return (
+      <Container>
+        <Box sx={{ py: 8, textAlign: 'center' }}>
+          <Typography variant="h4" gutterBottom>
+            {error || 'Package not found'}
+          </Typography>
+          <Typography variant="body1" color="text.secondary" gutterBottom>
+            {error === 'Package not found' 
+              ? "The package you're looking for doesn't exist or has been removed."
+              : 'There was an issue loading the package details. Please try again.'
+            }
+          </Typography>
+          <Button variant="contained" onClick={() => navigate('/')} sx={{ mt: 2 }}>
+            Back to Home
+          </Button>
         </Box>
       </Container>
     );
@@ -387,7 +445,14 @@ const PackageDetail = () => {
   return (
     <Box>
       <HeroSection>
-        <HeroImage src={packageData.image} alt={packageData.name} />
+        <HeroImage 
+          src={packageData.image} 
+          alt={packageData.name} 
+          onError={(e) => {
+            console.log('Hero image failed to load:', packageData.image);
+            e.target.src = 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2032&q=80';
+          }}
+        />
         <HeroContent>
           <Container maxWidth="lg">
             <Typography variant="h2" component="h1" 
@@ -418,7 +483,7 @@ const PackageDetail = () => {
               />
               <Chip
                 icon={<AccessTimeIcon />}
-                label={`${packageData.duration} days`}
+                label={`${typeof packageData.duration === 'number' ? packageData.duration : parseInt(packageData.duration) || 0} days`}
                 sx={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
                   color: 'text.primary',
@@ -427,7 +492,7 @@ const PackageDetail = () => {
               />
               <Chip
                 icon={<GroupIcon />}
-                label={packageData.type}
+                label={packageData.type || 'Package'}
                 sx={{ 
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
                   color: 'text.primary',
@@ -456,7 +521,7 @@ const PackageDetail = () => {
                   Package Highlights
                 </Typography>
                 <Stack direction="row" spacing={1.5} flexWrap="wrap" gap={1.5}>
-                  {packageData.highlights.map((highlight, index) => (
+                  {(packageData.highlights || []).map((highlight, index) => (
                     <FeatureChip
                       key={index}
                       label={highlight}
@@ -472,7 +537,7 @@ const PackageDetail = () => {
               <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
                 Detailed Itinerary
               </Typography>
-              {packageData.itinerary.map((day, index) => (
+              {(packageData.itinerary || []).map((day, index) => (
                 <Box key={index} sx={{ mb: 3 }}>
                   <Typography variant="h6" color="primary" gutterBottom>
                     Day {day.day}: {day.title}
@@ -491,7 +556,7 @@ const PackageDetail = () => {
                     Inclusions
                   </Typography>
                   <List>
-                    {packageData.inclusions.map((item, index) => (
+                    {(packageData.inclusions || []).map((item, index) => (
                       <ListItem key={index} sx={{ py: 0.5 }}>
                         <ListItemIcon sx={{ minWidth: 36 }}>
                           <CheckCircleIcon color="success" />
@@ -506,7 +571,7 @@ const PackageDetail = () => {
                     Exclusions
                   </Typography>
                   <List>
-                    {packageData.exclusions.map((item, index) => (
+                    {(packageData.exclusions || []).map((item, index) => (
                       <ListItem key={index} sx={{ py: 0.5 }}>
                         <ListItemIcon sx={{ minWidth: 36 }}>
                           <CancelIcon color="error" />
@@ -549,9 +614,9 @@ const PackageDetail = () => {
               )}
 
               <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 3 }}>
-                <Rating value={packageData.rating} precision={0.1} readOnly />
+                <Rating value={packageData.rating || 0} precision={0.1} readOnly />
                 <Typography variant="body2" color="text.secondary">
-                  ({packageData.reviews} reviews)
+                  ({packageData.reviews || 0} reviews)
                 </Typography>
               </Stack>
 
@@ -571,7 +636,7 @@ const PackageDetail = () => {
                   fontSize: '1.1rem',
                 }}
               >
-                {loading ? 'Checking Availability...' : 'Book Now'}
+                {loading ? 'Loading...' : (isSignedIn ? 'Book Now' : 'Login to Book')}
               </Button>
 
               {dynamicPrice?.breakdown && (

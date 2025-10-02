@@ -16,21 +16,25 @@ import {
 } from '@mui/material';
 import { LocationOn, AccessTime, Restaurant } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '@clerk/clerk-react';
+import { getAllPackages } from '../../services/packageService';
 
 const FeaturedPackages = () => {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await fetch('/api/packages/featured');
-        const data = await response.json();
-        setPackages(data);
-        setLoading(false);
+        setLoading(true);
+        const data = await getAllPackages();
+        console.log('Fetched packages data:', data); // Debug log
+        // Show first 6 packages as featured
+        setPackages(data.slice(0, 6));
       } catch (error) {
-        console.error('Error fetching featured packages:', error);
+        console.error('Error fetching packages:', error);
         // Fallback data in case of error
         setPackages([
           {
@@ -124,6 +128,7 @@ const FeaturedPackages = () => {
             activities: ["Snorkeling", "Spa Treatments", "Sunset Cruise"]
           }
         ]);
+      } finally {
         setLoading(false);
       }
     };
@@ -140,13 +145,20 @@ const FeaturedPackages = () => {
   };
 
   const handleViewDetails = (pkg) => {
-    // Store the package details in localStorage before navigation
-    localStorage.setItem('selectedPackage', JSON.stringify(pkg));
     navigate(`/packages/${pkg.id}`);
+  };
+
+  const handleBookNow = (pkg) => {
+    if (!isSignedIn) {
+      navigate('/login');
+      return;
+    }
+    navigate(`/booking/${pkg.id}`);
   };
 
   return (
     <Box
+      id="featured-packages"
       component="section"
       sx={{
         py: 8,
@@ -163,7 +175,7 @@ const FeaturedPackages = () => {
             fontSize: { xs: '2rem', md: '2.5rem' },
           }}
         >
-          Featured Luxury Stays
+          Featured Hotel Packages
         </Typography>
         <Typography
           variant="h5"
@@ -171,7 +183,7 @@ const FeaturedPackages = () => {
           color="text.secondary"
           sx={{ mb: 6 }}
         >
-          Discover our handpicked collection of India's finest palace hotels
+          Discover our handpicked collection of luxury hotels and resorts worldwide
         </Typography>
 
         <Grid container spacing={4}>
@@ -211,6 +223,10 @@ const FeaturedPackages = () => {
                       image={pkg.image}
                       alt={pkg.name}
                       sx={{ objectFit: 'cover' }}
+                      onError={(e) => {
+                        console.log('Image failed to load:', pkg.image);
+                        e.target.src = 'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                      }}
                     />
                     <CardContent sx={{ flexGrow: 1 }}>
                       <Typography
@@ -254,20 +270,20 @@ const FeaturedPackages = () => {
                         </Typography>
                       </Stack>
                     </CardContent>
-                    <CardActions sx={{ p: 2, pt: 0 }}>
+                    <CardActions sx={{ p: 2, pt: 0, gap: 1 }}>
                       <Button
-                        fullWidth
-                        variant="contained"
+                        variant="outlined"
                         onClick={() => handleViewDetails(pkg)}
-                        sx={{
-                          py: 1,
-                          backgroundColor: 'primary.main',
-                          '&:hover': {
-                            backgroundColor: 'primary.dark',
-                          },
-                        }}
+                        sx={{ flex: 1 }}
                       >
                         View Details
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleBookNow(pkg)}
+                        sx={{ flex: 1 }}
+                      >
+                        {isSignedIn ? 'Book Now' : 'Login to Book'}
                       </Button>
                     </CardActions>
                   </Card>

@@ -24,7 +24,13 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const handleExplore = () => {
-    navigate('/packages');
+    // Scroll to the featured packages section
+    const element = document.getElementById('featured-packages');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/packages');
+    }
   };
 
   return (
@@ -53,7 +59,11 @@ const Hero = () => {
       <Box
         component="img"
         src="/images/travel.jpg"
-        alt="Luxury Indian Palace"
+        alt="Luxury Hotel"
+        onError={(e) => {
+          e.target.style.display = 'none';
+          e.target.parentNode.style.background = 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)';
+        }}
         sx={{
           position: 'absolute',
           width: '100%',
@@ -89,7 +99,7 @@ const Hero = () => {
               animation: 'fadeInUp 1s ease-out',
             }}
           >
-            Experience Royal
+            Book Luxury Hotels
           </Typography>
           <Typography
             variant="h2"
@@ -102,7 +112,7 @@ const Hero = () => {
               animationFillMode: 'both',
             }}
           >
-            Indian Luxury
+            Worldwide
           </Typography>
           <Typography
             variant="h5"
@@ -114,7 +124,7 @@ const Hero = () => {
               animationFillMode: 'both',
             }}
           >
-            Discover the finest heritage hotels and palace stays across India
+            Discover and book the world's finest luxury hotels and resorts
           </Typography>
           <Stack
             direction="row"
