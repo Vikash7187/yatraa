@@ -1,0 +1,22 @@
+
+🚀 NETLIFY DEPLOYMENT INSTRUCTIONS
+
+1. Build frontend:
+   npm run build
+
+2. Deploy to Netlify:
+   - Go to https://netlify.com
+   - Drag 'dist' folder to deploy area
+
+3. Configure Environment Variables:
+   Site Settings → Environment Variables → Add:
+   
+   VITE_CLERK_PUBLISHABLE_KEY=pk_test_demo_key
+   VITE_API_BASE_URL=https://yatraa-production.up.railway.app
+
+4. Redeploy after adding variables
+
+Your Railway API: https://yatraa-production.up.railway.app
+Test endpoints:
+- Health: https://yatraa-production.up.railway.app/
+- Packages: https://yatraa-production.up.railway.app/api/packages
