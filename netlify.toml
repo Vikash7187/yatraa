@@ -7,7 +7,6 @@
   NPM_VERSION = "10"
   VITE_CLERK_PUBLISHABLE_KEY = "pk_test_bXV0dWFsLWhhcmUtOTAuY2xlcmsuYWNjb3VudHMuZGV2JA"
   VITE_API_BASE_URL = "https://yatraa-production.up.railway.app"
-  NPM_FLAGS = "--production=false"
   NODE_ENV = "production"
 
 # Headers for security and performance
