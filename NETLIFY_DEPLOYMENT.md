@@ -22,16 +22,16 @@
    - Branch to deploy: `main`
 
 4. **Build Settings (Auto-detected from netlify.toml):**
-   - Build command: `npm run build:netlify`
+   - Build command: `npm install && npx vite build`
    - Publish directory: `dist`
-   - Node.js version: `18`
+   - Node.js version: `20` (Updated for React Router DOM 7+ compatibility)
 
 5. **Environment Variables:**
    The following are already configured in `netlify.toml`:
    - ✅ `VITE_CLERK_PUBLISHABLE_KEY`
    - ✅ `VITE_API_BASE_URL`
-   - ✅ `NODE_VERSION = "18"`
-   - ✅ `NPM_VERSION = "9"`
+   - ✅ `NODE_VERSION = "20"` (Updated for compatibility)
+   - ✅ `NPM_VERSION = "10"`
 
 6. **Deploy:**
    - Click "Deploy site"
@@ -54,11 +54,11 @@
 ```toml
 [build]
   publish = "dist"
-  command = "npm run build:netlify"
+  command = "npm install && npx vite build"
 
 [build.environment]
-  NODE_VERSION = "18"
-  NPM_VERSION = "9"
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
   VITE_CLERK_PUBLISHABLE_KEY = "your_clerk_key"
   VITE_API_BASE_URL = "https://yatraa-production.up.railway.app"
 ```
@@ -72,11 +72,11 @@ This ensures clean dependency installation to avoid Rollup issues.
 
 ## 🛠️ Troubleshooting Common Issues
 
-### 1. Rollup Build Errors
-If you encounter `@rollup/rollup-linux-x64-gnu` errors:
-- The configuration already uses Vite 5.4.2 (stable version)
-- Uses `npm ci` for clean dependency installation
-- If issues persist, consider switching to Vercel
+### 1. Node.js Version Compatibility Issues
+If you encounter `EBADENGINE` warnings or `vite: not found` errors:
+- **Root Cause**: React Router DOM 7+ requires Node.js >= 20.0.0
+- **Solution**: Updated configuration now uses Node.js 20 and npm 10
+- **Fixed in**: `.nvmrc`, `netlify.toml`, and `package.json` engines field
 
 ### 2. Environment Variables Not Working
 - Ensure variables are prefixed with `VITE_`
