@@ -1,11 +1,13 @@
 [build]
   publish = "dist"
-  command = "npm run build"
+  command = "npm run build:netlify"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "9"
   VITE_CLERK_PUBLISHABLE_KEY = ""
+  NPM_FLAGS = "--production=false"
+  NODE_ENV = "production"
 
 # Headers for security and performance
 [[headers]]
