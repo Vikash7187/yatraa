@@ -13,10 +13,11 @@ const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 // Environment variable validation
 if (!clerkPubKey) {
-  console.error('❌ Missing VITE_CLERK_PUBLISHABLE_KEY environment variable');
-  console.error('Please add your Clerk publishable key to the .env file:');
-  console.error('VITE_CLERK_PUBLISHABLE_KEY=your_actual_key_here');
-  console.error('Get your key from: https://dashboard.clerk.com/');
+  console.warn('⚠️ Missing VITE_CLERK_PUBLISHABLE_KEY environment variable');
+  console.warn('Clerk authentication features will be limited.');
+  console.warn('Please add your Clerk publishable key to the environment variables:');
+  console.warn('VITE_CLERK_PUBLISHABLE_KEY=your_actual_key_here');
+  console.warn('Get your key from: https://dashboard.clerk.com/');
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

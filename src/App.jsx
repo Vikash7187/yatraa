@@ -15,6 +15,7 @@ import UserProfile from './components/Profile/UserProfile';
 import AddPackage from './components/Profile/AddPackage';
 import ClerkConfigError from './components/ErrorBoundary/ClerkConfigError';
 import PackageErrorBoundary from './components/ErrorBoundary/PackageErrorBoundary';
+import ConfigMissing from './components/ErrorBoundary/ConfigMissing';
 import { useAuth } from './context/AuthContext';
 import { SignIn, SignUp } from '@clerk/clerk-react';
 import './App.css';
@@ -22,6 +23,15 @@ import './App.css';
 function App() {
   const { user } = useAuth();
   const hasClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  
+  // Show configuration page if essential environment variables are missing
+  if (!hasClerkKey) {
+    return (
+      <div className="App">
+        <ConfigMissing />
+      </div>
+    );
+  }
   
   return (
     <div className="App">

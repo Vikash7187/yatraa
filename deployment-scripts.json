@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "build:frontend": "npm run build",
+    "build:backend": "cd backend && npm install",
+    "deploy:netlify": "npm run build && echo 'Upload dist folder to Netlify'",
+    "deploy:vercel": "npm run build && vercel --prod",
+    "start:backend": "cd backend && npm start",
+    "dev:fullstack": "concurrently \"npm run dev\" \"cd backend && npm start\"",
+    "preview:production": "npm run build && npm run preview"
+  }
+}

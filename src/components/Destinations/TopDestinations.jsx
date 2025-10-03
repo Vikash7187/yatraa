@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { LocationOn as LocationIcon, TravelExplore as ExploreIcon, Star as StarIcon } from '@mui/icons-material';
 import { motion } from 'framer-motion';
+import { API_ENDPOINTS } from '../../config/api';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -64,7 +65,7 @@ const TopDestinations = () => {
     const fetchTopDestinations = async () => {
       try {
         console.log('Fetching packages from API...');
-        const response = await fetch('http://localhost:3002/api/packages');
+        const response = await fetch(API_ENDPOINTS.packages);
         if (!response.ok) {
           throw new Error('Failed to fetch packages');
         }
