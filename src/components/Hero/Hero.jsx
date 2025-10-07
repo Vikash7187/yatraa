@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Typography, Container, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { getImagePath, IMAGES } from '../../utils/imagePaths';
 
 const HeroSection = styled(Box)(({ theme }) => ({
   height: '100vh',
   width: '100%',
   position: 'relative',
-  backgroundImage: 'url("/images/travel.jpg")',
+  backgroundImage: `url("${getImagePath(IMAGES.travel)}")`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundAttachment: 'fixed', // This creates a parallax effect

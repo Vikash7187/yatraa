@@ -9,6 +9,7 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
+    // Copy public directory files with correct paths  
     rollupOptions: {
       output: {
         manualChunks: {

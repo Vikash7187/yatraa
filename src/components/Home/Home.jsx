@@ -33,6 +33,7 @@ import FeaturedPackages from './FeaturedPackages';
 import WhyChooseUs from './WhyChooseUs';
 import Testimonials from './Testimonials';
 import Newsletter from './Newsletter';
+import { getImagePath } from '../../utils/imagePaths';
 
 const Home = () => {
   const theme = useTheme();
@@ -59,10 +60,6 @@ const Home = () => {
     }
   }, [location]);
 
-  const handleGetQuote = () => {
-    navigate('/packages');
-  };
-
   if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -72,66 +69,64 @@ const Home = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh' }}>
-      {/* Success Alert for New Bookings */}
-      {showBookingSuccess && (
-        <Container maxWidth="lg" sx={{ pt: 12, pb: 2 }}>
-          <Alert 
-            severity="success" 
-            onClose={() => setShowBookingSuccess(false)}
-            sx={{ mb: 2 }}
-          >
-            <Typography variant="h6" gutterBottom>
-              🎉 Booking Confirmed Successfully!
-            </Typography>
-            <Typography>
-              {location.state?.message || 'Your hotel booking has been confirmed. Check your profile to view booking details.'}
-            </Typography>
-            <Button 
-              variant="outlined" 
-              size="small" 
-              onClick={() => navigate('/profile')} 
-              sx={{ mt: 1 }}
+    <Box 
+      sx={{ 
+        minHeight: '100vh',
+        backgroundImage: `url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(135deg, rgba(25, 118, 210, 0.8) 0%, rgba(46, 125, 50, 0.6) 100%)',
+          zIndex: 1,
+        }
+      }}
+    >
+      {/* All content with higher z-index to appear above overlay */}
+      <Box sx={{ position: 'relative', zIndex: 2 }}>
+        {/* Success Alert for New Bookings */}
+        {showBookingSuccess && (
+          <Container maxWidth="lg" sx={{ pt: 12, pb: 2 }}>
+            <Alert 
+              severity="success" 
+              onClose={() => setShowBookingSuccess(false)}
+              sx={{ mb: 2 }}
             >
-              View My Bookings
-            </Button>
-          </Alert>
-        </Container>
-      )}
-      
-      <Hero />
-      <TopDestinations />
-      <FeaturedPackages />
-      <WhyChooseUs />
-      <Testimonials />
-      <Newsletter />
+              <Typography variant="h6" gutterBottom>
+                🎉 Booking Confirmed Successfully!
+              </Typography>
+              <Typography>
+                {location.state?.message || 'Your hotel booking has been confirmed. Check your profile to view booking details.'}
+              </Typography>
+              <Button 
+                variant="outlined" 
+                size="small" 
+                onClick={() => navigate('/profile')} 
+                sx={{ mt: 1 }}
+              >
+                View My Bookings
+              </Button>
+            </Alert>
+          </Container>
+        )}
+        
+        <Hero />
+        <TopDestinations />
+        <FeaturedPackages />
+        <WhyChooseUs />
+        <Testimonials />
+        <Newsletter />
+      </Box>
     </Box>
   );
 };
 
-// Sample data for top destinations
-const topDestinations = [
-  {
-    id: 1,
-    name: 'Bali',
-    location: 'Indonesia',
-    rating: 4.8,
-    image: '/images/destinations/bali.jpg',
-  },
-  {
-    id: 2,
-    name: 'Santorini',
-    location: 'Greece',
-    rating: 4.9,
-    image: '/images/destinations/santorini.jpg',
-  },
-  {
-    id: 3,
-    name: 'Maldives',
-    location: 'South Asia',
-    rating: 4.7,
-    image: '/images/destinations/maldives.jpg',
-  },
-];
-
-export default Home; 
+export default Home;

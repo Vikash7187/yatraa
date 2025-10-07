@@ -36,6 +36,7 @@ import { format } from 'date-fns';
 import { useAuth } from '../../context/AuthContext';
 import { getProfile, getProfileByClerk } from '../../services/profileService';
 import { useUser } from '@clerk/clerk-react';
+import { getImagePath, IMAGES } from '../../utils/imagePaths';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
@@ -96,7 +97,7 @@ const Bookings = () => {
         price: b.totalPrice || 0,
         guests: b.guests,
         bookingNumber: `BK${String(b.id).padStart(4, '0')}`,
-        image: '/images/travel.jpg',
+        image: getImagePath(IMAGES.travel),
       }));
       setBookings(mapped);
     };

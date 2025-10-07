@@ -18,6 +18,7 @@ import {
   Search,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { getImagePath, IMAGES } from '../../utils/imagePaths';
 
 const Hero = () => {
   const theme = useTheme();
@@ -55,21 +56,19 @@ const Hero = () => {
         },
       }}
     >
-      {/* Background Video or Image */}
+      {/* Background Image */}
       <Box
-        component="img"
-        src="/images/travel.jpg"
-        alt="Luxury Hotel"
-        onError={(e) => {
-          e.target.style.display = 'none';
-          e.target.parentNode.style.background = 'linear-gradient(135deg, #1976d2 0%, #42a5f5 100%)';
-        }}
         sx={{
           position: 'absolute',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          zIndex: 0,
         }}
       />
 
