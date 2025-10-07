@@ -32,6 +32,7 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
+    console.error('🚨 ErrorBoundary - Error caught:', error);
     return { hasError: true, error };
   }
 
@@ -40,7 +41,17 @@ class ErrorBoundary extends React.Component {
     console.log('📍 Location:', window.location.href);
     console.log('📦 Environment:', import.meta.env.MODE);
     console.log('🔗 Base URL:', import.meta.env.BASE_URL);
+    console.log('🔍 Error Stack:', error.stack);
+    console.log('🔍 Component Stack:', errorInfo.componentStack);
     this.setState({ errorInfo });
+    
+    // Log specific error details for debugging
+    if (error.message.includes('Cannot resolve module')) {
+      console.error('❌ Module resolution error - check imports');
+    }
+    if (error.message.includes('is not defined')) {
+      console.error('❌ Variable/function not defined error');
+    }
   }
 
   render() {
@@ -61,7 +72,7 @@ class ErrorBoundary extends React.Component {
             background: 'rgba(255, 255, 255, 0.1)',
             padding: '40px',
             borderRadius: '15px',
-            maxWidth: '600px',
+            maxWidth: '800px',
             margin: '0 auto'
           }}>
             <h1 style={{ fontSize: '2.5rem', marginBottom: '20px' }}>🏖️ Yatraa Travel</h1>
@@ -69,27 +80,43 @@ class ErrorBoundary extends React.Component {
               ⚠️ Application Error Detected
             </div>
             <p>The React application encountered an error during loading.</p>
+            <p style={{ marginTop: '10px', fontSize: '14px' }}>Error: {this.state.error?.message}</p>
             <details style={{ textAlign: 'left', marginTop: '20px', background: 'rgba(0,0,0,0.3)', padding: '15px', borderRadius: '5px' }}>
               <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔍 Error Details</summary>
-              <pre style={{ fontSize: '12px', overflow: 'auto', marginTop: '10px' }}>
-                Error: {this.state.error?.toString()}
+              <pre style={{ fontSize: '12px', overflow: 'auto', marginTop: '10px', whiteSpace: 'pre-wrap' }}>
+                {this.state.error?.stack}
                 {this.state.errorInfo?.componentStack}
               </pre>
             </details>
-            <button 
-              onClick={() => window.location.reload()} 
-              style={{
-                background: '#4caf50',
-                color: 'white',
-                border: 'none',
-                padding: '10px 20px',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                marginTop: '20px'
-              }}
-            >
-              🔄 Reload Page
-            </button>
+            <div style={{ marginTop: '20px' }}>
+              <button 
+                onClick={() => window.location.reload()} 
+                style={{
+                  background: '#4caf50',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  marginRight: '10px'
+                }}
+              >
+                🔄 Reload Page
+              </button>
+              <button 
+                onClick={() => window.location.href = '/yatraa/'} 
+                style={{
+                  background: '#2196f3',
+                  color: 'white',
+                  border: 'none',
+                  padding: '10px 20px',
+                  borderRadius: '5px',
+                  cursor: 'pointer'
+                }}
+              >
+                🏠 Go Home
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -109,11 +136,26 @@ console.log('🔑 Clerk Key Available:', !!clerkPubKey);
 
 try {
   console.log('🎨 Creating React Root...');
-  const root = ReactDOM.createRoot(document.getElementById('root'));
+  const rootElement = document.getElementById('root');
+  if (!rootElement) {
+    throw new Error('Root element not found in DOM');
+  }
+  
+  const root = ReactDOM.createRoot(rootElement);
   
   console.log('🎨 Rendering App with Router...');
   const basename = import.meta.env.PROD ? "/yatraa" : "/";
   console.log('🗺️ Router basename:', basename);
+  
+  // Verify all imports are available
+  console.log('🔍 Checking imports...');
+  console.log('App component:', typeof App);
+  console.log('React component:', typeof React);
+  console.log('HashRouter component:', typeof HashRouter);
+  console.log('ThemeProvider component:', typeof ThemeProvider);
+  console.log('ClerkProvider component:', typeof ClerkProvider);
+  console.log('AuthProvider component:', typeof AuthProvider);
+  console.log('theme object:', typeof theme);
   
   root.render(
     <React.StrictMode>
@@ -139,43 +181,68 @@ try {
   
 } catch (error) {
   console.error('🚨 Fatal error during React app initialization:', error);
-  document.getElementById('root').innerHTML = `
-    <div style="
-      padding: 40px; 
-      text-align: center; 
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    ">
+  console.error('🚨 Error stack:', error.stack);
+  
+  // More detailed error information
+  if (error.message.includes('Root element')) {
+    console.error('❌ DOM Issue: Root element #root not found in index.html');
+  }
+  if (error.message.includes('Cannot resolve')) {
+    console.error('❌ Import Issue: Check if all imported modules exist');
+  }
+  
+  const rootElement = document.getElementById('root');
+  if (rootElement) {
+    rootElement.innerHTML = `
       <div style="
-        background: rgba(255, 255, 255, 0.1);
-        padding: 40px;
-        border-radius: 15px;
-        max-width: 600px;
-        margin: 0 auto;
+        padding: 40px; 
+        text-align: center; 
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       ">
-        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">🏖️ Yatraa Travel</h1>
-        <div style="background: #f44336; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-          ⚠️ Fatal Application Error
-        </div>
-        <p>Failed to initialize the React application.</p>
-        <p style="font-size: 14px; margin-top: 20px;">Error: ${error.message}</p>
-        <button onclick="window.location.reload()" style="
-          background: #4caf50;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 20px;
+        <div style="
+          background: rgba(255, 255, 255, 0.1);
+          padding: 40px;
+          border-radius: 15px;
+          max-width: 700px;
+          margin: 0 auto;
         ">
-          🔄 Reload Page
-        </button>
+          <h1 style="font-size: 2.5rem; margin-bottom: 20px;">🏖️ Yatraa Travel</h1>
+          <div style="background: #f44336; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            ⚠️ Fatal Application Error
+          </div>
+          <p>Failed to initialize the React application.</p>
+          <p style="font-size: 14px; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px;">Error: ${error.message}</p>
+          <div style="margin-top: 20px;">
+            <button onclick="window.location.reload()" style="
+              background: #4caf50;
+              color: white;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 5px;
+              cursor: pointer;
+              margin-right: 10px;
+            ">
+              🔄 Reload Page
+            </button>
+            <button onclick="console.log('Error details:', '${error.stack}')" style="
+              background: #ff9800;
+              color: white;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 5px;
+              cursor: pointer;
+            ">
+              🔍 Show Error in Console
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 }
