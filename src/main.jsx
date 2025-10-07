@@ -50,7 +50,7 @@ try {
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
       <ErrorBoundary>
-        <BrowserRouter basename={import.meta.env.DEV ? "/" : "/yatraa"}>
+        <BrowserRouter basename={import.meta.env.PROD ? "/yatraa" : "/"}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <ClerkProvider 
