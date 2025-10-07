@@ -13,8 +13,18 @@ import {
   useScrollTrigger,
 } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 import MenuIcon from '@mui/icons-material/Menu';
+
+// Conditionally import Clerk components
+let SignedIn, SignedOut, UserButton;
+try {
+  const clerkComponents = require('@clerk/clerk-react');
+  SignedIn = clerkComponents.SignedIn;
+  SignedOut = clerkComponents.SignedOut;
+  UserButton = clerkComponents.UserButton;
+} catch (error) {
+  console.log('Clerk components not available - running in demo mode');
+}
 
 const pages = [
   { name: 'Home', path: '/' },
@@ -31,6 +41,11 @@ const Navbar = () => {
     disableHysteresis: true,
     threshold: 0,
   });
+  
+  // Check if Clerk is available
+  const hasValidClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY && 
+                          import.meta.env.VITE_CLERK_PUBLISHABLE_KEY !== 'pk_test_placeholder';
+  const clerkAvailable = hasValidClerkKey && SignedIn && SignedOut && UserButton;
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -164,15 +179,25 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, alignItems: 'center' }}>
-            <SignedOut>
-              <Button color="inherit" component={RouterLink} to="/login">Login</Button>
-              <Button color="inherit" component={RouterLink} to="/register">Register</Button>
-            </SignedOut>
-            <SignedIn>
-              <Button color="inherit" component={RouterLink} to="/profile">My Profile</Button>
-              <Button color="inherit" component={RouterLink} to="/add-package">Add Package</Button>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            {clerkAvailable ? (
+              <>
+                <SignedOut>
+                  <Button color="inherit" component={RouterLink} to="/login">Login</Button>
+                  <Button color="inherit" component={RouterLink} to="/register">Register</Button>
+                </SignedOut>
+                <SignedIn>
+                  <Button color="inherit" component={RouterLink} to="/profile">My Profile</Button>
+                  <Button color="inherit" component={RouterLink} to="/add-package">Add Package</Button>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+              </>
+            ) : (
+              <>
+                <Button color="inherit" component={RouterLink} to="/login">Login</Button>
+                <Button color="inherit" component={RouterLink} to="/register">Register</Button>
+                <Button color="inherit" component={RouterLink} to="/contact">Contact</Button>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>

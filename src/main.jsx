@@ -14,14 +14,13 @@ import GitHubPagesFallback from './components/GitHubPagesFallback.jsx';
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 // Environment variable validation with fallbacks for GitHub Pages
-if (!clerkPubKey) {
-  console.warn('⚠️ Missing VITE_CLERK_PUBLISHABLE_KEY environment variable');
-  console.warn('Running in demo mode - authentication features will be limited.');
-  if (import.meta.env.DEV) {
-    console.warn('Please add your Clerk publishable key to the environment variables:');
-    console.warn('VITE_CLERK_PUBLISHABLE_KEY=your_actual_key_here');
-    console.warn('Get your key from: https://dashboard.clerk.com/');
-  }
+if (!clerkPubKey || clerkPubKey === 'pk_test_placeholder') {
+  console.warn('⚠️ Missing or invalid VITE_CLERK_PUBLISHABLE_KEY environment variable');
+  console.warn('🔄 Running in demo mode - authentication features will be limited.');
+  console.warn('🔑 To enable full authentication, add your Clerk publishable key:');
+  console.warn('📋 1. Get your key from: https://dashboard.clerk.com/last-active?path=api-keys');
+  console.warn('📋 2. Create .env file with: VITE_CLERK_PUBLISHABLE_KEY=your_actual_key_here');
+  console.warn('📋 3. For GitHub Pages: Set repository secret VITE_CLERK_PUBLISHABLE_KEY');
 }
 
 // Enhanced error boundary for GitHub Pages debugging
@@ -132,7 +131,8 @@ console.log('📦 Environment:', import.meta.env.MODE);
 console.log('🔗 Base URL:', import.meta.env.BASE_URL);
 console.log('🐛 Development Mode:', import.meta.env.DEV);
 console.log('📦 Production Mode:', import.meta.env.PROD);
-console.log('🔑 Clerk Key Available:', !!clerkPubKey);
+console.log('🔑 Clerk Key Available:', !!clerkPubKey && clerkPubKey !== 'pk_test_placeholder');
+console.log('🔄 Demo Mode:', !clerkPubKey || clerkPubKey === 'pk_test_placeholder');
 
 try {
   console.log('🎨 Creating React Root...');
@@ -163,14 +163,20 @@ try {
         <HashRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <ClerkProvider 
-              publishableKey={clerkPubKey || 'pk_test_placeholder'} 
-              afterSignOutUrl="/"
-            >
+            {clerkPubKey && clerkPubKey !== 'pk_test_placeholder' ? (
+              <ClerkProvider 
+                publishableKey={clerkPubKey} 
+                afterSignOutUrl="/"
+              >
+                <AuthProvider>
+                  <App />
+                </AuthProvider>
+              </ClerkProvider>
+            ) : (
               <AuthProvider>
                 <App />
               </AuthProvider>
-            </ClerkProvider>
+            )}
           </ThemeProvider>
         </HashRouter>
       </ErrorBoundary>

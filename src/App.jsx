@@ -27,13 +27,11 @@ function App() {
   console.log('Environment:', import.meta.env.MODE);
   console.log('Base URL:', import.meta.env.BASE_URL);
   
-  // Simplified version for GitHub Pages - bypass auth checks
-  const hasClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+  // Check if Clerk is available
+  const hasValidClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY && 
+                          import.meta.env.VITE_CLERK_PUBLISHABLE_KEY !== 'pk_test_placeholder';
   
-  // For GitHub Pages, always render the main app
-  if (!import.meta.env.DEV && !hasClerkKey) {
-    console.log('Production mode without Clerk - rendering main app');
-  }
+  console.log('Clerk available:', hasValidClerkKey);
   
   return (
     <div className="App">
@@ -52,11 +50,11 @@ function App() {
         <Route path="/add-package" element={<AddPackage />} />
         <Route 
           path="/login" 
-          element={hasClerkKey ? <SignIn redirectUrl="/" /> : <ClerkConfigError />} 
+          element={hasValidClerkKey ? <SignIn redirectUrl="/" /> : <ClerkConfigError />} 
         />
         <Route 
           path="/register" 
-          element={hasClerkKey ? <SignUp redirectUrl="/" /> : <ClerkConfigError />} 
+          element={hasValidClerkKey ? <SignUp redirectUrl="/" /> : <ClerkConfigError />} 
         />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
