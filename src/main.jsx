@@ -11,13 +11,15 @@ import { ClerkProvider } from '@clerk/clerk-react';
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-// Environment variable validation
+// Environment variable validation with fallbacks for GitHub Pages
 if (!clerkPubKey) {
   console.warn('⚠️ Missing VITE_CLERK_PUBLISHABLE_KEY environment variable');
-  console.warn('Clerk authentication features will be limited.');
-  console.warn('Please add your Clerk publishable key to the environment variables:');
-  console.warn('VITE_CLERK_PUBLISHABLE_KEY=your_actual_key_here');
-  console.warn('Get your key from: https://dashboard.clerk.com/');
+  console.warn('Running in demo mode - authentication features will be limited.');
+  if (import.meta.env.DEV) {
+    console.warn('Please add your Clerk publishable key to the environment variables:');
+    console.warn('VITE_CLERK_PUBLISHABLE_KEY=your_actual_key_here');
+    console.warn('Get your key from: https://dashboard.clerk.com/');
+  }
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

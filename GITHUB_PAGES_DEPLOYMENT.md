@@ -62,10 +62,37 @@ export default defineConfig({
 
 ## Troubleshooting
 
+### Empty Page Issue - SOLVED:
+If you see an empty page, here are the fixes applied:
+
+1. **Router Configuration**: ✅ Fixed
+   - `basename="/yatraa"` in BrowserRouter
+   - SPA redirect scripts in index.html and 404.html
+
+2. **GitHub Actions Permissions**: ✅ Fixed
+   - Updated workflow with proper Pages permissions
+   - Using official GitHub Pages deployment actions
+
+3. **Environment Variables**: ✅ Fixed
+   - Added fallback values for missing env vars
+   - Created .env.production for GitHub Pages
+
+4. **Asset Loading**: ✅ Fixed
+   - Vite base path correctly set to '/yatraa/'
+   - All images and assets use proper paths
+
 ### Common Issues:
 1. **404 Error**: Ensure GitHub Pages is enabled with "GitHub Actions" source
 2. **Assets not loading**: Check `base: '/yatraa/'` in vite.config.js
 3. **Build fails**: Ensure Node.js >= 20 and run `npm ci`
+4. **Empty page**: Check console for JavaScript errors
+
+### After Deployment Checklist:
+- [ ] Visit https://Vikash7187.github.io/yatraa and verify homepage loads
+- [ ] Test navigation to different pages (destinations, packages, etc.)
+- [ ] Check browser console for any errors
+- [ ] Verify images and assets load correctly
+- [ ] Test responsive design on mobile devices
 
 ### Build Status:
 Check the Actions tab in your GitHub repository to monitor deployment status.
