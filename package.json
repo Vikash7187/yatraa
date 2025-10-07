@@ -1,14 +1,35 @@
 {
   "name": "yatraa",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Yatraa - Modern travel website for luxury hotels and destinations",
   "type": "module",
+  "homepage": "https://yatraa.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vikash7187/yatraa.git"
+  },
+  "keywords": [
+    "travel",
+    "hotel",
+    "booking",
+    "luxury",
+    "tourism",
+    "react",
+    "vite",
+    "mui"
+  ],
+  "author": "Yatraa Team",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npx vite build",
     "preview": "vite preview",
     "start": "vite preview",
-    "mock-api": "node mock/server.mjs"
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "mock-api": "node mock/server.mjs",
+    "build:netlify": "npm install && npx vite build",
+    "build:vercel": "npm install && npx vite build"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.46.2",
@@ -42,5 +63,17 @@
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
