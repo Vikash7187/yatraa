@@ -133,139 +133,122 @@ const BookingForm = styled(Box)(({ theme }) => ({
   boxShadow: theme.shadows[3],
 }));
 
-// Sample packages data
+// Sample packages data matching Railway backend
 const packagesData = [
   {
     id: 1,
-    name: "Romantic Bali Getaway",
-    type: "Honeymoon",
-    duration: 7,
-    price: 1299,
-    rating: 4.8,
-    reviews: 245,
-    image: "/images/destinations/bali.jpg",
-    description: "Experience the perfect romantic escape in tropical paradise with our carefully curated Bali getaway package.",
-    location: "Bali, Indonesia",
-    highlights: ["Luxury Resort", "Couple Spa", "Private Beach", "Sunset Dinner", "Island Tours"],
+    name: "Taj Lake Palace Udaipur",
+    type: "Palace",
+    location: "Udaipur, Rajasthan",
+    price: 45000,
+    duration: 3,
+    rating: 4.9,
+    reviews: 324,
+    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    mealPlan: "All Inclusive",
+    description: "Experience royal luxury in this floating palace on Lake Pichola, one of India's most iconic heritage hotels",
+    highlights: [
+      "Floating Palace Hotel",
+      "Lake Pichola Views", 
+      "Royal Heritage Experience",
+      "Fine Dining",
+      "Luxury Spa"
+    ],
     itinerary: [
       {
         day: 1,
-        title: "Arrival & Welcome",
-        description: "Airport pickup, check-in to luxury resort, welcome dinner"
+        title: "Royal Arrival",
+        description: "Airport pickup, boat transfer to palace, welcome ceremony with royal treatment"
       },
       {
         day: 2,
-        title: "Spa & Relaxation",
-        description: "Couple spa treatment, beach relaxation, romantic dinner"
+        title: "Palace Exploration", 
+        description: "Heritage walk, spa treatments, sunset dinner by the lake"
       },
       {
         day: 3,
-        title: "Island Exploration",
-        description: "Private island tour, water activities, sunset cruise"
+        title: "Cultural Experience",
+        description: "Cultural show, city tour, departure with royal memories"
       }
     ],
     inclusions: [
-      "5-star accommodation",
-      "Daily breakfast",
+      "5-star palace accommodation",
+      "All meals included",
       "Airport transfers",
-      "Guided tours",
-      "Couple spa session",
-      "Welcome dinner"
+      "Guided heritage tours",
+      "Spa session",
+      "Cultural show"
     ],
     exclusions: [
-      "International flights",
-      "Travel insurance",
+      "Domestic flights",
+      "Travel insurance", 
       "Personal expenses",
       "Additional activities"
-    ]
+    ],
+    amenities: ["Swimming Pool", "Spa", "Fine Dining", "Lake View"],
+    category: "Palace",
+    rooms: ["Luxury Room", "Royal Suite", "Grand Royal Suite"],
+    activities: ["Heritage Walk", "Boat Ride", "Cultural Show"]
   },
   {
     id: 2,
-    name: "Swiss Family Adventure",
-    type: "Family",
-    duration: 5,
-    price: 2499,
-    rating: 4.5,
-    reviews: 180,
-    image: "/images/destinations/swiss-alps.jpg",
-    description: "Experience an unforgettable family adventure in the majestic Swiss Alps with activities for everyone.",
-    location: "Swiss Alps, Switzerland",
-    highlights: ["Ski Resort", "Family Activities", "Mountain Views", "Adventure Sports", "Kids Club"],
+    name: "The Oberoi Mumbai",
+    type: "Luxury Business",
+    location: "Mumbai, Maharashtra", 
+    price: 35000,
+    duration: 4,
+    rating: 4.8,
+    reviews: 287,
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+    mealPlan: "Breakfast & Dinner",
+    description: "Luxury business hotel in the heart of Mumbai with stunning views of the Arabian Sea",
+    highlights: [
+      "Arabian Sea Views",
+      "Business Center",
+      "Rooftop Pool", 
+      "Award-winning Restaurants",
+      "Luxury Spa"
+    ],
     itinerary: [
       {
         day: 1,
-        title: "Arrival & Welcome",
-        description: "Airport pickup, resort check-in, welcome dinner"
+        title: "Mumbai Arrival",
+        description: "Airport pickup, hotel check-in, welcome drink with city views"
       },
       {
         day: 2,
-        title: "Ski Adventure",
-        description: "Ski lessons, winter sports, evening bonfire"
+        title: "City Exploration",
+        description: "Mumbai city tour, Gateway of India, Marine Drive, local markets"
       },
       {
         day: 3,
-        title: "Mountain Exploration",
-        description: "Cable car ride, hiking, mountain activities"
+        title: "Bollywood Experience", 
+        description: "Film City tour, Bollywood studio visit, traditional Indian dinner"
+      },
+      {
+        day: 4,
+        title: "Relaxation & Departure",
+        description: "Spa treatments, pool time, shopping, departure transfer"
       }
     ],
     inclusions: [
-      "4-star resort accommodation",
-      "Ski passes",
-      "Equipment rental",
-      "Daily meals",
-      "Family activities",
-      "Mountain guide"
+      "Luxury hotel accommodation",
+      "Daily breakfast and dinner",
+      "Airport transfers",
+      "City tours",
+      "Bollywood studio visit", 
+      "Spa session"
     ],
     exclusions: [
-      "Flights",
-      "Travel insurance",
-      "Personal gear",
-      "Extra activities"
-    ]
-  },
-  {
-    id: 3,
-    name: "Greek Island Explorer",
-    type: "Solo",
-    duration: 10,
-    price: 1799,
-    rating: 4.7,
-    reviews: 210,
-    image: "/images/destinations/santorini.jpg",
-    description: "Embark on an unforgettable journey through the Greek Islands, experiencing the best of Mediterranean culture.",
-    location: "Greek Islands, Greece",
-    highlights: ["Island Hopping", "Cultural Tours", "Beach Activities", "Local Cuisine", "Historical Sites"],
-    itinerary: [
-      {
-        day: 1,
-        title: "Athens Arrival",
-        description: "Airport pickup, hotel check-in, Athens city tour"
-      },
-      {
-        day: 2,
-        title: "Santorini Adventure",
-        description: "Ferry to Santorini, island tour, sunset viewing"
-      },
-      {
-        day: 3,
-        title: "Beach & Culture",
-        description: "Beach activities, local village tour, cooking class"
-      }
-    ],
-    inclusions: [
-      "Hotel accommodation",
-      "Ferry transfers",
-      "Island tours",
-      "Breakfast daily",
-      "Local guide",
-      "Welcome dinner"
-    ],
-    exclusions: [
-      "International flights",
+      "Domestic flights",
       "Travel insurance",
       "Personal expenses",
       "Optional activities"
-    ]
+    ],
+    amenities: ["Infinity Pool", "Business Center", "Multiple Restaurants", "Spa & Fitness"],
+    category: "Business Hotel",
+    rooms: ["Deluxe Room", "Executive Suite", "Presidential Suite"],
+    activities: ["City Tours", "Bollywood Experience", "Fine Dining"]
   }
 ];
 

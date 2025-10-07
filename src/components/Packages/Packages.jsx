@@ -44,6 +44,7 @@ import {
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { checkAvailability } from '../../services/bookingService';
+import { getAllPackages } from '../../services/packageService';
 import { format, addDays } from 'date-fns';
 import RecommendedPackages from './RecommendedPackages';
 
@@ -213,11 +214,9 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await fetch('http://localhost:3002/api/packages');
-        if (!response.ok) {
-          throw new Error('Failed to fetch packages');
-        }
-        const data = await response.json();
+        console.log('Fetching packages from API...');
+        const data = await getAllPackages();
+        console.log('API returned packages:', data);
         setPackages(data);
         setError(null);
       } catch (error) {
