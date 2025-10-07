@@ -34,6 +34,7 @@ import WhyChooseUs from './WhyChooseUs';
 import Testimonials from './Testimonials';
 import Newsletter from './Newsletter';
 import { getImagePath } from '../../utils/imagePaths';
+import travelImage from '../../assets/travel.jpg';
 
 const Home = () => {
   const theme = useTheme();
@@ -72,7 +73,7 @@ const Home = () => {
     <Box 
       sx={{ 
         minHeight: '100vh',
-        backgroundImage: `url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+        backgroundImage: `url(${travelImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

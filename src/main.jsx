@@ -126,7 +126,7 @@ try {
               afterSignOutUrl="/"
             >
               <AuthProvider>
-                <SimpleApp />
+                <App />
               </AuthProvider>
             </ClerkProvider>
           </ThemeProvider>

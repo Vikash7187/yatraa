@@ -19,6 +19,7 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { getImagePath, IMAGES } from '../../utils/imagePaths';
+import travelImage from '../../assets/travel.jpg';
 
 const Hero = () => {
   const theme = useTheme();
@@ -64,7 +65,7 @@ const Hero = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+          backgroundImage: `url(${travelImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
