@@ -6,9 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:netlify": "npm install && npm run build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "start": "vite preview",
     "mock-api": "node mock/server.mjs"
   },
   "dependencies": {
