@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App.jsx';
@@ -117,7 +117,7 @@ try {
   root.render(
     <React.StrictMode>
       <ErrorBoundary>
-        <BrowserRouter basename={basename}>
+        <HashRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <ClerkProvider 
@@ -129,7 +129,7 @@ try {
               </AuthProvider>
             </ClerkProvider>
           </ThemeProvider>
-        </BrowserRouter>
+        </HashRouter>
       </ErrorBoundary>
     </React.StrictMode>
   );

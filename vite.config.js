@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/yatraa/' : '/', // Conditional base path
+  base: '/yatraa/', // Always use GitHub Pages base path
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
