@@ -22,7 +22,7 @@ if (!clerkPubKey) {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/yatraa">
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ClerkProvider 
