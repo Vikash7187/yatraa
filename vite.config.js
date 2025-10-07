@@ -8,16 +8,14 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    sourcemap: false,
+    sourcemap: true, // Enable for debugging
     // Copy public directory files with correct paths  
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
-          mui: ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
-          clerk: ['@clerk/clerk-react'],
-          utils: ['axios', 'date-fns']
+          mui: ['@mui/material', '@mui/icons-material'],
         }
       }
     }

@@ -21,16 +21,17 @@ import { SignIn, SignUp } from '@clerk/clerk-react';
 import './App.css';
 
 function App() {
-  const { user } = useAuth();
+  // Debug information for GitHub Pages
+  console.log('App rendering...');
+  console.log('Environment:', import.meta.env.MODE);
+  console.log('Base URL:', import.meta.env.BASE_URL);
+  
+  // Simplified version for GitHub Pages - bypass auth checks
   const hasClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
   
-  // Show configuration page if essential environment variables are missing
-  if (!hasClerkKey) {
-    return (
-      <div className="App">
-        <ConfigMissing />
-      </div>
-    );
+  // For GitHub Pages, always render the main app
+  if (!import.meta.env.DEV && !hasClerkKey) {
+    console.log('Production mode without Clerk - rendering main app');
   }
   
   return (

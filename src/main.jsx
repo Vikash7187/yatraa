@@ -8,6 +8,7 @@ import theme from './theme';
 import './index.css';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ClerkProvider } from '@clerk/clerk-react';
+import GitHubPagesFallback from './components/GitHubPagesFallback.jsx';
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -22,20 +23,57 @@ if (!clerkPubKey) {
   }
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter basename="/yatraa">
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ClerkProvider 
-          publishableKey={clerkPubKey || 'pk_test_placeholder'} 
-          afterSignOutUrl="/"
-        >
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </ClerkProvider>
-      </ThemeProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+// Error boundary for GitHub Pages
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('React Error Boundary caught an error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <GitHubPagesFallback />;
+    }
+    return this.props.children;
+  }
+}
+
+try {
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <ErrorBoundary>
+        <BrowserRouter basename={import.meta.env.DEV ? "/" : "/yatraa"}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <ClerkProvider 
+              publishableKey={clerkPubKey || 'pk_test_placeholder'} 
+              afterSignOutUrl="/"
+            >
+              <AuthProvider>
+                <App />
+              </AuthProvider>
+            </ClerkProvider>
+          </ThemeProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+} catch (error) {
+  console.error('Failed to render React app:', error);
+  // Fallback rendering
+  document.getElementById('root').innerHTML = `
+    <div style="padding: 40px; text-align: center; font-family: Arial, sans-serif;">
+      <h1 style="color: #d32f2f;">⚠️ Application Error</h1>
+      <p>Failed to load the React application. Please check the browser console for details.</p>
+      <p style="color: #666; font-size: 14px;">Error: ${error.message}</p>
+    </div>
+  `;
+}

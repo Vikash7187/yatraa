@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yatraa - Debug</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        background-color: #f5f5f5;
+      }
+      .debug-info {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+      }
+      .success { color: #2e7d32; }
+      .error { color: #d32f2f; }
+      .warning { color: #f57c00; }
+    </style>
+  </head>
+  <body>
+    <div class="debug-info">
+      <h1>🔍 Yatraa Debug Information</h1>
+      <p><strong>Current URL:</strong> <span id="currentUrl"></span></p>
+      <p><strong>Base Path:</strong> <span id="basePath"></span></p>
+      <p><strong>Environment:</strong> <span id="environment"></span></p>
+      <div id="status">
+        <p class="warning">⏳ Loading React application...</p>
+      </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script>
+      // Debug information
+      document.getElementById('currentUrl').textContent = window.location.href;
+      document.getElementById('basePath').textContent = window.location.pathname;
+      document.getElementById('environment').textContent = 'Production (GitHub Pages)';
+
+      // Check if React app loads
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length === 0) {
+          document.getElementById('status').innerHTML = 
+            '<p class="error">❌ React application failed to load</p>' +
+            '<p>Check browser console for errors</p>';
+        } else {
+          document.getElementById('status').innerHTML = 
+            '<p class="success">✅ React application loaded successfully</p>';
+        }
+      }, 3000);
+
+      // Log any JavaScript errors
+      window.addEventListener('error', (e) => {
+        console.error('JavaScript Error:', e.error);
+        const status = document.getElementById('status');
+        status.innerHTML += `<p class="error">❌ Error: ${e.message}</p>`;
+      });
+    </script>
+
+    <!-- Start Single Page Apps for GitHub Pages -->
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <!-- End Single Page Apps for GitHub Pages -->
+
+    <script type="module" src="/yatraa/src/main.jsx"></script>
+  </body>
+</html>
