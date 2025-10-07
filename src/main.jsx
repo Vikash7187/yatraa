@@ -4,6 +4,7 @@ import { HashRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App.jsx';
+import SimpleApp from './SimpleApp.jsx';
 import theme from './theme';
 import './index.css';
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -125,7 +126,7 @@ try {
               afterSignOutUrl="/"
             >
               <AuthProvider>
-                <App />
+                <SimpleApp />
               </AuthProvider>
             </ClerkProvider>
           </ThemeProvider>

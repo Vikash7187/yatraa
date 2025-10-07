@@ -31,7 +31,70 @@
     <!-- End Single Page Apps for GitHub Pages -->
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Immediate fallback content -->
+      <div style="
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+        color: white;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div style="
+          background: rgba(255, 255, 255, 0.1);
+          padding: 60px 40px;
+          border-radius: 20px;
+          backdrop-filter: blur(15px);
+          max-width: 600px;
+        ">
+          <h1 style="font-size: 3rem; margin-bottom: 20px;">🏖️ Yatraa</h1>
+          <div style="background: #4caf50; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            ⏳ Loading Travel Website...
+          </div>
+          <p style="font-size: 1.2rem;">Please wait while we load your luxury travel experience.</p>
+          <div id="loading-status" style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
+            Initializing React application...
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      // Loading status updates
+      let loadingStep = 0;
+      const steps = [
+        'Initializing React application...',
+        'Loading travel components...',
+        'Setting up routing...',
+        'Preparing your experience...'
+      ];
+      
+      setInterval(() => {
+        const status = document.getElementById('loading-status');
+        if (status && loadingStep < steps.length - 1) {
+          loadingStep++;
+          status.textContent = steps[loadingStep];
+        }
+      }, 1000);
+      
+      // Check if React loads
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length === 1) {
+          console.log('⚠️ React app did not load - fallback content still showing');
+          const status = document.getElementById('loading-status');
+          if (status) {
+            status.innerHTML = '❌ Loading failed. <a href="/yatraa/backup.html" style="color: #ffeb3b;">Try backup page</a>';
+          }
+        }
+      }, 10000);
+    </script>
+    
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatraa - Working!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 60px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            text-align: center;
+            max-width: 700px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 { font-size: 4rem; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .status { 
+            background: #4caf50; 
+            padding: 20px 30px; 
+            border-radius: 10px; 
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        p { font-size: 1.3rem; margin: 20px 0; line-height: 1.6; }
+        .btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn:hover { background: #f57c00; transform: translateY(-2px); }
+        .debug {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .success { color: #4caf50; }
+        .working { color: #8bc34a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏖️ Yatraa Travel</h1>
+        <div class="status">✅ GitHub Pages Deployment WORKING!</div>
+        
+        <p class="success">🎉 Congratulations! Your website is successfully deployed.</p>
+        <p>This confirms that GitHub Pages deployment is working correctly.</p>
+        
+        <div style="margin: 30px 0;">
+            <a href="#/" class="btn">🏠 Try Main App</a>
+            <a href="backup.html" class="btn">📄 Backup Page</a>
+            <button onclick="window.location.reload()" class="btn">🔄 Reload</button>
+        </div>
+        
+        <div class="debug">
+            <strong class="working">🔍 Deployment Verification:</strong><br><br>
+            <strong>✅ Static hosting:</strong> <span class="success">Working</span><br>
+            <strong>✅ Asset serving:</strong> <span class="success">Working</span><br>
+            <strong>✅ Domain routing:</strong> <span class="success">Working</span><br>
+            <strong>✅ CSS styling:</strong> <span class="success">Working</span><br><br>
+            
+            <strong>📊 Technical Details:</strong><br>
+            URL: <span id="url"></span><br>
+            Path: <span id="path"></span><br>
+            Protocol: <span id="protocol"></span><br>
+            Host: <span id="host"></span><br>
+            Time: <span id="time"></span><br>
+            User Agent: <span id="ua"></span>
+        </div>
+        
+        <div style="margin-top: 30px; font-size: 16px; opacity: 0.9;">
+            <p><strong>🚀 Next Steps:</strong></p>
+            <p>1. Verify this page loads correctly</p>
+            <p>2. Test the main React app (click button above)</p>
+            <p>3. If React app doesn't work, check browser console</p>
+        </div>
+    </div>
+
+    <script>
+        // Populate debug information
+        document.getElementById('url').textContent = window.location.href;
+        document.getElementById('path').textContent = window.location.pathname;
+        document.getElementById('protocol').textContent = window.location.protocol;
+        document.getElementById('host').textContent = window.location.host;
+        document.getElementById('time').textContent = new Date().toLocaleString();
+        document.getElementById('ua').textContent = navigator.userAgent.substring(0, 50) + '...';
+
+        // Console success message
+        console.log('✅ SUCCESS: GitHub Pages deployment is working correctly!');
+        console.log('🌐 URL:', window.location.href);
+        console.log('📅 Loaded at:', new Date().toISOString());
+        
+        // Test if we're on GitHub Pages
+        if (window.location.hostname.includes('github.io')) {
+            console.log('🎯 Confirmed: Running on GitHub Pages');
+        } else {
+            console.log('🏠 Running locally for testing');
+        }
+    </script>
+</body>
+</html>
