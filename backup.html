@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatraa - Travel & Tourism</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            color: white;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 60px 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            max-width: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 20px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .status { 
+            background: #4caf50; 
+            padding: 15px 25px; 
+            border-radius: 8px; 
+            display: inline-block; 
+            margin: 25px 0;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        p { 
+            font-size: 1.3rem; 
+            margin: 20px 0; 
+            line-height: 1.6;
+        }
+        .debug {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #f57c00;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏖️ Yatraa</h1>
+        <div class="status">✅ GitHub Pages Working</div>
+        <p>Your travel website is successfully deployed!</p>
+        <p>Loading the React application...</p>
+        
+        <button class="btn" onclick="window.location.href='#/'">🏠 Go to Home</button>
+        <button class="btn" onclick="window.location.reload()">🔄 Reload</button>
+        
+        <div class="debug">
+            <strong>🔍 Debug Info:</strong><br>
+            URL: <span id="url"></span><br>
+            Path: <span id="path"></span><br>
+            Hash: <span id="hash"></span><br>
+            Time: <span id="time"></span>
+        </div>
+    </div>
+
+    <script>
+        // Debug information
+        document.getElementById('url').textContent = window.location.href;
+        document.getElementById('path').textContent = window.location.pathname;
+        document.getElementById('hash').textContent = window.location.hash || '(none)';
+        document.getElementById('time').textContent = new Date().toLocaleString();
+
+        // Auto-redirect to React app after 3 seconds
+        setTimeout(() => {
+            if (window.location.hash === '') {
+                window.location.hash = '#/';
+            }
+        }, 3000);
+
+        // Log status
+        console.log('✅ Backup page loaded successfully');
+        console.log('🔗 Current URL:', window.location.href);
+    </script>
+</body>
+</html>
