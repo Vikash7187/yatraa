@@ -1,25 +1,44 @@
 import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:3002/api';
+import { API_BASE_URL } from '../config/api.js';
 
 export const getProfile = async (id) => {
-  const response = await axios.get(`${API_BASE_URL}/profiles/${id}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/profiles/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to get profile:', error);
+    throw new Error('Failed to get profile');
+  }
 };
 
 export const getProfileByClerk = async (clerkUserId) => {
-  const response = await axios.get(`${API_BASE_URL}/profiles/by-clerk/${clerkUserId}`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/profiles/by-clerk/${clerkUserId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to get profile by Clerk ID:', error);
+    throw new Error('Failed to get profile by Clerk ID');
+  }
 };
 
 export const updateProfile = async (id, profileData) => {
-  const response = await axios.put(`${API_BASE_URL}/profiles/${id}`, profileData);
-  return response.data;
+  try {
+    const response = await axios.put(`${API_BASE_URL}/profiles/${id}`, profileData);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to update profile:', error);
+    throw new Error('Failed to update profile');
+  }
 };
 
 export const createProfile = async (profileData) => {
-  const response = await axios.post(`${API_BASE_URL}/profiles`, profileData);
-  return response.data;
+  try {
+    const response = await axios.post(`${API_BASE_URL}/profiles`, profileData);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create profile:', error);
+    throw new Error('Failed to create profile');
+  }
 };
 
 
