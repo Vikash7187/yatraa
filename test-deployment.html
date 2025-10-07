@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yatraa - Test Deployment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            color: white;
+            text-align: center;
+            padding: 50px;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+        }
+        h1 { font-size: 3rem; margin-bottom: 20px; }
+        p { font-size: 1.2rem; margin: 15px 0; }
+        .status { 
+            background: #4caf50; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            display: inline-block; 
+            margin: 20px 0;
+        }
+        .debug {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏖️ Yatraa Travel</h1>
+        <div class="status">✅ Deployment Successful</div>
+        <p>GitHub Pages deployment is working correctly!</p>
+        <p>Your travel website infrastructure is ready.</p>
+        
+        <div class="debug">
+            <strong>Debug Information:</strong><br>
+            URL: <span id="currentUrl"></span><br>
+            Path: <span id="currentPath"></span><br>
+            Timestamp: <span id="timestamp"></span><br>
+            User Agent: <span id="userAgent"></span>
+        </div>
+    </div>
+
+    <script>
+        // Debug information
+        document.getElementById('currentUrl').textContent = window.location.href;
+        document.getElementById('currentPath').textContent = window.location.pathname;
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        document.getElementById('userAgent').textContent = navigator.userAgent.substring(0, 60) + '...';
+
+        // Check if this is GitHub Pages
+        if (window.location.hostname.includes('github.io')) {
+            console.log('✅ Running on GitHub Pages');
+        } else {
+            console.log('🔧 Running locally');
+        }
+    </script>
+</body>
+</html>
