@@ -1,7 +1,20 @@
 # GitHub Pages Deployment Guide
 
 ## Overview
-This guide explains how to deploy the Yatraa travel website to GitHub Pages using automated workflows.
+This guide explains how to deploy the Yatraa travel website to GitHub Pages from the `/root` folder using automated workflows.
+
+## Repository Structure
+```
+repository/
+├── root/                    # ← Your project files are here
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   ├── vite.config.js
+│   └── ...
+└── .github/workflows/       # ← Deployment configuration
+    └── deploy.yml
+```
 
 ## Prerequisites
 - GitHub repository: `https://github.com/Vikash7187/yatraa.git`

@@ -3,8 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'root/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'root/**'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -31,11 +35,14 @@ jobs:
       with:
         node-version: '20'
         cache: 'npm'
+        cache-dependency-path: 'root/package-lock.json'
         
     - name: Install dependencies
+      working-directory: ./root
       run: npm ci
       
     - name: Build project
+      working-directory: ./root
       run: npm run build
       env:
         VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
@@ -46,8 +53,9 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        path: './dist'
+        path: './root/dist'
         
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v2
+      if: github.ref == 'refs/heads/main'
