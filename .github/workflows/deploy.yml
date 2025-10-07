@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Static Site to GitHub Pages
 
 on:
   push:
@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -27,29 +27,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build project
-      run: npm run build
-      env:
-        VITE_CLERK_PUBLISHABLE_KEY: 'pk_test_placeholder'
-        NODE_ENV: production
-        
-    - name: Debug build output
+    - name: Create deployment directory
       run: |
-        echo "Build completed. Checking output..."
-        ls -la dist/
-        echo "Index.html content:"
-        cat dist/index.html
-        echo "File sizes:"
-        du -sh dist/*
+        mkdir -p deploy
+        cp index.html deploy/
+        echo "Static site prepared for deployment"
+        ls -la deploy/
+        
+    - name: Verify deployment content
+      run: |
+        echo "Deployment content:"
+        cat deploy/index.html | head -20
+        echo "..."
         
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -57,7 +46,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './dist'
+        path: './deploy'
         
     - name: Deploy to GitHub Pages
       id: deployment
