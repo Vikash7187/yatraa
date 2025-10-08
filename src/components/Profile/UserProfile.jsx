@@ -492,7 +492,7 @@ const UserProfile = () => {
           </Grid>
           <Grid item xs={12} sm={4}>
             <StatCard>
-              <LocationOn sx={{ fontSize: 40, color: '#FF9800', mb: 1 }} />
+              <LocationIcon sx={{ fontSize: 40, color: '#FF9800', mb: 1 }} />
               <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'white' }}>
                 {stats.favoriteDestinations}
               </Typography>
@@ -672,7 +672,7 @@ const UserProfile = () => {
                                 </Typography>
                                 {isPackageDataAvailable && (
                                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <LocationOn sx={{ fontSize: 18, mr: 1, color: '#FF9800' }} />
+                                    <LocationIcon sx={{ fontSize: 18, mr: 1, color: '#FF9800' }} />
                                     <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                                       {packageData.location || 'Location not available'}
                                     </Typography>
