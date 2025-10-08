@@ -339,7 +339,7 @@ const UserProfile = () => {
   return (
     <>
       <Background />
-      <Container maxWidth="md" sx={{ py: 2, position: 'relative', zIndex: 3, minHeight: '100vh' }}>
+      <Container maxWidth="md" sx={{ py: 4, position: 'relative', zIndex: 3, minHeight: '100vh' }}>
         {/* Success Alert for New Bookings */}
         <Fade in={showBookingSuccess}>
           <Box sx={{ mb: 2 }}>
