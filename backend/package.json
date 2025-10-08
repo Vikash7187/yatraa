@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "cross-env NODE_ENV=development node server.js",
-    "build": "echo 'No build required for Node.js backend'",
+    "build": "echo 'Skipping build - Node.js backend'",
     "production": "cross-env NODE_ENV=production node server.js"
   },
   "dependencies": {
