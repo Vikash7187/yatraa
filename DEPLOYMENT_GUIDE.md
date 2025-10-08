@@ -9,31 +9,6 @@ This guide explains how to deploy the Yatraa application with the frontend on Ve
 3. Render account (free tier available)
 4. Your repository pushed to GitHub
 
-## 🌐 Frontend Deployment (Vercel)
-
-### Step 1: Deploy to Vercel
-
-1. Go to [Vercel](https://vercel.com/)
-2. Sign in with your GitHub account
-3. Click "New Project"
-4. Import your `yatraa` repository
-5. Vercel should automatically detect the Vite project
-6. Click "Deploy"
-
-### Step 2: Configure Environment Variables
-
-After deployment, go to your project settings:
-1. Navigate to "Environment Variables"
-2. Add these variables:
-   ```
-   VITE_CLERK_PUBLISHABLE_KEY=pk_test_your_actual_clerk_key_here
-   VITE_API_BASE_URL=https://your-render-backend.onrender.com
-   ```
-
-### Step 3: Redeploy
-
-After adding environment variables, Vercel will automatically redeploy your application.
-
 ## ☁️ Backend Deployment (Render)
 
 ### Step 1: Deploy to Render
@@ -66,7 +41,38 @@ Click "Create Web Service" and wait for deployment to complete.
 
 ### Step 4: Get Your Backend URL
 
-Once deployed, note the URL provided by Render (it will be something like `https://yatraa-backend-xxxx.onrender.com`).
+Once deployed, note the URL provided by Render (it will be something like `https://yatraa-2.onrender.com`).
+
+## 🌐 Frontend Deployment (Vercel)
+
+### Step 1: Deploy to Vercel
+
+1. Go to [Vercel](https://vercel.com/)
+2. Sign in with your GitHub account
+3. Click "New Project"
+4. Import your `yatraa` repository
+5. Vercel should automatically detect the Vite project
+6. In the project settings, make sure:
+   - Framework Preset: Vite
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+
+### Step 2: Configure Environment Variables
+
+After deployment, go to your project settings:
+1. Navigate to "Environment Variables"
+2. Add these variables:
+   ```
+   VITE_CLERK_PUBLISHABLE_KEY=pk_test_bXV0dWFsLWhhcmUtOTAuY2xlcmsuYWNjb3VudHMuZGV2JA
+   VITE_API_BASE_URL=https://yatraa-2.onrender.com
+   ```
+
+### Step 3: Redeploy
+
+After adding environment variables, trigger a new deployment:
+1. Go to the "Deployments" tab
+2. Click the three dots next to the latest deployment
+3. Select "Redeploy"
 
 ## 🔗 Connect Frontend and Backend
 
@@ -78,9 +84,9 @@ Once deployed, note the URL provided by Render (it will be something like `https
 
 ### Test Backend Endpoints
 
-1. Health check: `https://your-render-backend.onrender.com/health`
-2. Packages endpoint: `https://your-render-backend.onrender.com/api/packages`
-3. Bookings endpoint: `https://your-render-backend.onrender.com/api/bookings`
+1. Health check: `https://yatraa-2.onrender.com/health`
+2. Packages endpoint: `https://yatraa-2.onrender.com/api/packages`
+3. Bookings endpoint: `https://yatraa-2.onrender.com/api/bookings`
 
 ### Test Frontend
 
