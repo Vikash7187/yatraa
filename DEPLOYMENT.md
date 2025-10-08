@@ -81,7 +81,7 @@ npm start  # Test locally
 ### Step 3: Update Frontend Config
 ```javascript
 // src/services/apiConfig.js (create this file)
-export const API_BASE_URL = process.env.NODE_ENV === 'production' 
+export const API_BASE_URL = import.meta.env.PROD
   ? 'https://your-backend-url.railway.app/api'
   : 'http://localhost:3002/api';
 ```

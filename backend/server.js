@@ -568,33 +568,83 @@ const packages = [
   }
 ];
 
+// Import required modules
+const { format } = require('date-fns');
+
+// In-memory storage for bookings and profiles (in a real app, you would use a database)
+let bookings = [];
+let profiles = [];
+let nextBookingId = 1;
+let nextProfileId = 1;
+
 // Express server setup
 const express = require('express');
 const cors = require('cors');
 const app = express();
 const PORT = 3003;
 
-// CORS configuration for development
+// Middleware
+app.use(express.json());
+
+// More permissive CORS configuration for production
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://localhost:5176',
-    'http://localhost:5177',
-    'http://localhost:5178',
-    'http://localhost:5179',
-    'http://localhost:5180',
-    'http://localhost:5181',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
-    'http://127.0.0.1:5175'
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // List of allowed origins
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:5176',
+      'http://localhost:5177',
+      'http://localhost:5178',
+      'http://localhost:5179',
+      'http://localhost:5180',
+      'http://localhost:5181',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:5174',
+      'http://127.0.0.1:5175',
+      // Vercel deployment domains
+      'https://yatraa.vercel.app',
+      'https://yatraa-git-main.vikash7187.vercel.app',
+      'https://yatraa-lilac.vercel.app',
+      // Allow any vercel.app domain (for flexibility)
+      'https://*.vercel.app',
+      // Add your specific Vercel domain here once you have it
+    ];
+    
+    // Check if origin matches any allowed pattern
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (allowedOrigin.includes('*')) {
+        // Handle wildcard patterns
+        const regex = new RegExp(allowedOrigin.replace('*', '.*'));
+        return regex.test(origin);
+      }
+      return origin === allowedOrigin;
+    });
+    
+    // Allow all origins in development, be more restrictive in production
+    if (isAllowed || process.env.NODE_ENV === 'development') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
+
+// Add a health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'Yatraa API'
+  });
+});
 
 // API routes
 app.get('/api/packages', (req, res) => {
@@ -603,16 +653,372 @@ app.get('/api/packages', (req, res) => {
 
 app.get('/api/packages/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  const pkg = packages.find(p => p.id === id);
+  console.log(`🔍 Request for package with ID: ${id} (type: ${typeof id})`);
+  
+  // Validate ID parameter
+  if (isNaN(id)) {
+    console.log(`❌ Invalid ID parameter: ${req.params.id}`);
+    return res.status(400).json({ error: 'Invalid package ID provided' });
+  }
+  
+  // Find package by ID (handle both string and number IDs)
+  const pkg = packages.find(p => {
+    const packageId = typeof p.id === 'string' ? parseInt(p.id) : p.id;
+    return packageId === id;
+  });
+  
   if (pkg) {
+    console.log(`✅ Found package with ID ${id}:`, pkg.name);
     res.json(pkg);
   } else {
-    res.status(404).json({ error: 'Package not found' });
+    console.log(`❌ Package with ID ${id} not found. Available IDs:`, packages.map(p => p.id));
+    res.status(404).json({ 
+      error: `Package with ID ${id} not found`,
+      availableIds: packages.map(p => p.id)
+    });
+  }
+});
+
+// Booking endpoints
+app.post('/api/bookings', (req, res) => {
+  try {
+    const bookingData = req.body;
+    console.log('📥 Received booking request:', bookingData);
+    
+    // Validate required fields
+    if (!bookingData.packageId || !bookingData.firstName || !bookingData.lastName || !bookingData.email) {
+      return res.status(400).json({ 
+        error: 'Missing required fields: packageId, firstName, lastName, and email are required' 
+      });
+    }
+    
+    // Validate package exists
+    const packageId = parseInt(bookingData.packageId);
+    console.log(`🔍 Validating package ID: ${packageId} (type: ${typeof packageId})`);
+    
+    if (isNaN(packageId)) {
+      return res.status(400).json({ 
+        error: `Invalid package ID: ${bookingData.packageId}` 
+      });
+    }
+    
+    const pkg = packages.find(p => {
+      const pId = typeof p.id === 'string' ? parseInt(p.id) : p.id;
+      return pId === packageId;
+    });
+    
+    if (!pkg) {
+      console.log(`❌ Package with ID ${packageId} not found. Available IDs:`, packages.map(p => p.id));
+      return res.status(400).json({ 
+        error: `Package with ID ${packageId} not found`,
+        availableIds: packages.map(p => p.id)
+      });
+    }
+    
+    console.log(`✅ Package validation passed for ID: ${packageId}`);
+    
+    // Create booking with proper profile association
+    const newBooking = {
+      id: nextBookingId++,
+      ...bookingData,
+      packageId: packageId, // Ensure packageId is stored as number
+      profileId: bookingData.profileId || bookingData.clerkUserId, // Associate with profile
+      clerkUserId: bookingData.clerkUserId, // Ensure clerkUserId is set
+      createdAt: new Date().toISOString(),
+      status: 'confirmed'
+    };
+    
+    bookings.push(newBooking);
+    console.log(`✅ Booking created successfully with ID: ${newBooking.id}`);
+    
+    res.status(201).json(newBooking);
+  } catch (error) {
+    console.error('❌ Error creating booking:', error);
+    res.status(500).json({ error: 'Failed to create booking' });
+  }
+});
+
+app.get('/api/bookings', (req, res) => {
+  try {
+    const { profileId } = req.query;
+    console.log(`📥 Request for bookings with profileId: ${profileId}`);
+    
+    let userBookings = bookings;
+    if (profileId) {
+      userBookings = bookings.filter(booking => 
+        booking.profileId == profileId || booking.clerkUserId == profileId
+      );
+    }
+    
+    console.log(`✅ Found ${userBookings.length} bookings`);
+    res.json(userBookings);
+  } catch (error) {
+    console.error('❌ Error fetching bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
+app.get('/api/bookings/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    console.log(`📥 Request for booking with ID: ${id}`);
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid booking ID' });
+    }
+    
+    const booking = bookings.find(b => b.id === id);
+    if (!booking) {
+      return res.status(404).json({ error: `Booking with ID ${id} not found` });
+    }
+    
+    console.log(`✅ Found booking with ID: ${id}`);
+    res.json(booking);
+  } catch (error) {
+    console.error('❌ Error fetching booking:', error);
+    res.status(500).json({ error: 'Failed to fetch booking' });
+  }
+});
+
+// Profile endpoints
+app.get('/api/profiles/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    console.log(`📥 Request for profile with ID: ${id}`);
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid profile ID' });
+    }
+    
+    const profile = profiles.find(p => p.id === id);
+    if (!profile) {
+      return res.status(404).json({ error: `Profile with ID ${id} not found` });
+    }
+    
+    // Add bookings to profile data with package information
+    const userBookings = bookings.filter(booking => 
+      booking.profileId == profile.id || booking.clerkUserId == profile.clerkUserId || booking.profileId == profile.clerkUserId
+    ).map(booking => {
+      // Add package information to booking
+      const packageId = typeof booking.packageId === 'string' ? parseInt(booking.packageId) : booking.packageId;
+      const pkg = packages.find(p => {
+        const pId = typeof p.id === 'string' ? parseInt(p.id) : p.id;
+        return pId === packageId;
+      });
+      
+      return {
+        ...booking,
+        package: pkg || {
+          id: packageId,
+          name: `Package #${packageId}`,
+          location: 'Location not available',
+          price: 0,
+          duration: 0,
+          image: 'https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+        }
+      };
+    });
+    
+    const profileWithBookings = {
+      ...profile,
+      bookings: userBookings
+    };
+    
+    console.log(`✅ Found profile with ID: ${id}`, {
+      bookingCount: userBookings.length,
+      hasPackageData: userBookings.some(b => b.package && b.package.name !== `Package #${b.packageId}`)
+    });
+    res.json(profileWithBookings);
+  } catch (error) {
+    console.error('❌ Error fetching profile:', error);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+app.get('/api/profiles/by-clerk/:clerkUserId', (req, res) => {
+  try {
+    const { clerkUserId } = req.params;
+    console.log(`📥 Request for profile with Clerk ID: ${clerkUserId}`);
+    
+    let profile = profiles.find(p => p.clerkUserId === clerkUserId);
+    
+    // If profile doesn't exist, create it
+    if (!profile) {
+      console.log(`🆕 Creating new profile for Clerk user: ${clerkUserId}`);
+      profile = {
+        id: nextProfileId++,
+        clerkUserId: clerkUserId,
+        name: `User ${nextProfileId}`,
+        email: `${clerkUserId}@example.com`,
+        createdAt: new Date().toISOString()
+      };
+      profiles.push(profile);
+    }
+    
+    // Add bookings to profile data with package information
+    const userBookings = bookings.filter(booking => 
+      booking.profileId == profile.id || booking.clerkUserId == profile.clerkUserId || booking.profileId == profile.clerkUserId
+    ).map(booking => {
+      // Add package information to booking
+      const packageId = typeof booking.packageId === 'string' ? parseInt(booking.packageId) : booking.packageId;
+      const pkg = packages.find(p => {
+        const pId = typeof p.id === 'string' ? parseInt(p.id) : p.id;
+        return pId === packageId;
+      });
+      
+      return {
+        ...booking,
+        package: pkg || {
+          id: packageId,
+          name: `Package #${packageId}`,
+          location: 'Location not available',
+          price: 0,
+          duration: 0,
+          image: 'https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+        }
+      };
+    });
+    
+    const profileWithBookings = {
+      ...profile,
+      bookings: userBookings
+    };
+    
+    console.log(`✅ Found/created profile for Clerk ID: ${clerkUserId}`, {
+      bookingCount: userBookings.length,
+      hasPackageData: userBookings.some(b => b.package && b.package.name !== `Package #${b.packageId}`)
+    });
+    res.json(profileWithBookings);
+  } catch (error) {
+    console.error('❌ Error fetching profile by Clerk ID:', error);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+app.post('/api/profiles', (req, res) => {
+  try {
+    const profileData = req.body;
+    console.log('📥 Creating new profile:', profileData);
+    
+    // Check if profile already exists
+    const existingProfile = profiles.find(p => p.clerkUserId === profileData.clerkUserId);
+    if (existingProfile) {
+      return res.status(400).json({ error: 'Profile already exists for this Clerk user' });
+    }
+    
+    const newProfile = {
+      id: nextProfileId++,
+      ...profileData,
+      createdAt: new Date().toISOString()
+    };
+    
+    profiles.push(newProfile);
+    console.log(`✅ Profile created with ID: ${newProfile.id}`);
+    res.status(201).json(newProfile);
+  } catch (error) {
+    console.error('❌ Error creating profile:', error);
+    res.status(500).json({ error: 'Failed to create profile' });
+  }
+});
+
+app.put('/api/profiles/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const profileData = req.body;
+    console.log(`📥 Updating profile ${id} with data:`, profileData);
+    
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid profile ID' });
+    }
+    
+    const profileIndex = profiles.findIndex(p => p.id === id);
+    if (profileIndex === -1) {
+      return res.status(404).json({ error: `Profile with ID ${id} not found` });
+    }
+    
+    profiles[profileIndex] = {
+      ...profiles[profileIndex],
+      ...profileData,
+      updatedAt: new Date().toISOString()
+    };
+    
+    console.log(`✅ Profile ${id} updated`);
+    res.json(profiles[profileIndex]);
+  } catch (error) {
+    console.error('❌ Error updating profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
+// Check availability endpoint
+app.post('/api/check-availability', (req, res) => {
+  try {
+    const { packageId, startDate, endDate, guests } = req.body;
+    console.log(`📥 Availability check for package ${packageId}: ${startDate} to ${endDate} for ${guests} guests`);
+    
+    // In a real app, you would check against actual availability data
+    // For now, we'll return default availability
+    const availability = {
+      available: true,
+      remainingSpots: 5,
+      maxGuests: 10
+    };
+    
+    console.log(`✅ Availability check completed:`, availability);
+    res.json(availability);
+  } catch (error) {
+    console.error('❌ Error checking availability:', error);
+    res.status(500).json({ error: 'Failed to check availability' });
+  }
+});
+
+// Available dates endpoint
+app.get('/api/available-dates', (req, res) => {
+  try {
+    const { packageId, month, year } = req.query;
+    console.log(`📥 Request for available dates for package ${packageId}: ${month}/${year}`);
+    
+    // In a real app, you would return actual available dates
+    // For now, we'll generate some sample dates
+    const dates = [];
+    const today = new Date();
+    const targetMonth = month ? parseInt(month) - 1 : today.getMonth();
+    const targetYear = year ? parseInt(year) : today.getFullYear();
+    
+    // Generate sample dates for the month (valid for next 90 days)
+    const startDate = new Date(targetYear, targetMonth, 1);
+    const endDate = new Date(targetYear, targetMonth + 1, 0);
+    
+    // Also include dates for next month to ensure continuity
+    for (let i = 0; i < 60; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      dates.push(format(date, 'yyyy-MM-dd'));
+    }
+    
+    console.log(`✅ Generated ${dates.length} available dates`);
+    res.json(dates);
+  } catch (error) {
+    console.error('❌ Error fetching available dates:', error);
+    // Return default dates if there's an error
+    const defaultDates = [];
+    const today = new Date();
+    for (let i = 1; i <= 30; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      defaultDates.push(format(date, 'yyyy-MM-dd'));
+    }
+    res.json(defaultDates);
   }
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`CORS enabled for: ${corsOptions.origin.join(', ')}`);
+  console.log(`🚀 Yatraa API server running on port ${PORT}`);
+  console.log(`🏥 Health check endpoint: http://localhost:${PORT}/health`);
+  console.log(`📦 Packages endpoint: http://localhost:${PORT}/api/packages`);
+  console.log(`📝 Bookings endpoint: http://localhost:${PORT}/api/bookings`);
+  console.log(`🔍 Check availability endpoint: http://localhost:${PORT}/api/check-availability`);
+  console.log(`📅 Available dates endpoint: http://localhost:${PORT}/api/available-dates`);
+  console.log(`🔗 CORS enabled for origins: ${corsOptions.origin ? corsOptions.origin.toString() : 'All origins allowed'}`);
 });

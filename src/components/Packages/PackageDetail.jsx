@@ -278,21 +278,28 @@ const PackageDetail = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('Fetching package with ID:', id); // Debug log
-        const data = await getPackageById(id);
-        console.log('API returned package data:', data); // Debug log
+        console.log('🔄 Fetching package with ID:', id);
+        
+        // Validate ID parameter
+        if (!id || isNaN(parseInt(id))) {
+          throw new Error('Invalid package ID provided');
+        }
+        
+        const data = await getPackageById(parseInt(id));
+        console.log('✅ API returned package data:', data);
         setPackageData(data);
       } catch (error) {
-        console.error('Failed to fetch package:', error);
-        console.log('Using fallback data for package ID:', id); // Debug log
+        console.error('❌ Failed to fetch package:', error);
+        console.log('ℹ️ Using fallback data for package ID:', id);
+        
         // Use fallback data if API fails
         const fallbackPackage = packagesData.find(pkg => pkg.id === parseInt(id));
         if (fallbackPackage) {
-          console.log('Found fallback package:', fallbackPackage); // Debug log
+          console.log('✅ Found fallback package:', fallbackPackage);
           setPackageData(fallbackPackage);
         } else {
-          console.log('No fallback package found for ID:', id); // Debug log
-          setError('Package not found');
+          console.log('❌ No fallback package found for ID:', id);
+          setError(`Package with ID ${id} not found`);
         }
       } finally {
         setLoading(false);

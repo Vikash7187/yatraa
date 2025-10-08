@@ -225,14 +225,18 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        console.log('Fetching packages from API...');
+        console.log('🔄 Fetching packages from API...');
+        console.log('🔧 API endpoint:', import.meta.env.VITE_API_BASE_URL || 'Not set');
+        console.log('🔧 Current environment:', import.meta.env.MODE);
+        
         const data = await getAllPackages();
-        console.log('API returned packages:', data);
+        console.log('✅ Successfully fetched packages:', data);
         setPackages(data);
         setError(null);
       } catch (error) {
-        console.error('Failed to fetch packages:', error);
-        setError('Failed to fetch packages from server. Showing demo data.');
+        console.error('❌ Failed to fetch packages:', error);
+        const errorMessage = error.message || 'Failed to fetch packages from server. Showing demo data.';
+        setError(errorMessage);
         // Keep using mock data if fetch fails
         setPackages(MOCK_PACKAGES);
       } finally {
@@ -985,6 +989,10 @@ const Packages = () => {
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                         transform: 'translateY(-2px)'
                       }
+                    }}
+                    onClick={(e) => {
+                      console.log(`🚀 Navigating to package ${pkg.id}`);
+                      console.log(`🔗 URL: /packages/${pkg.id}`);
                     }}
                   >
                     Explore Package

@@ -73,35 +73,42 @@ const UserProfile = () => {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      console.log('Fetching profile for Clerk user:', user.id); // Debug log
+      console.log('🔄 Fetching profile for Clerk user:', user.id);
+      
       // Get user profile
       const profileData = await getProfileByClerk(user.id);
-      console.log('Fetched profile data:', profileData); // Debug log
+      console.log('✅ Fetched profile data:', profileData);
       setProfile(profileData);
 
-      // Get user bookings
-      const userBookings = await getUserBookings(profileData.id);
-      console.log('Fetched user bookings:', userBookings); // Debug log
+      // Get user bookings from profile data (now includes package info)
+      const userBookings = profileData.bookings || [];
+      console.log('✅ Fetched user bookings:', userBookings);
       setBookings(Array.isArray(userBookings) ? userBookings : []);
 
-      // Get package details for each booking
+      // Extract package details from bookings (now included in booking data)
       if (Array.isArray(userBookings) && userBookings.length > 0) {
-        const packageDetailsPromises = userBookings.map(async (booking) => {
-          try {
-            const packageData = await getPackageById(booking.packageId);
-            return { [booking.id]: packageData };
-          } catch (error) {
-            console.error(`Failed to fetch package ${booking.packageId}:`, error);
-            return { [booking.id]: null };
+        const packageDetailsMap = {};
+        userBookings.forEach(booking => {
+          // Use the package data directly from the booking if available
+          if (booking.package) {
+            packageDetailsMap[booking.id] = booking.package;
+          } else {
+            // Fallback data if package info is missing
+            packageDetailsMap[booking.id] = {
+              id: booking.packageId,
+              name: `Package #${booking.packageId}`,
+              location: booking.location || 'Location not available',
+              price: booking.totalPrice || booking.price || 0,
+              duration: booking.duration || 0,
+              image: 'https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'
+            };
           }
         });
-
-        const packageDetailsArray = await Promise.all(packageDetailsPromises);
-        const packageDetailsMap = packageDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+        console.log('✅ Package details map:', packageDetailsMap);
         setBookingDetails(packageDetailsMap);
       }
     } catch (error) {
-      console.error('Failed to fetch user profile:', error);
+      console.error('❌ Failed to fetch user profile:', error);
       // Set empty arrays as fallback
       setBookings([]);
       setBookingDetails({});
@@ -260,14 +267,20 @@ const UserProfile = () => {
           ) : (
             <Grid container spacing={3}>
               {bookings.map((booking) => {
-                const packageData = bookingDetails[booking.id];
+                // Use the package data directly from the booking if available through the backend
+                // Otherwise fall back to the bookingDetails state
+                const packageData = booking.package || bookingDetails[booking.id];
+                const isPackageDataAvailable = packageData && 
+                  packageData.name && 
+                  !packageData.name.startsWith('Package #');
+                
                 return (
                   <Grid item xs={12} md={6} key={booking.id}>
                     <Card sx={{ height: '100%' }}>
                       <CardContent>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
                           <Typography variant="h6">
-                            {packageData?.name || 'Loading...'}
+                            {isPackageDataAvailable ? packageData.name : `Package #${booking.packageId}`}
                           </Typography>
                           <Chip
                             label={booking.status}
@@ -276,19 +289,20 @@ const UserProfile = () => {
                           />
                         </Box>
                         
-                        {packageData && (
+                        {isPackageDataAvailable ? (
                           <>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                               <LocationIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
                               <Typography variant="body2" color="text.secondary">
-                                {packageData.location}
+                                {packageData.location || 'Location not available'}
                               </Typography>
                             </Box>
                             
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                               <CalendarIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
                               <Typography variant="body2" color="text.secondary">
-                                {new Date(booking.startDate).toLocaleDateString()} - {new Date(booking.endDate).toLocaleDateString()}
+                                {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A'} - 
+                                {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}
                               </Typography>
                             </Box>
                             
@@ -300,15 +314,15 @@ const UserProfile = () => {
                                   Guests
                                 </Typography>
                                 <Typography variant="body1">
-                                  {booking.guests}
+                                  {booking.guests || 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid item xs={6}>
                                 <Typography variant="body2" color="text.secondary">
-                                  Room Type
+                                  Duration
                                 </Typography>
                                 <Typography variant="body1">
-                                  {booking.roomType}
+                                  {packageData.duration ? `${packageData.duration} days` : 'N/A'}
                                 </Typography>
                               </Grid>
                               <Grid item xs={12}>
@@ -316,11 +330,47 @@ const UserProfile = () => {
                                   Total Price
                                 </Typography>
                                 <Typography variant="h6" color="primary">
-                                  Rs.{(packageData.price * booking.guests).toLocaleString()}
+                                  ₹{booking.totalPrice?.toLocaleString() || ((packageData.price || 0) * (booking.guests || 1)).toLocaleString() || 'N/A'}
                                 </Typography>
                               </Grid>
                             </Grid>
                           </>
+                        ) : (
+                          <Box sx={{ py: 2 }}>
+                            <Alert severity="info" sx={{ mb: 2 }}>
+                              <Typography variant="body2">
+                                Package details are currently unavailable. This might be because the package was removed or there was a connection issue.
+                              </Typography>
+                            </Alert>
+                            
+                            <Grid container spacing={2}>
+                              <Grid item xs={6}>
+                                <Typography variant="body2" color="text.secondary">
+                                  Booking Dates
+                                </Typography>
+                                <Typography variant="body1">
+                                  {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A'} - 
+                                  {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={6}>
+                                <Typography variant="body2" color="text.secondary">
+                                  Guests
+                                </Typography>
+                                <Typography variant="body1">
+                                  {booking.guests || 'N/A'}
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="body2" color="text.secondary">
+                                  Total Price
+                                </Typography>
+                                <Typography variant="h6" color="primary">
+                                  ₹{booking.totalPrice?.toLocaleString() || 'N/A'}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          </Box>
                         )}
                         
                         <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>

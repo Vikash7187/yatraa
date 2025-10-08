@@ -28,6 +28,12 @@ import { useAuth } from './context/AuthContext';
 import { SignIn, SignUp } from '@clerk/clerk-react';
 import './App.css';
 
+import TestPackageNavigation from './components/TestPackageNavigation';
+import ApiDebugger from './components/Debug/ApiDebugger';
+import PackageDebug from './components/Debug/PackageDebug';
+import DateDebug from './components/Debug/DateDebug';
+import BookingTest from './components/Debug/BookingTest';
+
 function App() {
   // Debug information for GitHub Pages
   console.log('App rendering...');
@@ -117,6 +123,11 @@ function App() {
         <Route path="/api-test" element={<ApiTest />} />
         <Route path="/auth-debug-profile" element={<AuthDebugProfile />} />
         <Route path="/test-api" element={<TestApi />} /> {/* Add this route */}
+        <Route path="/test-package-nav" element={<TestPackageNavigation />} />
+        <Route path="/api-debug" element={<ApiDebugger />} />
+        <Route path="/package-debug" element={<PackageDebug />} />
+        <Route path="/date-debug" element={<DateDebug />} />
+        <Route path="/booking-test" element={<BookingTest />} />
       </Routes>
       <Footer />
     </div>

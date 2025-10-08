@@ -45,7 +45,7 @@ import { format, addMonths, startOfMonth } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { checkAvailability, getDynamicPrice, createBooking, getAvailableDates } from '../../services/bookingService';
+import { checkAvailability, getDynamicPrice, createBooking, getAvailableDates, getPackageById } from '../../services/bookingService';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -115,27 +115,65 @@ const BookingForm = () => {
 
   useEffect(() => {
     // Fetch package details based on ID (replace with actual API call)
-    const fetchedPackage = {
-      id: 1,
-      name: "Romantic Bali Getaway",
-      location: "Bali, Indonesia",
-      price: 1299,
-      image: "/images/destinations/bali.jpg",
-      duration: 7,
+    const fetchPackageDetails = async () => {
+      if (!id) return;
+      try {
+        console.log(`🔍 Fetching package details for ID: ${id}`);
+        const packageData = await getPackageById(id);
+        console.log(`✅ Fetched package details:`, packageData);
+        setPackageDetails(packageData);
+      } catch (error) {
+        console.error(`❌ Failed to fetch package details for ID ${id}:`, error);
+        // Fallback to hardcoded data if API fails
+        const fetchedPackage = {
+          id: parseInt(id) || 1,
+          name: "Romantic Bali Getaway",
+          location: "Bali, Indonesia",
+          price: 1299,
+          image: "/images/destinations/bali.jpg",
+          duration: 7,
+        };
+        setPackageDetails(fetchedPackage);
+      }
     };
-    setPackageDetails(fetchedPackage);
+    
+    fetchPackageDetails();
   }, [id]);
 
   useEffect(() => {
     const fetchAvailableDates = async () => {
       if (!id) return;
       try {
+        console.log(`🔍 Fetching available dates for package ${id}`);
         const currentMonth = new Date().getMonth() + 1;
         const currentYear = new Date().getFullYear();
         const dates = await getAvailableDates(id, currentMonth, currentYear);
-        setAvailableDates(dates);
+        console.log(`✅ Fetched available dates:`, dates);
+        // Ensure dates are in the correct format
+        const formattedDates = Array.isArray(dates) ? dates.map(date => {
+          // If it's already a string in YYYY-MM-DD format, return as is
+          if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            return date;
+          }
+          // Otherwise, try to format it
+          try {
+            return format(new Date(date), 'yyyy-MM-dd');
+          } catch {
+            return date;
+          }
+        }) : [];
+        setAvailableDates(formattedDates);
       } catch (error) {
-        console.error('Failed to fetch available dates:', error);
+        console.error('❌ Failed to fetch available dates:', error);
+        // Generate some default dates if API fails
+        const defaultDates = [];
+        const today = new Date();
+        for (let i = 1; i <= 30; i++) {
+          const date = new Date(today);
+          date.setDate(today.getDate() + i);
+          defaultDates.push(format(date, 'yyyy-MM-dd'));
+        }
+        setAvailableDates(defaultDates);
       }
     };
     fetchAvailableDates();
@@ -223,10 +261,24 @@ const BookingForm = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      setErrors({}); // Clear any previous errors
+      
       if (!isSignedIn) { 
         navigate('/login'); 
         return; 
       }
+      
+      console.log('📤 Submitting booking with data:', {
+        ...formData,
+        packageId: id,
+        profileId: user?.id,
+        clerkUserId: clerkUser?.id,
+        totalPrice: dynamicPrice?.total || (packageDetails?.price * formData.guests) || 0,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        name: `${formData.firstName} ${formData.lastName}`
+      });
       
       const bookingResponse = await createBooking({
         ...formData,
@@ -240,6 +292,8 @@ const BookingForm = () => {
         name: `${formData.firstName} ${formData.lastName}`
       });
       
+      console.log('✅ Booking confirmed:', bookingResponse);
+      
       // Navigate to profile page with success message
       navigate('/profile', { 
         state: { 
@@ -249,10 +303,9 @@ const BookingForm = () => {
         } 
       });
     } catch (error) {
-      console.error('Booking failed:', error);
+      console.error('❌ Booking failed:', error);
       setErrors({
-        ...errors,
-        submit: 'Failed to create booking. Please try again.',
+        submit: error.message || 'Failed to create booking. Please try again.',
       });
     } finally {
       setLoading(false);
@@ -337,7 +390,13 @@ const BookingForm = () => {
                   label="Start Date"
                   value={formData.startDate ? new Date(formData.startDate) : null}
                   onChange={(newValue) => {
-                    handleInputChange('startDate')(format(newValue, 'yyyy-MM-dd'));
+                    if (newValue) {
+                      const formattedDate = format(newValue, 'yyyy-MM-dd');
+                      console.log(`📅 Start date selected: ${formattedDate}`);
+                      handleInputChange('startDate')(formattedDate);
+                    } else {
+                      handleInputChange('startDate')('');
+                    }
                   }}
                   renderInput={(params) => (
                     <TextField
@@ -348,7 +407,11 @@ const BookingForm = () => {
                     />
                   )}
                   disablePast
-                  shouldDisableDate={(date) => !availableDates.includes(format(date, 'yyyy-MM-dd'))}
+                  shouldDisableDate={(date) => {
+                    if (!date) return true;
+                    const formattedDate = format(date, 'yyyy-MM-dd');
+                    return !availableDates.includes(formattedDate);
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
@@ -359,7 +422,13 @@ const BookingForm = () => {
                   label="End Date"
                   value={formData.endDate ? new Date(formData.endDate) : null}
                   onChange={(newValue) => {
-                    handleInputChange('endDate')(format(newValue, 'yyyy-MM-dd'));
+                    if (newValue) {
+                      const formattedDate = format(newValue, 'yyyy-MM-dd');
+                      console.log(`📅 End date selected: ${formattedDate}`);
+                      handleInputChange('endDate')(formattedDate);
+                    } else {
+                      handleInputChange('endDate')('');
+                    }
                   }}
                   renderInput={(params) => (
                     <TextField
@@ -371,7 +440,11 @@ const BookingForm = () => {
                   )}
                   disablePast
                   minDate={formData.startDate ? new Date(formData.startDate) : null}
-                  shouldDisableDate={(date) => !availableDates.includes(format(date, 'yyyy-MM-dd'))}
+                  shouldDisableDate={(date) => {
+                    if (!date) return true;
+                    const formattedDate = format(date, 'yyyy-MM-dd');
+                    return !availableDates.includes(formattedDate);
+                  }}
                 />
               </LocalizationProvider>
             </Grid>

@@ -78,6 +78,24 @@ This project is optimized for deployment on Vercel:
 
 For detailed instructions, see [VERCEL_DEPLOYMENT_FIXED.md](VERCEL_DEPLOYMENT_FIXED.md)
 
+### Backend Deployment
+
+The backend should be deployed to Railway or a similar service:
+1. Deploy [backend/server.js](backend/server.js) to Railway
+2. Ensure the Railway URL is set as `VITE_API_BASE_URL` in Vercel environment variables
+3. Verify CORS is configured to allow requests from your Vercel domain
+
+## Troubleshooting
+
+If you see "Failed to fetch packages from server. Showing demo data." after deployment:
+
+1. Check that your backend is running and accessible
+2. Verify the `VITE_API_BASE_URL` environment variable is set correctly
+3. Ensure CORS is configured to allow requests from your Vercel domain
+4. Check the browser console for detailed error messages
+
+For more detailed troubleshooting, see [DEPLOYMENT_CHECKLIST_POST_FIX.md](DEPLOYMENT_CHECKLIST_POST_FIX.md)
+
 ## Available Scripts
 
 - `npm run dev` - Starts the development server

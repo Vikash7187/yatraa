@@ -134,6 +134,21 @@ console.log('📦 Production Mode:', import.meta.env.PROD);
 console.log('🔑 Clerk Key Available:', !!clerkPubKey && clerkPubKey !== 'pk_test_placeholder');
 console.log('🔄 Demo Mode:', !clerkPubKey || clerkPubKey === 'pk_test_placeholder');
 
+// Add navigation debugging
+window.addEventListener('popstate', (event) => {
+  console.log('🧭 Navigation event:', event);
+  console.log('📍 New location:', window.location.href);
+});
+
+// Add click debugging for links
+document.addEventListener('click', (event) => {
+  const target = event.target.closest('a');
+  if (target) {
+    console.log('🔗 Link clicked:', target.href);
+    console.log('📍 Current location:', window.location.href);
+  }
+});
+
 try {
   console.log('🎨 Creating React Root...');
   const rootElement = document.getElementById('root');
