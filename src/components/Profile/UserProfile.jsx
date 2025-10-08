@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Container,
   Grid,
@@ -16,7 +16,8 @@ import {
   Fade,
   Zoom,
   CircularProgress,
-  styled
+  styled,
+  Fab
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -29,7 +30,8 @@ import {
   Hotel as HotelIcon,
   LocalActivity as ActivityIcon,
   Star as StarIcon,
-  AttachMoney as PriceIcon
+  AttachMoney as PriceIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon
 } from '@mui/icons-material';
 import { useUserSafe } from '../../hooks/useClerkSafe';
 import { useLocation } from 'react-router-dom';
@@ -140,6 +142,8 @@ const UserProfile = () => {
   const [bookingDetails, setBookingDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [showBookingSuccess, setShowBookingSuccess] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const containerRef = useRef(null);
 
   // Check if user came from successful booking
   useEffect(() => {
@@ -153,6 +157,31 @@ const UserProfile = () => {
       window.history.replaceState({}, document.title);
     }
   }, [location, isLoaded, user]);
+
+  // Smooth scroll to top when tab changes
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [tabValue]);
+
+  // Handle scroll events for scroll to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setShowScrollTop(containerRef.current.scrollTop > 300);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   useEffect(() => {
     if (isLoaded && user) {
@@ -336,10 +365,44 @@ const UserProfile = () => {
     );
   }
 
+  const scrollToTop = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <>
       <Background />
-      <Container maxWidth="md" sx={{ py: 6, position: 'relative', zIndex: 3, minHeight: '100vh' }}>
+      <Container 
+        maxWidth="md" 
+        sx={{ 
+          py: 6, 
+          position: 'relative', 
+          zIndex: 3, 
+          minHeight: '100vh',
+          overflowY: 'auto',
+          scrollBehavior: 'smooth',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#1976d2 rgba(255, 255, 255, 0.1)',
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#1976d2',
+            borderRadius: '4px',
+            border: '2px solid rgba(255, 255, 255, 0.1)',
+          },
+        }} 
+        ref={containerRef}
+      >
         {/* Success Alert for New Bookings */}
         <Fade in={showBookingSuccess}>
           <Box sx={{ mb: 3 }}>
@@ -670,6 +733,27 @@ const UserProfile = () => {
           </TabPanel>
         </CompactCard>
       </Container>
+      
+      {/* Scroll to Top Button */}
+      <Fade in={showScrollTop}>
+        <Fab
+          color="primary"
+          size="small"
+          onClick={scrollToTop}
+          sx={{
+            position: 'fixed',
+            bottom: 16,
+            right: 16,
+            zIndex: 1000,
+            backgroundColor: 'rgba(25, 118, 210, 0.8)',
+            '&:hover': {
+              backgroundColor: 'rgba(21, 101, 192, 0.9)',
+            }
+          }}
+        >
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </Fade>
     </>
   );
 };
