@@ -45,7 +45,7 @@
    In the deployment settings, add these environment variables:
    ```
    VITE_CLERK_PUBLISHABLE_KEY=pk_test_bXV0dWFsLWhhcmUtOTAuY2xlcmsuYWNjb3VudHMuZGV2JA
-   VITE_API_BASE_URL=https://yatraa-production.up.railway.app
+   VITE_API_BASE_URL=https://yatraa-production-567e.up.railway.app/
    ```
 
 6. **Deploy:**

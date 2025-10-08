@@ -12,11 +12,11 @@
    Site Settings → Environment Variables → Add:
    
    VITE_CLERK_PUBLISHABLE_KEY=pk_test_demo_key
-   VITE_API_BASE_URL=https://yatraa-production.up.railway.app
+   VITE_API_BASE_URL=https://yatraa-production-567e.up.railway.app/
 
 4. Redeploy after adding variables
 
-Your Railway API: https://yatraa-production.up.railway.app
+Your Railway API: https://yatraa-production-567e.up.railway.app/
 Test endpoints:
-- Health: https://yatraa-production.up.railway.app/
-- Packages: https://yatraa-production.up.railway.app/api/packages
+- Health: https://yatraa-production-567e.up.railway.app/
+- Packages: https://yatraa-production-567e.up.railway.app/api/packages

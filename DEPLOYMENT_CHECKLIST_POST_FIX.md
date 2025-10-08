@@ -33,9 +33,9 @@
 
 ### ✅ Railway Backend
 - [ ] Backend is deployed and running
-- [ ] Railway URL is accessible: `https://yatraa-production.up.railway.app`
-- [ ] Health check endpoint works: `https://yatraa-production.up.railway.app/health`
-- [ ] Packages endpoint works: `https://yatraa-production.up.railway.app/api/packages`
+- [ ] Railway URL is accessible: `https://yatraa-production-567e.up.railway.app/`
+- [ ] Health check endpoint works: `https://yatraa-production-567e.up.railway.app/health`
+- [ ] Packages endpoint works: `https://yatraa-production-567e.up.railway.app/api/packages`
 
 ### ✅ Vercel Frontend
 - [ ] Frontend is deployed to Vercel
@@ -74,7 +74,7 @@
         -H "Access-Control-Request-Method: GET" \
         -H "Access-Control-Request-Headers: X-Requested-With" \
         -X OPTIONS \
-        https://yatraa-production.up.railway.app/api/packages
+        https://yatraa-production-567e.up.railway.app/api/packages
    ```
 
 ### Environment Variable Issues:

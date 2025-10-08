@@ -3,7 +3,7 @@ const getApiBaseUrl = () => {
   // Check if we're in production
   if (import.meta.env.PROD) {
     // Try to get the API URL from environment variable first
-    return import.meta.env.VITE_API_BASE_URL || 'https://yatraa-production.up.railway.app';
+    return import.meta.env.VITE_API_BASE_URL || 'https://yatraa-production-567e.up.railway.app/';
   }
   
   // Development environment

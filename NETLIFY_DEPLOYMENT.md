@@ -60,7 +60,7 @@
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   VITE_CLERK_PUBLISHABLE_KEY = "your_clerk_key"
-  VITE_API_BASE_URL = "https://yatraa-production.up.railway.app"
+  VITE_API_BASE_URL = "https://yatraa-production-567e.up.railway.app/"
 ```
 
 ### Custom Build Script
