@@ -12,13 +12,13 @@ const rl = readline.createInterface({
 console.log('🚀 Yatraa Deployment Setup');
 console.log('============================');
 
-rl.question('Enter your Railway backend URL (e.g., https://backend-production-xxxx.up.railway.app): ', (railwayUrl) => {
+rl.question('Enter your Railway backend URL (e.g., https://yatraa-production.up.railway.app): ', (railwayUrl) => {
   rl.question('Enter your Clerk publishable key (pk_test_...): ', (clerkKey) => {
     
     // Update .env file
     const envContent = `# Production Environment Variables
 VITE_CLERK_PUBLISHABLE_KEY=${clerkKey}
-VITE_API_BASE_URL=${railwayUrl}
+VITE_API_BASE_URL=${railwayUrl || 'https://yatraa-production.up.railway.app'}
 `;
     
     fs.writeFileSync('.env', envContent);
@@ -30,7 +30,7 @@ VITE_API_BASE_URL=${railwayUrl}
 Copy these to Netlify Site Settings → Environment Variables:
 
 VITE_CLERK_PUBLISHABLE_KEY=${clerkKey}
-VITE_API_BASE_URL=${railwayUrl}
+VITE_API_BASE_URL=${railwayUrl || 'https://yatraa-production.up.railway.app'}
 
 🚀 NEXT STEPS:
 1. Run: npm run build

@@ -49,8 +49,8 @@
 ### Environment Variables
 Add these in Vercel Dashboard → Project Settings → Environment Variables:
 
-- `VITE_CLERK_PUBLISHABLE_KEY` (Required for authentication)
-- `VITE_API_BASE_URL` (Backend API URL - set after backend deployment)
+- `VITE_CLERK_PUBLISHABLE_KEY`: `pk_test_bXV0dWFsLWhhcmUtOTAuY2xlcmsuYWNjb3VudHMuZGV2JA`
+- `VITE_API_BASE_URL`: `https://yatraa-production.up.railway.app`
 
 ### Build Settings
 - **Build Command:** `npm run build`
