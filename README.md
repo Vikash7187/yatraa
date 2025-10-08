@@ -63,6 +63,21 @@ src/
   └── index.css
 ```
 
+## Deployment
+
+### Vercel Deployment (Recommended)
+
+This project is optimized for deployment on Vercel:
+
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Add the following environment variables in Vercel:
+   - `VITE_CLERK_PUBLISHABLE_KEY`: Your Clerk publishable key
+   - `VITE_API_BASE_URL`: Your backend API URL
+4. Deploy!
+
+For detailed instructions, see [VERCEL_DEPLOYMENT_FIXED.md](VERCEL_DEPLOYMENT_FIXED.md)
+
 ## Available Scripts
 
 - `npm run dev` - Starts the development server

@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/yatraa/' : '/', // Use GitHub Pages base path only in production
+  base: '/', // Use root base path for Vercel deployment
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
