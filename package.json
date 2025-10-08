@@ -30,6 +30,8 @@
     "mock-api": "node mock/server.mjs",
     "build:netlify": "npm install && npx vite build",
     "build:vercel": "npm install && npx vite build",
+    "build:backend": "cd backend && npm install",
+    "start:backend": "cd backend && npm start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
