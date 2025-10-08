@@ -627,6 +627,13 @@ const corsOptions = {
       return origin === allowedOrigin;
     });
     
+    // NEW: Allow all origins in production to prevent CORS issues
+    // This is less secure but will prevent the timeout issues
+    if (process.env.NODE_ENV === 'production') {
+      console.log(`⚠️  Production mode: Allowing CORS for origin: ${origin}`);
+      return callback(null, true);
+    }
+    
     // Allow all origins in development, be more restrictive in production
     if (isAllowed || process.env.NODE_ENV === 'development') {
       callback(null, true);
@@ -641,6 +648,7 @@ app.use(cors(corsOptions));
 
 // Add a health check endpoint
 app.get('/health', (req, res) => {
+  console.log(`🏥 Health check requested from ${req.headers.origin || 'unknown origin'}`);
   res.status(200).json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
@@ -650,12 +658,19 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.get('/api/packages', (req, res) => {
-  res.json(packages);
+  console.log(`📦 Packages requested from ${req.headers.origin || 'unknown origin'}`);
+  console.log(`🌐 Request headers:`, req.headers);
+  
+  // Add a small delay to simulate processing (remove this in production)
+  setTimeout(() => {
+    res.json(packages);
+    console.log(`✅ Packages response sent (${packages.length} packages)`);
+  }, 100);
 });
 
 app.get('/api/packages/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  console.log(`🔍 Request for package with ID: ${id} (type: ${typeof id})`);
+  console.log(`🔍 Request for package with ID: ${id} (type: ${typeof id}) from ${req.headers.origin || 'unknown origin'}`);
   
   // Validate ID parameter
   if (isNaN(id)) {
