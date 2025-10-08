@@ -41,6 +41,7 @@ import {
   Close,
   Person,
   CalendarMonth,
+  Castle,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { format, addDays } from 'date-fns';
@@ -212,7 +213,7 @@ const TopDestinations = () => {
               color: 'transparent',
             }}
           >
-            Top Destinations
+            Royal Indian Destinations
           </Typography>
           <Typography
             variant="h6"
@@ -351,7 +352,7 @@ const TopDestinations = () => {
                             color="primary"
                             size="small"
                             onClick={() => handleViewDetails(destination)}
-                            startIcon={<Hotel />}
+                            startIcon={<Castle />}
                           >
                             View Details
                           </Button>
@@ -577,7 +578,7 @@ const TopDestinations = () => {
               fontSize: '1.1rem',
             }}
           >
-            View All Destinations
+            View All Royal Destinations
           </Button>
         </Box>
       </Container>
@@ -585,4 +586,4 @@ const TopDestinations = () => {
   );
 };
 
-export default TopDestinations; 
+export default TopDestinations;

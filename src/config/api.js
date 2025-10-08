@@ -7,16 +7,19 @@ const getApiBaseUrl = () => {
   }
   
   // Development environment
-  return 'http://localhost:3002';
+  return 'http://localhost:3003';
 };
 
 export const API_BASE_URL = getApiBaseUrl();
 export const API_ENDPOINTS = {
   packages: `${API_BASE_URL}/api/packages`,
   bookings: `${API_BASE_URL}/api/bookings`,
+  profiles: `${API_BASE_URL}/api/profiles`,
   checkAvailability: `${API_BASE_URL}/api/check-availability`,
   availableDates: `${API_BASE_URL}/api/available-dates`,
-  health: `${API_BASE_URL}/health`
+  health: `${API_BASE_URL}/health`,
+  register: `${API_BASE_URL}/api/register`,
+  login: `${API_BASE_URL}/api/login`
 };
 
 // Console log for debugging

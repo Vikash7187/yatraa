@@ -40,7 +40,7 @@ import {
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useUser } from '@clerk/clerk-react';
+import { useUserSafe } from '../../hooks/useClerkSafe';
 import { format, addMonths, startOfMonth } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -72,7 +72,7 @@ const BookingForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { user: clerkUser, isSignedIn } = useUser();
+  const { user: clerkUser, isSignedIn } = useUserSafe();
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({
     // Personal Details
@@ -240,12 +240,12 @@ const BookingForm = () => {
         name: `${formData.firstName} ${formData.lastName}`
       });
       
-      // Navigate to home page with success message, then they can check profile for bookings
-      navigate('/', { 
+      // Navigate to profile page with success message
+      navigate('/profile', { 
         state: { 
           bookingConfirmed: true,
           bookingDetails: bookingResponse,
-          message: 'Booking confirmed successfully! Check your profile to view booking details.'
+          message: 'Booking confirmed successfully! You can view your booking details below.'
         } 
       });
     } catch (error) {
@@ -680,4 +680,4 @@ const BookingForm = () => {
   );
 };
 
-export default BookingForm; 
+export default BookingForm;

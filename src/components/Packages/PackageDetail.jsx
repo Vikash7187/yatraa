@@ -29,7 +29,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
+import { useUserSafe } from '../../hooks/useClerkSafe';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -255,7 +255,7 @@ const packagesData = [
 const PackageDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
+  const { isSignedIn } = useUserSafe();
   const [packageData, setPackageData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [availability, setAvailability] = useState(null);

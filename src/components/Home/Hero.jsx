@@ -99,7 +99,7 @@ const Hero = () => {
               animation: 'fadeInUp 1s ease-out',
             }}
           >
-            Book Luxury Hotels
+            Discover India's
           </Typography>
           <Typography
             variant="h2"
@@ -112,7 +112,7 @@ const Hero = () => {
               animationFillMode: 'both',
             }}
           >
-            Worldwide
+            Royal Heritage Hotels
           </Typography>
           <Typography
             variant="h5"
@@ -124,7 +124,7 @@ const Hero = () => {
               animationFillMode: 'both',
             }}
           >
-            Discover and book the world's finest luxury hotels and resorts
+            Experience the luxury and grandeur of India's finest palace hotels and heritage properties
           </Typography>
           <Stack
             direction="row"
@@ -149,7 +149,7 @@ const Hero = () => {
                 },
               }}
             >
-              Explore Hotels
+              Explore Royal Stays
             </Button>
             <Button
               variant="outlined"
@@ -250,4 +250,4 @@ const Hero = () => {
   );
 };
 
-export default Hero; 
+export default Hero;

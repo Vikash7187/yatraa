@@ -16,14 +16,14 @@ import {
 } from '@mui/material';
 import { LocationOn, AccessTime, Restaurant } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
+import { useUserSafe } from '../../hooks/useClerkSafe';
 import { getAllPackages } from '../../services/packageService';
 
 const FeaturedPackages = () => {
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
+  const { isSignedIn } = useUserSafe();
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -54,59 +54,59 @@ const FeaturedPackages = () => {
           },
           {
             id: 2,
-            name: "Santorini Grace",
-            location: "Santorini, Greece",
+            name: "The Oberoi Mumbai",
+            location: "Mumbai, Maharashtra",
             price: 95000,
             duration: "5 Days / 4 Nights",
             rating: 4.8,
             image: "/images/packages/santorini-grace.jpg",
             mealPlan: "Breakfast & Dinner",
-            description: "Luxurious cliffside retreat with stunning Aegean Sea views",
-            amenities: ["Infinity Pool", "Mediterranean Spa", "Sunset Terrace", "Wine Cellar"],
-            category: "Resort",
-            rooms: ["Sea View Suite", "Plunge Pool Suite", "Grace Suite"],
-            activities: ["Wine Tasting", "Sunset Cruise", "Greek Cooking Class"]
+            description: "Luxury business hotel in the heart of Mumbai with stunning views",
+            amenities: ["Infinity Pool", "Business Center", "Rooftop Restaurant", "Spa"],
+            category: "Business",
+            rooms: ["Deluxe Room", "Executive Suite", "Presidential Suite"],
+            activities: ["City Tours", "Bollywood Experience", "Fine Dining"]
           },
           {
             id: 3,
-            name: "Burj Al Arab Experience",
-            location: "Dubai, UAE",
-            price: 150000,
+            name: "ITC Grand Chola Chennai",
+            location: "Chennai, Tamil Nadu",
+            price: 85000,
             duration: "4 Days / 3 Nights",
             rating: 4.9,
             image: "/images/packages/burj-al-arab.jpg",
             mealPlan: "All Inclusive",
-            description: "Ultimate luxury in the world's most iconic seven-star hotel",
-            amenities: ["Private Beach", "Helipad", "Gold-Plated Interiors", "Underwater Restaurant"],
-            category: "Ultra Luxury",
-            rooms: ["Deluxe Suite", "Panoramic Suite", "Royal Suite"],
-            activities: ["Desert Safari", "Yacht Tour", "Sky View Restaurant"]
+            description: "Heritage luxury hotel with award-winning hospitality in South India",
+            amenities: ["Multiple Restaurants", "Luxury Spa", "Swimming Pool", "Conference Rooms"],
+            category: "Heritage",
+            rooms: ["Premium Room", "Club Room", "Grand Royal Suite"],
+            activities: ["Temple Tours", "Cultural Shows", "Ayurvedic Spa"]
           },
           {
             id: 4,
-            name: "Amalfi Coast Retreat",
-            location: "Positano, Italy",
-            price: 85000,
-            duration: "6 Days / 5 Nights",
-            rating: 4.7,
+            name: "The Leela Palace New Delhi",
+            location: "New Delhi",
+            price: 90000,
+            duration: "3 Days / 2 Nights",
+            rating: 4.8,
             image: "/images/packages/amalfi-retreat.jpg",
             mealPlan: "Breakfast & Dinner",
-            description: "Cliffside luxury with breathtaking Mediterranean views",
-            amenities: ["Panoramic Pool", "Italian Spa", "Michelin Restaurant", "Private Beach Access"],
-            category: "Boutique",
-            rooms: ["Sea View Room", "Deluxe Suite", "Presidential Suite"],
-            activities: ["Cooking Class", "Boat Tours", "Wine Tasting"]
+            description: "Urban palace hotel showcasing Indian artistry and luxury in the capital",
+            amenities: ["Royal Spa", "Multiple Restaurants", "Indoor Pool", "Art Gallery"],
+            category: "Palace",
+            rooms: ["Deluxe Room", "Palace Wing", "Royal Suite"],
+            activities: ["Heritage Walk", "Cultural Shows", "Shopping Tours"]
           },
           {
             id: 5,
             name: "Rambagh Palace Heritage",
-            location: "Jaipur, India",
+            location: "Jaipur, Rajasthan",
             price: 65000,
             duration: "3 Days / 2 Nights",
             rating: 4.7,
             image: "/images/packages/rambagh-palace.jpg",
             mealPlan: "All Inclusive",
-            description: "Indulge in Rajasthani hospitality at its finest",
+            description: "Indulge in Rajasthani hospitality at this former royal residence",
             amenities: ["Royal Garden", "Polo Bar", "Spa", "Indoor Pool"],
             category: "Palace",
             rooms: ["Palace Room", "Historical Suite", "Royal Suite"],
@@ -114,18 +114,18 @@ const FeaturedPackages = () => {
           },
           {
             id: 6,
-            name: "Maldives Water Villa",
-            location: "Male, Maldives",
-            price: 120000,
-            duration: "5 Days / 4 Nights",
+            name: "Kumarakom Lake Resort Kerala",
+            location: "Kumarakom, Kerala",
+            price: 70000,
+            duration: "4 Days / 3 Nights",
             rating: 4.8,
             image: "/images/packages/maldives-villa.jpg",
             mealPlan: "All Inclusive",
-            description: "Overwater luxury in pristine tropical paradise",
-            amenities: ["Private Pool", "Glass Floor", "Direct Ocean Access", "Sunset Deck"],
+            description: "Serene backwater resort with authentic Kerala hospitality",
+            amenities: ["Ayurvedic Spa", "Backwater View", "Multiple Restaurants", "Swimming Pool"],
             category: "Resort",
-            rooms: ["Water Villa", "Sunset Villa", "Ocean Suite"],
-            activities: ["Snorkeling", "Spa Treatments", "Sunset Cruise"]
+            rooms: ["Lake View Room", "Garden View Room", "Presidential Suite"],
+            activities: ["Backwater Cruise", "Spa Treatments", "Cultural Programs"]
           }
         ]);
       } finally {
@@ -175,7 +175,7 @@ const FeaturedPackages = () => {
             fontSize: { xs: '2rem', md: '2.5rem' },
           }}
         >
-          Featured Hotel Packages
+          Premium Indian Hotels
         </Typography>
         <Typography
           variant="h5"
@@ -183,7 +183,7 @@ const FeaturedPackages = () => {
           color="text.secondary"
           sx={{ mb: 6 }}
         >
-          Discover our handpicked collection of luxury hotels and resorts worldwide
+          Discover India's most luxurious heritage hotels and palace stays
         </Typography>
 
         <Grid container spacing={4}>
@@ -295,4 +295,4 @@ const FeaturedPackages = () => {
   );
 };
 
-export default FeaturedPackages; 
+export default FeaturedPackages;

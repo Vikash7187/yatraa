@@ -11,7 +11,7 @@ import {
   useTheme,
   useMediaQuery,
 } from '@mui/material';
-import { ChevronLeft, ChevronRight, FormatQuote } from '@mui/icons-material';
+import { ChevronLeft, ChevronRight, FormatQuote, Castle } from '@mui/icons-material';
 
 const testimonials = [
   {
@@ -92,7 +92,7 @@ const Testimonials = () => {
               fontSize: { xs: '2rem', md: '2.5rem' }
             }}
           >
-            Guest Experiences
+            Royal Guest Experiences
           </Typography>
           <Typography
             variant="h5"
@@ -103,7 +103,7 @@ const Testimonials = () => {
               mb: 4
             }}
           >
-            Hear what our distinguished guests have to say
+            Hear what our distinguished guests have to say about their Indian palace stays
           </Typography>
         </Box>
 
@@ -222,4 +222,4 @@ const Testimonials = () => {
   );
 };
 
-export default Testimonials; 
+export default Testimonials;

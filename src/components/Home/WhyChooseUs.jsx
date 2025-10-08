@@ -15,38 +15,40 @@ import {
   SupportAgent,
   Villa,
   Restaurant,
+  Castle,
+  EmojiEvents,
 } from '@mui/icons-material';
 
 const features = [
   {
-    icon: <Villa sx={{ fontSize: 45 }} />,
-    title: 'Handpicked Palace Hotels',
-    description: 'Curated selection of India\'s most prestigious heritage properties and palace hotels'
+    icon: <Castle sx={{ fontSize: 45 }} />,
+    title: 'Royal Palace Stays',
+    description: 'Experience the grandeur of India\'s former royal residences and heritage properties'
   },
   {
     icon: <Star sx={{ fontSize: 45 }} />,
-    title: 'Exclusive Experiences',
-    description: 'Unique cultural experiences and royal treatments crafted for our distinguished guests'
+    title: 'Authentic Cultural Experiences',
+    description: 'Immerse yourself in traditional Indian hospitality and royal customs'
   },
   {
     icon: <LocalOffer sx={{ fontSize: 45 }} />,
     title: 'Best Price Guarantee',
-    description: 'We ensure you get the best rates with our price match promise'
+    description: 'We ensure you get the best rates with our price match promise across India'
   },
   {
     icon: <Restaurant sx={{ fontSize: 45 }} />,
-    title: 'Gourmet Dining',
-    description: 'Experience authentic royal cuisines and traditional delicacies'
+    title: 'Royal Indian Cuisine',
+    description: 'Savor authentic regional delicacies and royal feasts prepared by master chefs'
   },
   {
     icon: <SupportAgent sx={{ fontSize: 45 }} />,
     title: '24/7 Concierge Service',
-    description: 'Dedicated support team available round the clock for all your needs'
+    description: 'Dedicated support team available round the clock for all your travel needs'
   },
   {
     icon: <Security sx={{ fontSize: 45 }} />,
     title: 'Secure Booking',
-    description: 'Safe and secure payment process with instant confirmation'
+    description: 'Safe and secure payment process with instant confirmation for all Indian hotels'
   }
 ];
 
@@ -84,7 +86,7 @@ const WhyChooseUs = () => {
               fontSize: { xs: '2rem', md: '2.5rem' }
             }}
           >
-            Why Choose Yatraa
+            Why Choose Indian Heritage Hotels
           </Typography>
           <Typography
             variant="h5"
@@ -95,7 +97,7 @@ const WhyChooseUs = () => {
               mb: 4
             }}
           >
-            Experience the finest in luxury Indian hospitality
+            Experience the unparalleled luxury and rich history of India's finest palace hotels
           </Typography>
         </Box>
 
@@ -165,4 +167,4 @@ const WhyChooseUs = () => {
   );
 };
 
-export default WhyChooseUs; 
+export default WhyChooseUs;

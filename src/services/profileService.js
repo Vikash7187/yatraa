@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { API_BASE_URL } from '../config/api.js';
+import { API_ENDPOINTS } from '../config/api.js';
 
 export const getProfile = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/profiles/${id}`);
+    const response = await axios.get(`${API_ENDPOINTS.profiles}/${id}`);
     return response.data;
   } catch (error) {
     console.error('Failed to get profile:', error);
@@ -13,7 +13,7 @@ export const getProfile = async (id) => {
 
 export const getProfileByClerk = async (clerkUserId) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/profiles/by-clerk/${clerkUserId}`);
+    const response = await axios.get(`${API_ENDPOINTS.profiles}/by-clerk/${clerkUserId}`);
     return response.data;
   } catch (error) {
     console.error('Failed to get profile by Clerk ID:', error);
@@ -23,7 +23,7 @@ export const getProfileByClerk = async (clerkUserId) => {
 
 export const updateProfile = async (id, profileData) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/profiles/${id}`, profileData);
+    const response = await axios.put(`${API_ENDPOINTS.profiles}/${id}`, profileData);
     return response.data;
   } catch (error) {
     console.error('Failed to update profile:', error);
@@ -33,7 +33,7 @@ export const updateProfile = async (id, profileData) => {
 
 export const createProfile = async (profileData) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/profiles`, profileData);
+    const response = await axios.post(`${API_ENDPOINTS.profiles}`, profileData);
     return response.data;
   } catch (error) {
     console.error('Failed to create profile:', error);

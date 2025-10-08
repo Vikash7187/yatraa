@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/yatraa/', // Always use GitHub Pages base path
+  base: process.env.NODE_ENV === 'production' ? '/yatraa/' : '/', // Use GitHub Pages base path only in production
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -27,6 +27,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    host: true
+    host: true,
+    historyApiFallback: true, // Enable SPA routing support
   }
 })

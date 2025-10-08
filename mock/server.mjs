@@ -1,15 +1,20 @@
 import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const jsonServer = require('json-server');
-const cors = require('cors');
+import { create, router as jsonRouter, defaults, bodyParser } from 'json-server';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-const server = jsonServer.create();
-const router = jsonServer.router('./mock/db.json');
-const middlewares = jsonServer.defaults();
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const server = create();
+const router = jsonRouter(join(__dirname, 'db.json'));
+const middlewares = defaults();
 
 server.use(cors());
 server.use(middlewares);
-server.use(jsonServer.bodyParser);
+server.use(bodyParser);
 
 // Custom routes for availability
 server.get('/api/packages/:id/availability', (req, res) => {

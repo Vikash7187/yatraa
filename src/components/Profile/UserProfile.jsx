@@ -21,7 +21,7 @@ import {
   CalendarToday as CalendarIcon,
   LocationOn as LocationIcon
 } from '@mui/icons-material';
-import { useUser } from '@clerk/clerk-react';
+import { useUserSafe } from '../../hooks/useClerkSafe';
 import { useLocation } from 'react-router-dom';
 import { getProfileByClerk } from '../../services/profileService';
 import { getUserBookings, getPackageById } from '../../services/bookingService';
@@ -42,7 +42,7 @@ function TabPanel({ children, value, index, ...other }) {
 }
 
 const UserProfile = () => {
-  const { user, isLoaded } = useUser();
+  const { user, isLoaded, isSignedIn } = useUserSafe();
   const location = useLocation();
   const [tabValue, setTabValue] = useState(0);
   const [profile, setProfile] = useState(null);
@@ -82,24 +82,29 @@ const UserProfile = () => {
       // Get user bookings
       const userBookings = await getUserBookings(profileData.id);
       console.log('Fetched user bookings:', userBookings); // Debug log
-      setBookings(userBookings);
+      setBookings(Array.isArray(userBookings) ? userBookings : []);
 
       // Get package details for each booking
-      const packageDetailsPromises = userBookings.map(async (booking) => {
-        try {
-          const packageData = await getPackageById(booking.packageId);
-          return { [booking.id]: packageData };
-        } catch (error) {
-          console.error(`Failed to fetch package ${booking.packageId}:`, error);
-          return { [booking.id]: null };
-        }
-      });
+      if (Array.isArray(userBookings) && userBookings.length > 0) {
+        const packageDetailsPromises = userBookings.map(async (booking) => {
+          try {
+            const packageData = await getPackageById(booking.packageId);
+            return { [booking.id]: packageData };
+          } catch (error) {
+            console.error(`Failed to fetch package ${booking.packageId}:`, error);
+            return { [booking.id]: null };
+          }
+        });
 
-      const packageDetailsArray = await Promise.all(packageDetailsPromises);
-      const packageDetailsMap = packageDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-      setBookingDetails(packageDetailsMap);
+        const packageDetailsArray = await Promise.all(packageDetailsPromises);
+        const packageDetailsMap = packageDetailsArray.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+        setBookingDetails(packageDetailsMap);
+      }
     } catch (error) {
       console.error('Failed to fetch user profile:', error);
+      // Set empty arrays as fallback
+      setBookings([]);
+      setBookingDetails({});
     } finally {
       setLoading(false);
     }
@@ -122,10 +127,22 @@ const UserProfile = () => {
     }
   };
 
-  if (!isLoaded || loading) {
+  console.log('UserProfile Debug:', {
+    isLoaded,
+    loading,
+    user: user ? {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.emailAddresses?.[0]?.emailAddress,
+      isSignedIn: !!user
+    } : null,
+    isSignedIn
+  });
+
+  if (!isLoaded) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography>Loading...</Typography>
+        <Typography>Loading authentication...</Typography>
       </Container>
     );
   }
@@ -133,7 +150,18 @@ const UserProfile = () => {
   if (!user) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Alert severity="warning" sx={{ mb: 3 }}>
+          Please log in to view your profile. You will be redirected to the login page.
+        </Alert>
         <Typography>Please log in to view your profile.</Typography>
+      </Container>
+    );
+  }
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography>Loading profile data...</Typography>
       </Container>
     );
   }
@@ -148,7 +176,7 @@ const UserProfile = () => {
           sx={{ mb: 3 }}
         >
           <Typography variant="h6" gutterBottom>
-            Booking Confirmed Successfully! 🎉
+            Booking Confirmed Successfully!
           </Typography>
           <Typography>
             {location.state?.message || 'Your booking has been confirmed. You can view all your bookings below.'}
@@ -288,7 +316,7 @@ const UserProfile = () => {
                                   Total Price
                                 </Typography>
                                 <Typography variant="h6" color="primary">
-                                  ₹{(packageData.price * booking.guests).toLocaleString()}
+                                  Rs.{(packageData.price * booking.guests).toLocaleString()}
                                 </Typography>
                               </Grid>
                             </Grid>

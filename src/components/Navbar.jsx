@@ -15,16 +15,8 @@ import {
 import { useAuth } from '../context/AuthContext';
 import MenuIcon from '@mui/icons-material/Menu';
 
-// Conditionally import Clerk components
-let SignedIn, SignedOut, UserButton;
-try {
-  const clerkComponents = require('@clerk/clerk-react');
-  SignedIn = clerkComponents.SignedIn;
-  SignedOut = clerkComponents.SignedOut;
-  UserButton = clerkComponents.UserButton;
-} catch (error) {
-  console.log('Clerk components not available - running in demo mode');
-}
+import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { useUserSafe } from '../hooks/useClerkSafe';
 
 const pages = [
   { name: 'Home', path: '/' },
@@ -42,10 +34,15 @@ const Navbar = () => {
     threshold: 0,
   });
   
-  // Check if Clerk is available
-  const hasValidClerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY && 
+  // Authentication System Configuration
+  // Set useClerkAuth to true to use Clerk authentication
+  // Set useClerkAuth to false to use custom authentication with backend
+  const useClerkAuth = true;
+  const hasValidClerkKey = useClerkAuth && import.meta.env.VITE_CLERK_PUBLISHABLE_KEY && 
                           import.meta.env.VITE_CLERK_PUBLISHABLE_KEY !== 'pk_test_placeholder';
-  const clerkAvailable = hasValidClerkKey && SignedIn && SignedOut && UserButton;
+  const { user: clerkUser, isSignedIn: isClerkSignedIn } = useUserSafe();
+  
+  const clerkAvailable = hasValidClerkKey && clerkUser && SignedIn && SignedOut && UserButton;
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -193,8 +190,19 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Button color="inherit" component={RouterLink} to="/login">Login</Button>
-                <Button color="inherit" component={RouterLink} to="/register">Register</Button>
+                {!user ? (
+                  <>
+                    <Button color="inherit" component={RouterLink} to="/login">Login</Button>
+                    <Button color="inherit" component={RouterLink} to="/register">Register</Button>
+                  </>
+                ) : (
+                  <>
+                    <Button color="inherit" component={RouterLink} to="/profile">
+                      {user.name || user.email}
+                    </Button>
+                    <Button color="inherit" onClick={logout}>Logout</Button>
+                  </>
+                )}
                 <Button color="inherit" component={RouterLink} to="/contact">Contact</Button>
               </>
             )}

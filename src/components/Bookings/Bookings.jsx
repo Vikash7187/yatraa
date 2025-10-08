@@ -35,7 +35,7 @@ import {
 import { format } from 'date-fns';
 import { useAuth } from '../../context/AuthContext';
 import { getProfile, getProfileByClerk } from '../../services/profileService';
-import { useUser } from '@clerk/clerk-react';
+import { useUserSafe } from '../../hooks/useClerkSafe';
 import { getImagePath, IMAGES } from '../../utils/imagePaths';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -79,7 +79,7 @@ const Bookings = () => {
   const [openInvoice, setOpenInvoice] = useState(false);
   const [bookings, setBookings] = useState([]);
   const { user } = useAuth();
-  const { user: clerkUser, isSignedIn } = useUser();
+  const { user: clerkUser, isSignedIn } = useUserSafe();
 
   useEffect(() => {
     const load = async () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom';
+import { HashRouter, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App.jsx';
@@ -146,27 +146,36 @@ try {
   console.log('🎨 Rendering App with Router...');
   const basename = import.meta.env.PROD ? "/yatraa" : "/";
   console.log('🗺️ Router basename:', basename);
+  console.log('🏗️ Base URL from Vite:', import.meta.env.BASE_URL);
   
   // Verify all imports are available
   console.log('🔍 Checking imports...');
   console.log('App component:', typeof App);
   console.log('React component:', typeof React);
   console.log('HashRouter component:', typeof HashRouter);
+  console.log('BrowserRouter component:', typeof BrowserRouter);
   console.log('ThemeProvider component:', typeof ThemeProvider);
   console.log('ClerkProvider component:', typeof ClerkProvider);
   console.log('AuthProvider component:', typeof AuthProvider);
   console.log('theme object:', typeof theme);
   
+  // Use BrowserRouter for proper Clerk routing in development
+  const Router = BrowserRouter;
+  const routerProps = {};
+  
   root.render(
     <React.StrictMode>
       <ErrorBoundary>
-        <HashRouter>
+        <Router {...routerProps}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             {clerkPubKey && clerkPubKey !== 'pk_test_placeholder' ? (
               <ClerkProvider 
                 publishableKey={clerkPubKey} 
                 afterSignOutUrl="/"
+                signInUrl="/login"
+                signUpUrl="/register"
+                allowedRedirectOrigins={[window.location.origin]}
               >
                 <AuthProvider>
                   <App />
@@ -178,7 +187,7 @@ try {
               </AuthProvider>
             )}
           </ThemeProvider>
-        </HashRouter>
+        </Router>
       </ErrorBoundary>
     </React.StrictMode>
   );

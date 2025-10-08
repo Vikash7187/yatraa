@@ -38,10 +38,5 @@ export const IMAGES = {
   // Background images
   newsletterBg: 'images/newsletter-bg.jpg',
   patternBg: 'images/pattern-bg.png',
-  // Testimonials
-  guest1: 'images/testimonials/guest1.jpg',
-  guest2: 'images/testimonials/guest2.jpg',
-  guest3: 'images/testimonials/guest3.jpg',
-  guest4: 'images/testimonials/guest4.jpg',
   // Add more images as needed
 };

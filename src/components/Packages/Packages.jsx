@@ -44,112 +44,123 @@ import {
 } from '@mui/icons-material';
 import { Link as RouterLink } from 'react-router-dom';
 import { checkAvailability } from '../../services/bookingService';
-import { getAllPackages } from '../../services/packageService';
+import { getAllPackages, likePackage, unlikePackage, checkIfLiked } from '../../services/packageService';
 import { format, addDays } from 'date-fns';
 import RecommendedPackages from './RecommendedPackages';
+import { useUserSafe } from '../../hooks/useClerkSafe';
 
 // Mock data for initial state and fallback
 const MOCK_PACKAGES = [
   {
     id: 1,
-    name: "Royal Rajasthan Experience",
-    type: "Luxury",
-    duration: 7,
-    price: 175000,
+    name: "Taj Lake Palace Udaipur",
+    type: "Palace",
+    duration: 3,
+    price: 45000,
     rating: 4.9,
-    reviews: 156,
-    image: "/images/destinations/udaipur-lake-palace.jpg",
+    reviews: 324,
+    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     location: "Udaipur, Rajasthan",
-    description: "Experience royal luxury at the iconic Taj Lake Palace with exclusive palace tours and cultural experiences"
+    description: "Experience royal luxury in this floating palace on Lake Pichola, one of India's most iconic heritage hotels",
+    highlights: [
+      "Floating Palace Hotel",
+      "Lake Pichola Views", 
+      "Royal Heritage Experience",
+      "Fine Dining",
+      "Luxury Spa"
+    ],
+    itinerary: [
+      {
+        day: 1,
+        title: "Royal Arrival",
+        description: "Airport pickup, boat transfer to palace, welcome ceremony with royal treatment"
+      },
+      {
+        day: 2,
+        title: "Palace Exploration", 
+        description: "Heritage walk, spa treatments, sunset dinner by the lake"
+      },
+      {
+        day: 3,
+        title: "Cultural Experience",
+        description: "Cultural show, city tour, departure with royal memories"
+      }
+    ],
+    inclusions: [
+      "5-star palace accommodation",
+      "All meals included",
+      "Airport transfers",
+      "Guided heritage tours",
+      "Spa session",
+      "Cultural show"
+    ],
+    exclusions: [
+      "Domestic flights",
+      "Travel insurance", 
+      "Personal expenses",
+      "Additional activities"
+    ]
   },
   {
     id: 2,
-    name: "Taj Mahal Romance Package",
-    type: "Honeymoon",
-    duration: 5,
-    price: 145000,
-    rating: 4.9,
-    reviews: 142,
-    image: "/images/destinations/agra-amarvilas.jpg",
-    location: "Agra, Uttar Pradesh",
-    description: "Luxury stay at The Oberoi Amarvilas with breathtaking views of the Taj Mahal from every room"
-  },
-  {
-    id: 3,
-    name: "Kerala Backwaters Retreat",
-    type: "Wellness",
-    duration: 6,
-    price: 120000,
-    rating: 4.8,
-    reviews: 210,
-    image: "/images/destinations/kerala-leela.jpg",
-    location: "Kumarakom, Kerala",
-    description: "Rejuvenating experience at The Leela Palace with Ayurvedic spa treatments and houseboat cruises"
-  },
-  {
-    id: 4,
-    name: "Pink City Royal Escape",
-    type: "Heritage",
+    name: "The Oberoi Mumbai",
+    type: "Luxury Business",
     duration: 4,
-    price: 135000,
+    price: 35000,
     rating: 4.8,
-    reviews: 178,
-    image: "/images/destinations/jaipur-rambagh.jpg",
-    location: "Jaipur, Rajasthan",
-    description: "Live like royalty at the Rambagh Palace with heritage walks and royal dining experiences"
-  },
-  {
-    id: 5,
-    name: "Mumbai Luxury Gateway",
-    type: "Business",
-    duration: 3,
-    price: 95000,
-    rating: 4.9,
-    reviews: 225,
-    image: "/images/destinations/mumbai-taj.jpg",
+    reviews: 287,
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506862ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     location: "Mumbai, Maharashtra",
-    description: "Iconic stay at The Taj Mahal Palace with sea views and world-class dining"
-  },
-  {
-    id: 6,
-    name: "Blue City Heritage Tour",
-    type: "Family",
-    duration: 5,
-    price: 155000,
-    rating: 4.9,
-    reviews: 164,
-    image: "/images/destinations/jodhpur-umaid.jpg",
-    location: "Jodhpur, Rajasthan",
-    description: "Family retreat at the majestic Umaid Bhawan Palace with museum tours and royal experiences"
-  },
-  {
-    id: 7,
-    name: "Goa Beach Resort Luxury",
-    type: "Beach",
-    duration: 4,
-    price: 85000,
-    rating: 4.7,
-    reviews: 198,
-    image: "/images/destinations/goa-taj.jpg",
-    location: "Goa",
-    description: "Beachfront luxury at Taj Fort Aguada with private beach access and water sports"
-  },
-  {
-    id: 8,
-    name: "Ranthambore Wildlife Luxury",
-    type: "Adventure",
-    duration: 4,
-    price: 125000,
-    rating: 4.8,
-    reviews: 145,
-    image: "/images/destinations/ranthambore-oberoi.jpg",
-    location: "Ranthambore, Rajasthan",
-    description: "Luxury wildlife experience at The Oberoi Vanyavilas with tiger safaris and spa treatments"
+    description: "Luxury business hotel in the heart of Mumbai with stunning views of the Arabian Sea",
+    highlights: [
+      "Arabian Sea Views",
+      "Business Center",
+      "Rooftop Pool", 
+      "Award-winning Restaurants",
+      "Luxury Spa"
+    ],
+    itinerary: [
+      {
+        day: 1,
+        title: "Mumbai Arrival",
+        description: "Airport pickup, hotel check-in, welcome drink with city views"
+      },
+      {
+        day: 2,
+        title: "City Exploration",
+        description: "Mumbai city tour, Gateway of India, Marine Drive, local markets"
+      },
+      {
+        day: 3,
+        title: "Bollywood Experience", 
+        description: "Film City tour, Bollywood studio visit, traditional Indian dinner"
+      },
+      {
+        day: 4,
+        title: "Relaxation & Departure",
+        description: "Spa treatments, pool time, shopping, departure transfer"
+      }
+    ],
+    inclusions: [
+      "Luxury hotel accommodation",
+      "Daily breakfast and dinner",
+      "Airport transfers",
+      "City tours",
+      "Bollywood studio visit", 
+      "Spa session"
+    ],
+    exclusions: [
+      "Domestic flights",
+      "Travel insurance",
+      "Personal expenses",
+      "Optional activities"
+    ]
   }
 ];
 
 const Packages = () => {
   const theme = useTheme();
+  const { user, isSignedIn } = useUserSafe();
   const [packages, setPackages] = useState(MOCK_PACKAGES);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -230,6 +241,26 @@ const Packages = () => {
     };
     fetchPackages();
   }, []);
+
+  // Load user's favorite packages
+  useEffect(() => {
+    const loadUserFavorites = async () => {
+      if (!isSignedIn || !user) return;
+      
+      try {
+        const favoritePromises = packages.map(pkg => checkIfLiked(pkg.id, user.id));
+        const favoriteResults = await Promise.all(favoritePromises);
+        const userFavorites = packages.filter((_, index) => favoriteResults[index]).map(pkg => pkg.id);
+        setFavorites(userFavorites);
+      } catch (error) {
+        console.error('Failed to load user favorites:', error);
+      }
+    };
+    
+    if (packages.length > 0) {
+      loadUserFavorites();
+    }
+  }, [isSignedIn, user, packages]);
 
   // Filter packages
   const filteredPackages = packages.filter(pkg => {
@@ -333,12 +364,26 @@ const Packages = () => {
     setSortBy(event.target.value);
   };
 
-  const handleFavoriteToggle = (packageId) => {
-    setFavorites(prev => 
-      prev.includes(packageId)
-        ? prev.filter(id => id !== packageId)
-        : [...prev, packageId]
-    );
+  const handleFavoriteToggle = async (packageId) => {
+    if (!isSignedIn) {
+      alert('Please login to like packages');
+      return;
+    }
+    
+    try {
+      const isCurrentlyLiked = favorites.includes(packageId);
+      
+      if (isCurrentlyLiked) {
+        await unlikePackage(packageId, user.id);
+        setFavorites(prev => prev.filter(id => id !== packageId));
+      } else {
+        await likePackage(packageId, user.id);
+        setFavorites(prev => [...prev, packageId]);
+      }
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
+      alert('Failed to update favorite. Please try again.');
+    }
   };
 
   const toggleFilters = () => {
