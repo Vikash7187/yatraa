@@ -14,7 +14,10 @@ import {
   Divider,
   Alert,
   Fade,
-  Zoom
+  Zoom,
+  CircularProgress,
+  styled,
+  keyframes
 } from '@mui/material';
 import {
   Person as PersonIcon,
@@ -22,7 +25,12 @@ import {
   Add as AddIcon,
   CalendarToday as CalendarIcon,
   LocationOn as LocationIcon,
-  Refresh as RefreshIcon
+  Refresh as RefreshIcon,
+  FlightTakeoff as FlightIcon,
+  Hotel as HotelIcon,
+  LocalActivity as ActivityIcon,
+  Star as StarIcon,
+  AttachMoney as PriceIcon
 } from '@mui/icons-material';
 import { useUserSafe } from '../../hooks/useClerkSafe';
 import { useLocation } from 'react-router-dom';
@@ -31,45 +39,156 @@ import { getUserBookings, getPackageById } from '../../services/bookingService';
 import AddPackage from './AddPackage';
 import travelImage from '../../assets/travel.jpg';
 
-// Background component with image and gradient overlay
-const Background = ({ children }) => (
-  <>
-    <Box
-      sx={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundImage: `url(${travelImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        zIndex: 0,
-      }}
-    />
-    <Box
-      sx={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        zIndex: 1,
-      }}
-    />
-    <Box
-      sx={{
-        position: 'relative',
-        zIndex: 2,
-      }}
-    >
-      {children}
-    </Box>
-  </>
-);
+// Custom animations
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`;
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+const gradientShift = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+// Styled components
+const AnimatedBackground = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backgroundImage: `url(${travelImage})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  backgroundAttachment: 'fixed',
+  zIndex: 0,
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.8) 100%)',
+    backdropFilter: 'blur(3px)',
+  }
+}));
+
+const GlassCard = styled(Card)(({ theme }) => ({
+  background: 'rgba(255, 255, 255, 0.15)',
+  backdropFilter: 'blur(10px)',
+  border: '1px solid rgba(255, 255, 255, 0.2)',
+  borderRadius: '20px',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+  transition: 'all 0.3s ease',
+  '&:hover': {
+    transform: 'translateY(-5px)',
+    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)',
+    background: 'rgba(255, 255, 255, 0.25)',
+  }
+}));
+
+const InteractiveAvatar = styled(Avatar)(({ theme }) => ({
+  width: 120,
+  height: 120,
+  border: '4px solid transparent',
+  background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+  padding: '4px',
+  animation: `${float} 3s ease-in-out infinite`,
+  '& img': {
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%',
+    objectFit: 'cover',
+  },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: '-5px',
+    left: '-5px',
+    right: '-5px',
+    bottom: '-5px',
+    background: 'linear-gradient(45deg, #2196F3, #21CBF3, #FF4081, #FFD740)',
+    borderRadius: '50%',
+    zIndex: -1,
+    animation: `${gradientShift} 3s ease-in-out infinite`,
+    backgroundSize: '400% 400%',
+  }
+}));
+
+const AnimatedButton = styled(Button)(({ theme }) => ({
+  borderRadius: '30px',
+  padding: '12px 24px',
+  fontWeight: 'bold',
+  position: 'relative',
+  overflow: 'hidden',
+  transition: 'all 0.3s ease',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '-100%',
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
+    transition: '0.5s',
+  },
+  '&:hover': {
+    transform: 'translateY(-3px)',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
+    '&::before': {
+      left: '100%',
+    }
+  },
+  '&:active': {
+    transform: 'translateY(-1px)',
+  }
+}));
+
+const BookingCard = styled(GlassCard)(({ theme }) => ({
+  height: '100%',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '4px',
+    background: 'linear-gradient(90deg, #2196F3, #21CBF3)',
+  },
+  '&:hover': {
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(33, 203, 243, 0.1))',
+      pointerEvents: 'none',
+    }
+  }
+}));
+
+const StatCard = styled(GlassCard)(({ theme }) => ({
+  textAlign: 'center',
+  padding: theme.spacing(3),
+  animation: `${pulse} 2s ease-in-out infinite`,
+  '&:hover': {
+    animation: 'none',
+  }
+}));
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -94,6 +213,11 @@ const UserProfile = () => {
   const [bookingDetails, setBookingDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [showBookingSuccess, setShowBookingSuccess] = useState(false);
+  const [stats, setStats] = useState({
+    totalBookings: 0,
+    totalSpent: 0,
+    favoriteDestinations: 0
+  });
 
   // Check if user came from successful booking
   useEffect(() => {
@@ -128,6 +252,18 @@ const UserProfile = () => {
       const userBookings = profileData.bookings || [];
       console.log('✅ Fetched user bookings:', userBookings);
       setBookings(Array.isArray(userBookings) ? userBookings : []);
+
+      // Calculate stats
+      const totalSpent = userBookings.reduce((sum, booking) => sum + (booking.totalPrice || 0), 0);
+      const destinations = [...new Set(userBookings.map(booking => 
+        booking.package?.location || 'Unknown'
+      ))].filter(loc => loc !== 'Unknown');
+      
+      setStats({
+        totalBookings: userBookings.length,
+        totalSpent,
+        favoriteDestinations: destinations.length
+      });
 
       // Extract package details from bookings (now included in booking data)
       if (Array.isArray(userBookings) && userBookings.length > 0) {
@@ -178,6 +314,19 @@ const UserProfile = () => {
     }
   };
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'confirmed':
+        return <FlightIcon />;
+      case 'pending':
+        return <HotelIcon />;
+      case 'cancelled':
+        return <ActivityIcon />;
+      default:
+        return <BookmarkIcon />;
+    }
+  };
+
   console.log('UserProfile Debug:', {
     isLoaded,
     loading,
@@ -192,93 +341,105 @@ const UserProfile = () => {
 
   if (!isLoaded) {
     return (
-      <Background>
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Typography 
-            variant="h4" 
-            align="center" 
-            sx={{ 
-              color: 'white', 
-              mt: 4,
-              textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-            }}
-          >
-            Loading authentication...
-          </Typography>
+      <>
+        <AnimatedBackground />
+        <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress size={60} sx={{ color: 'white' }} />
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                color: 'white', 
+                ml: 2,
+                textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+              }}
+            >
+              Loading authentication...
+            </Typography>
+          </Box>
         </Container>
-      </Background>
+      </>
     );
   }
 
   if (!user) {
     return (
-      <Background>
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Alert 
-            severity="warning" 
-            sx={{ 
-              mb: 3,
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              maxWidth: 600,
-              mx: 'auto'
-            }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Please log in to view your profile
-            </Typography>
-            <Typography>
-              You will be redirected to the login page.
-            </Typography>
-          </Alert>
-          <Box sx={{ textAlign: 'center', mt: 3 }}>
-            <Button 
-              variant="contained" 
-              color="primary" 
-              href="/login"
-              size="large"
+      <>
+        <AnimatedBackground />
+        <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3 }}>
+          <Fade in={true}>
+            <Alert 
+              severity="warning" 
               sx={{ 
-                py: 1.5,
-                px: 4,
-                fontSize: '1.1rem',
-                boxShadow: 3,
-                '&:hover': {
-                  boxShadow: 6,
-                  transform: 'translateY(-2px)'
-                },
-                transition: 'all 0.3s ease'
+                mb: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                maxWidth: 600,
+                mx: 'auto',
+                borderRadius: 3,
+                boxShadow: 3
               }}
             >
-              Go to Login
-            </Button>
+              <Typography variant="h6" gutterBottom>
+                Please log in to view your profile
+              </Typography>
+              <Typography>
+                You will be redirected to the login page.
+              </Typography>
+            </Alert>
+          </Fade>
+          <Box sx={{ textAlign: 'center', mt: 3 }}>
+            <Zoom in={true}>
+              <AnimatedButton 
+                variant="contained" 
+                color="primary" 
+                href="/login"
+                size="large"
+                sx={{ 
+                  py: 1.5,
+                  px: 4,
+                  fontSize: '1.1rem',
+                  background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+                  '&:hover': {
+                    background: 'linear-gradient(45deg, #1976D2, #03A9F4)',
+                  }
+                }}
+              >
+                Go to Login
+              </AnimatedButton>
+            </Zoom>
           </Box>
         </Container>
-      </Background>
+      </>
     );
   }
 
   if (loading) {
     return (
-      <Background>
-        <Container maxWidth="lg" sx={{ py: 4 }}>
-          <Typography 
-            variant="h4" 
-            align="center" 
-            sx={{ 
-              color: 'white', 
-              mt: 4,
-              textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-            }}
-          >
-            Loading profile data...
-          </Typography>
+      <>
+        <AnimatedBackground />
+        <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <CircularProgress size={60} sx={{ color: 'white' }} />
+            <Typography 
+              variant="h4" 
+              sx={{ 
+                color: 'white', 
+                ml: 2,
+                textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+              }}
+            >
+              Loading profile data...
+            </Typography>
+          </Box>
         </Container>
-      </Background>
+      </>
     );
   }
 
   return (
-    <Background>
-      <Container maxWidth="lg" sx={{ py: 4, minHeight: '100vh' }}>
+    <>
+      <AnimatedBackground />
+      <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3, minHeight: '100vh' }}>
         {/* Success Alert for New Bookings */}
         <Fade in={showBookingSuccess}>
           <Box sx={{ mb: 3 }}>
@@ -289,12 +450,13 @@ const UserProfile = () => {
                 sx={{ 
                   mb: 3,
                   backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  borderRadius: 2,
-                  boxShadow: 3
+                  borderRadius: 3,
+                  boxShadow: 6,
+                  border: '1px solid rgba(0, 255, 0, 0.3)'
                 }}
               >
-                <Typography variant="h6" gutterBottom>
-                  Booking Confirmed Successfully!
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Booking Confirmed Successfully! 🎉
                 </Typography>
                 <Typography>
                   {location.state?.message || 'Your booking has been confirmed. You can view all your bookings below.'}
@@ -304,70 +466,117 @@ const UserProfile = () => {
           </Box>
         </Fade>
 
+        {/* Stats Cards */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} sm={4}>
+            <StatCard>
+              <FlightIcon sx={{ fontSize: 40, color: '#2196F3', mb: 1 }} />
+              <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'white' }}>
+                {stats.totalBookings}
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                Total Bookings
+              </Typography>
+            </StatCard>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <StatCard>
+              <PriceIcon sx={{ fontSize: 40, color: '#4CAF50', mb: 1 }} />
+              <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'white' }}>
+                ₹{stats.totalSpent.toLocaleString()}
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                Total Spent
+              </Typography>
+            </StatCard>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <StatCard>
+              <LocationOn sx={{ fontSize: 40, color: '#FF9800', mb: 1 }} />
+              <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'white' }}>
+                {stats.favoriteDestinations}
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                Destinations
+              </Typography>
+            </StatCard>
+          </Grid>
+        </Grid>
+
         {/* Profile Header */}
         <Zoom in={true}>
-          <Card 
-            sx={{ 
-              mb: 3,
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: 3,
-              boxShadow: 6,
-              '&:hover': {
-                boxShadow: 12,
-                transform: 'translateY(-4px)',
-                transition: 'all 0.3s ease'
-              }
-            }}
-          >
+          <GlassCard sx={{ mb: 4, borderRadius: 4 }}>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                <Avatar
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+                <InteractiveAvatar
                   src={user.imageUrl}
-                  sx={{ 
-                    width: 100, 
-                    height: 100,
-                    border: '4px solid',
-                    borderColor: 'primary.main',
-                    boxShadow: 3
-                  }}
                 >
-                  <PersonIcon sx={{ fontSize: 50 }} />
-                </Avatar>
-                <Box>
+                  <PersonIcon sx={{ fontSize: 60, color: 'white' }} />
+                </InteractiveAvatar>
+                <Box sx={{ flex: 1 }}>
                   <Typography 
-                    variant="h3" 
+                    variant="h2" 
                     gutterBottom
                     sx={{
                       fontWeight: 'bold',
-                      background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                      background: 'linear-gradient(45deg, #2196F3, #21CBF3, #FF4081)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
+                      backgroundClip: 'text',
+                      backgroundSize: '300% 300%',
+                      animation: `${gradientShift} 4s ease infinite`,
+                      mb: 1
                     }}
                   >
                     {user.fullName || user.emailAddresses[0].emailAddress}
                   </Typography>
-                  <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+                  <Typography variant="h5" color="rgba(255, 255, 255, 0.9)" sx={{ mb: 1 }}>
                     {user.emailAddresses[0].emailAddress}
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    Member since {new Date(user.createdAt).toLocaleDateString()}
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                    <Chip 
+                      label={`Member since ${new Date(user.createdAt).getFullYear()}`} 
+                      sx={{ 
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        color: 'white',
+                        fontWeight: 'bold'
+                      }} 
+                    />
+                    <Chip 
+                      icon={<StarIcon sx={{ color: '#FFD740 !important' }} />} 
+                      label={`${stats.totalBookings} Trips`} 
+                      sx={{ 
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                        color: 'white',
+                        fontWeight: 'bold'
+                      }} 
+                    />
+                  </Box>
+                </Box>
+                <Box>
+                  <AnimatedButton
+                    variant="contained"
+                    startIcon={<RefreshIcon />}
+                    onClick={fetchUserProfile}
+                    disabled={loading}
+                    sx={{
+                      background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #1976D2, #03A9F4)',
+                      }
+                    }}
+                  >
+                    {loading ? 'Refreshing...' : 'Refresh Data'}
+                  </AnimatedButton>
                 </Box>
               </Box>
             </CardContent>
-          </Card>
+          </GlassCard>
         </Zoom>
 
         {/* Tabs */}
-        <Card 
-          sx={{ 
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: 3,
-            boxShadow: 6
-          }}
-        >
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <GlassCard sx={{ borderRadius: 4 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }}>
             <Tabs 
               value={tabValue} 
               onChange={handleTabChange}
@@ -376,10 +585,16 @@ const UserProfile = () => {
                 '& .MuiTab-root': {
                   fontSize: '1.1rem',
                   fontWeight: 'bold',
-                  py: 2
+                  py: 3,
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  textTransform: 'none'
                 },
                 '& .Mui-selected': {
-                  color: 'primary.main'
+                  color: 'white'
+                },
+                '& .MuiTabs-indicator': {
+                  backgroundColor: '#2196F3',
+                  height: '4px'
                 }
               }}
             >
@@ -387,86 +602,56 @@ const UserProfile = () => {
                 icon={<BookmarkIcon />}
                 label="My Bookings"
                 iconPosition="start"
-                sx={{
-                  '&.Mui-selected': {
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)'
-                  }
-                }}
               />
               <Tab
                 icon={<AddIcon />}
                 label="Add Package"
                 iconPosition="start"
-                sx={{
-                  '&.Mui-selected': {
-                    backgroundColor: 'rgba(33, 150, 243, 0.1)'
-                  }
-                }}
               />
             </Tabs>
           </Box>
 
           {/* My Bookings Tab */}
           <TabPanel value={tabValue} index={0}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h4" component="h2" sx={{ fontWeight: 'bold' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+              <Typography variant="h3" component="h2" sx={{ fontWeight: 'bold', color: 'white' }}>
                 My Bookings ({bookings.length})
               </Typography>
-              <Button
-                variant="contained"
-                startIcon={<RefreshIcon />}
-                onClick={fetchUserProfile}
-                disabled={loading}
-                sx={{
-                  py: 1.5,
-                  px: 3,
-                  borderRadius: 3,
-                  boxShadow: 3,
-                  '&:hover': {
-                    boxShadow: 6,
-                    transform: 'translateY(-2px)',
-                    backgroundColor: 'primary.dark'
-                  },
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                {loading ? 'Refreshing...' : 'Refresh'}
-              </Button>
             </Box>
             {bookings.length === 0 ? (
-              <Box sx={{ textAlign: 'center', py: 6 }}>
+              <Box sx={{ textAlign: 'center', py: 8 }}>
                 <Zoom in={true}>
-                  <BookmarkIcon sx={{ fontSize: 80, color: 'text.secondary', mb: 3 }} />
+                  <Box sx={{ mb: 4 }}>
+                    <BookmarkIcon sx={{ fontSize: 100, color: 'rgba(255, 255, 255, 0.3)', mb: 3 }} />
+                  </Box>
                 </Zoom>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
+                <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: 'white', mb: 2 }}>
                   No bookings yet
                 </Typography>
-                <Typography variant="h6" color="text.secondary" sx={{ mb: 3 }}>
+                <Typography variant="h5" sx={{ color: 'rgba(255, 255, 255, 0.8)', mb: 4 }}>
                   Start exploring our amazing travel packages!
                 </Typography>
-                <Button
-                  variant="contained"
-                  size="large"
-                  href="/"
-                  sx={{
-                    py: 1.5,
-                    px: 4,
-                    fontSize: '1.1rem',
-                    borderRadius: 3,
-                    boxShadow: 3,
-                    '&:hover': {
-                      boxShadow: 6,
-                      transform: 'translateY(-2px)',
-                      backgroundColor: 'primary.dark'
-                    },
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  Browse Hotels
-                </Button>
+                <Zoom in={true} style={{ transitionDelay: '300ms' }}>
+                  <AnimatedButton
+                    variant="contained"
+                    size="large"
+                    href="/"
+                    sx={{
+                      py: 2,
+                      px: 6,
+                      fontSize: '1.2rem',
+                      background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #1976D2, #03A9F4)',
+                      }
+                    }}
+                  >
+                    Browse Hotels
+                  </AnimatedButton>
+                </Zoom>
               </Box>
             ) : (
-              <Grid container spacing={3}>
+              <Grid container spacing={4}>
                 {bookings.map((booking, index) => {
                   // Use the package data directly from the booking if available through the backend
                   // Otherwise fall back to the bookingDetails state
@@ -477,76 +662,73 @@ const UserProfile = () => {
                   
                   return (
                     <Grid item xs={12} md={6} key={booking.id}>
-                      <Zoom in={true} style={{ transitionDelay: `${index * 100}ms` }}>
-                        <Card 
-                          sx={{ 
-                            height: '100%',
-                            borderRadius: 3,
-                            boxShadow: 3,
-                            '&:hover': {
-                              boxShadow: 8,
-                              transform: 'translateY(-4px)',
-                              transition: 'all 0.3s ease'
-                            }
-                          }}
-                        >
+                      <Zoom in={true} style={{ transitionDelay: `${index * 150}ms` }}>
+                        <BookingCard>
                           <CardContent>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                                {isPackageDataAvailable ? packageData.name : `Package #${booking.packageId}`}
-                              </Typography>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+                              <Box>
+                                <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'white', mb: 1 }}>
+                                  {isPackageDataAvailable ? packageData.name : `Package #${booking.packageId}`}
+                                </Typography>
+                                {isPackageDataAvailable && (
+                                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <LocationOn sx={{ fontSize: 18, mr: 1, color: '#FF9800' }} />
+                                    <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+                                      {packageData.location || 'Location not available'}
+                                    </Typography>
+                                  </Box>
+                                )}
+                              </Box>
                               <Chip
+                                icon={getStatusIcon(booking.status)}
                                 label={booking.status}
                                 color={getStatusColor(booking.status)}
                                 size="small"
                                 sx={{
                                   fontWeight: 'bold',
-                                  boxShadow: 1
+                                  boxShadow: 2,
+                                  minWidth: 100
                                 }}
                               />
                             </Box>
                             
                             {isPackageDataAvailable ? (
                               <>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                  <LocationIcon sx={{ fontSize: 18, mr: 1, color: 'text.secondary' }} />
-                                  <Typography variant="body2" color="text.secondary">
-                                    {packageData.location || 'Location not available'}
-                                  </Typography>
-                                </Box>
-                                
                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                  <CalendarIcon sx={{ fontSize: 18, mr: 1, color: 'text.secondary' }} />
-                                  <Typography variant="body2" color="text.secondary">
+                                  <CalendarIcon sx={{ fontSize: 18, mr: 1, color: '#4CAF50' }} />
+                                  <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                                     {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A'} - 
                                     {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}
                                   </Typography>
                                 </Box>
                                 
-                                <Divider sx={{ my: 2 }} />
+                                <Divider sx={{ my: 3, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
                                 
-                                <Grid container spacing={2}>
+                                <Grid container spacing={3}>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
+                                      <HotelIcon sx={{ fontSize: 16, mr: 1, verticalAlign: 'middle' }} />
                                       Guests
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
                                       {booking.guests || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
+                                      <FlightIcon sx={{ fontSize: 16, mr: 1, verticalAlign: 'middle' }} />
                                       Duration
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
                                       {packageData.duration ? `${packageData.duration} days` : 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={12}>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
+                                      <PriceIcon sx={{ fontSize: 16, mr: 1, verticalAlign: 'middle' }} />
                                       Total Price
                                     </Typography>
-                                    <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
+                                    <Typography variant="h4" sx={{ color: '#4CAF50', fontWeight: 'bold' }}>
                                       ₹{booking.totalPrice?.toLocaleString() || ((packageData.price || 0) * (booking.guests || 1)).toLocaleString() || 'N/A'}
                                     </Typography>
                                   </Grid>
@@ -554,7 +736,15 @@ const UserProfile = () => {
                               </>
                             ) : (
                               <Box sx={{ py: 2 }}>
-                                <Alert severity="info" sx={{ mb: 2 }}>
+                                <Alert 
+                                  severity="info" 
+                                  sx={{ 
+                                    mb: 3,
+                                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                                    color: 'white',
+                                    borderRadius: 2
+                                  }}
+                                >
                                   <Typography variant="body2">
                                     Package details are currently unavailable. This might be because the package was removed or there was a connection issue.
                                   </Typography>
@@ -562,27 +752,27 @@ const UserProfile = () => {
                                 
                                 <Grid container spacing={2}>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
                                       Booking Dates
                                     </Typography>
-                                    <Typography variant="body1">
+                                    <Typography variant="body1" sx={{ color: 'white' }}>
                                       {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A'} - 
                                       {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
                                       Guests
                                     </Typography>
-                                    <Typography variant="body1">
+                                    <Typography variant="body1" sx={{ color: 'white' }}>
                                       {booking.guests || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={12}>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1 }}>
                                       Total Price
                                     </Typography>
-                                    <Typography variant="h6" color="primary">
+                                    <Typography variant="h6" sx={{ color: '#4CAF50' }}>
                                       ₹{booking.totalPrice?.toLocaleString() || 'N/A'}
                                     </Typography>
                                   </Grid>
@@ -590,42 +780,40 @@ const UserProfile = () => {
                               </Box>
                             )}
                             
-                            <Box sx={{ mt: 3, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-                              <Button
+                            <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
+                              <AnimatedButton
                                 variant="outlined"
-                                size="small"
+                                size="medium"
                                 href={`/packages/${booking.packageId}`}
                                 sx={{
-                                  borderRadius: 2,
+                                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                                  color: 'white',
                                   '&:hover': {
-                                    transform: 'translateY(-1px)',
-                                    boxShadow: 2
-                                  },
-                                  transition: 'all 0.2s ease'
+                                    borderColor: 'rgba(255, 255, 255, 0.6)',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                  }
                                 }}
                               >
-                                View Package
-                              </Button>
+                                View Details
+                              </AnimatedButton>
                               {booking.status === 'confirmed' && (
-                                <Button
+                                <AnimatedButton
                                   variant="contained"
-                                  size="small"
+                                  size="medium"
                                   color="success"
                                   sx={{
-                                    borderRadius: 2,
+                                    background: 'linear-gradient(45deg, #4CAF50, #8BC34A)',
                                     '&:hover': {
-                                      transform: 'translateY(-1px)',
-                                      boxShadow: 4
-                                    },
-                                    transition: 'all 0.2s ease'
+                                      background: 'linear-gradient(45deg, #388E3C, #689F38)',
+                                    }
                                   }}
                                 >
                                   Download Voucher
-                                </Button>
+                                </AnimatedButton>
                               )}
                             </Box>
                           </CardContent>
-                        </Card>
+                        </BookingCard>
                       </Zoom>
                     </Grid>
                   );
@@ -638,9 +826,9 @@ const UserProfile = () => {
           <TabPanel value={tabValue} index={1}>
             <AddPackage />
           </TabPanel>
-        </Card>
+        </GlassCard>
       </Container>
-    </Background>
+    </>
   );
 };
 
