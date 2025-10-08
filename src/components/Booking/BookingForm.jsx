@@ -203,7 +203,24 @@ const BookingForm = () => {
   }, [id, formData.startDate, formData.endDate, formData.guests]);
 
   const handleInputChange = (field) => (event) => {
-    const value = event?.target?.value ?? event;
+    let value = event?.target?.value ?? event;
+    
+    // Format phone number to remove non-digits and limit to 10 digits
+    if (field === 'phone') {
+      value = value.replace(/\D/g, '').substring(0, 10);
+    }
+    
+    // Format card number with spaces every 4 digits
+    if (field === 'cardNumber') {
+      value = value.replace(/\D/g, '').substring(0, 16);
+      value = value.replace(/(\d{4})/g, '$1 ').trim();
+    }
+    
+    // Limit CVV to 4 digits
+    if (field === 'cvv') {
+      value = value.replace(/\D/g, '').substring(0, 4);
+    }
+    
     setFormData({
       ...formData,
       [field]: value,
@@ -225,6 +242,7 @@ const BookingForm = () => {
       if (!formData.email) newErrors.email = 'Email is required';
       else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email format';
       if (!formData.phone) newErrors.phone = 'Phone number is required';
+      else if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = 'Phone number must be exactly 10 digits';
     }
 
     if (step === 1) {
@@ -235,9 +253,12 @@ const BookingForm = () => {
 
     if (step === 2 && formData.paymentMethod === 'credit_card') {
       if (!formData.cardNumber) newErrors.cardNumber = 'Card number is required';
+      else if (!/^\d{16}$/.test(formData.cardNumber.replace(/\s+/g, ''))) newErrors.cardNumber = 'Card number must be 16 digits';
       if (!formData.cardName) newErrors.cardName = 'Cardholder name is required';
       if (!formData.expiryDate) newErrors.expiryDate = 'Expiry date is required';
+      else if (!/^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(formData.expiryDate)) newErrors.expiryDate = 'Expiry date must be in MM/YY format';
       if (!formData.cvv) newErrors.cvv = 'CVV is required';
+      else if (!/^\d{3,4}$/.test(formData.cvv)) newErrors.cvv = 'CVV must be 3 or 4 digits';
     }
 
     setErrors(newErrors);
