@@ -1029,4 +1029,10 @@ app.listen(PORT, () => {
     console.log(`🔧 Running in ${process.env.NODE_ENV} mode`);
     console.log(`🔧 PORT environment variable: ${process.env.PORT || 'Not set, using default 3003'}`);
   }
+  
+  // Log all environment variables (excluding sensitive ones)
+  console.log('📊 Environment Variables:');
+  console.log(`  NODE_ENV: ${process.env.NODE_ENV || 'Not set'}`);
+  console.log(`  PORT: ${process.env.PORT || 'Not set'}`);
+  console.log(`  CORS origins count: ${Array.isArray(corsOptions.origin) ? corsOptions.origin.length : 'N/A'}`);
 });

@@ -9,6 +9,13 @@
 | `NODE_ENV` | Environment mode | `development` | Yes (set to `production`) |
 | `PORT` | Port to run the server on | `3003` | Yes |
 
+### Optional Variables for Enhanced Functionality
+
+| Variable | Description | Default Value | Required |
+|----------|-------------|---------------|----------|
+| `CORS_ORIGIN` | Additional CORS origins (comma-separated) | None | No |
+| `LOG_LEVEL` | Logging verbosity | `info` | No |
+
 ### Example Render Environment Configuration
 
 In your Render dashboard, set these environment variables:
