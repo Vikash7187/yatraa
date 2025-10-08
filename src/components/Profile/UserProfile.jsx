@@ -62,54 +62,58 @@ const Background = styled(Box)(({ theme }) => ({
   }
 }));
 
-// Minimalist card with subtle shadow
-const MinimalCard = styled(Card)(({ theme }) => ({
+// Compact card with subtle shadow
+const CompactCard = styled(Card)(({ theme }) => ({
   backgroundColor: 'rgba(255, 255, 255, 0.95)',
-  borderRadius: '12px',
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+  borderRadius: '8px',
+  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.08)',
   transition: 'all 0.2s ease',
   '&:hover': {
-    transform: 'translateY(-2px)',
-    boxShadow: '0 6px 25px rgba(0, 0, 0, 0.15)',
+    transform: 'translateY(-1px)',
+    boxShadow: '0 3px 15px rgba(0, 0, 0, 0.12)',
   }
 }));
 
-// Simple avatar with subtle border
-const SimpleAvatar = styled(Avatar)(({ theme }) => ({
-  width: 100,
-  height: 100,
-  border: '2px solid #e0e0e0',
+// Small avatar with subtle border
+const SmallAvatar = styled(Avatar)(({ theme }) => ({
+  width: 80,
+  height: 80,
+  border: '1px solid #e0e0e0',
   backgroundColor: '#f5f5f5',
 }));
 
-// Subtle button with clean design
-const SubtleButton = styled(Button)(({ theme }) => ({
-  borderRadius: '8px',
-  padding: '8px 16px',
+// Compact button with clean design
+const CompactButton = styled(Button)(({ theme }) => ({
+  borderRadius: '6px',
+  padding: '6px 12px',
+  fontSize: '0.875rem',
   fontWeight: '500',
   transition: 'all 0.2s ease',
   backgroundColor: '#f5f5f5',
   color: '#333',
   border: '1px solid #e0e0e0',
+  minHeight: '32px',
   '&:hover': {
     backgroundColor: '#e0e0e0',
     transform: 'translateY(-1px)',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 1px 6px rgba(0, 0, 0, 0.1)',
   }
 }));
 
 // Active button with primary color
 const ActiveButton = styled(Button)(({ theme }) => ({
-  borderRadius: '8px',
-  padding: '8px 16px',
+  borderRadius: '6px',
+  padding: '6px 12px',
+  fontSize: '0.875rem',
   fontWeight: '500',
   transition: 'all 0.2s ease',
   backgroundColor: '#1976d2',
   color: 'white',
+  minHeight: '32px',
   '&:hover': {
     backgroundColor: '#1565c0',
     transform: 'translateY(-1px)',
-    boxShadow: '0 2px 8px rgba(25, 118, 210, 0.3)',
+    boxShadow: '0 1px 6px rgba(25, 118, 210, 0.2)',
   }
 }));
 
@@ -122,7 +126,7 @@ function TabPanel({ children, value, index, ...other }) {
       aria-labelledby={`profile-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
 }
@@ -249,14 +253,14 @@ const UserProfile = () => {
     return (
       <>
         <Background />
-        <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress size={40} sx={{ color: 'white' }} />
+        <Container maxWidth="md" sx={{ py: 3, position: 'relative', zIndex: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+            <CircularProgress size={32} sx={{ color: 'white' }} />
             <Typography 
-              variant="h5" 
+              variant="body1" 
               sx={{ 
                 color: 'white', 
-                ml: 2,
+                ml: 1.5,
                 textShadow: '0 1px 2px rgba(0,0,0,0.5)'
               }}
             >
@@ -272,33 +276,33 @@ const UserProfile = () => {
     return (
       <>
         <Background />
-        <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3 }}>
+        <Container maxWidth="md" sx={{ py: 3, position: 'relative', zIndex: 3 }}>
           <Fade in={true}>
             <Alert 
               severity="warning" 
               sx={{ 
-                mb: 3,
+                mb: 2,
                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                maxWidth: 600,
+                maxWidth: 500,
                 mx: 'auto',
-                borderRadius: 2,
-                boxShadow: 2
+                borderRadius: 1.5,
+                boxShadow: 1
               }}
             >
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="subtitle1" gutterBottom>
                 Please log in to view your profile
               </Typography>
-              <Typography>
+              <Typography variant="body2">
                 You will be redirected to the login page.
               </Typography>
             </Alert>
           </Fade>
-          <Box sx={{ textAlign: 'center', mt: 3 }}>
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Zoom in={true}>
               <ActiveButton 
                 variant="contained" 
                 href="/login"
-                size="medium"
+                size="small"
               >
                 Go to Login
               </ActiveButton>
@@ -313,14 +317,14 @@ const UserProfile = () => {
     return (
       <>
         <Background />
-        <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <CircularProgress size={40} sx={{ color: 'white' }} />
+        <Container maxWidth="md" sx={{ py: 3, position: 'relative', zIndex: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+            <CircularProgress size={32} sx={{ color: 'white' }} />
             <Typography 
-              variant="h5" 
+              variant="body1" 
               sx={{ 
                 color: 'white', 
-                ml: 2,
+                ml: 1.5,
                 textShadow: '0 1px 2px rgba(0,0,0,0.5)'
               }}
             >
@@ -335,27 +339,29 @@ const UserProfile = () => {
   return (
     <>
       <Background />
-      <Container maxWidth="lg" sx={{ py: 4, position: 'relative', zIndex: 3, minHeight: '100vh' }}>
+      <Container maxWidth="md" sx={{ py: 3, position: 'relative', zIndex: 3, minHeight: '100vh' }}>
         {/* Success Alert for New Bookings */}
         <Fade in={showBookingSuccess}>
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 2 }}>
             {showBookingSuccess && (
               <Alert 
                 severity="success" 
                 onClose={() => setShowBookingSuccess(false)}
                 sx={{ 
-                  mb: 3,
+                  mb: 2,
                   backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  border: '1px solid #4caf50'
+                  borderRadius: 1.5,
+                  boxShadow: 2,
+                  border: '1px solid #4caf50',
+                  py: 1,
+                  px: 1.5
                 }}
               >
-                <Typography variant="h6" gutterBottom sx={{ fontWeight: '500' }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: '500' }}>
                   Booking Confirmed Successfully!
                 </Typography>
-                <Typography>
-                  {location.state?.message || 'Your booking has been confirmed. You can view all your bookings below.'}
+                <Typography variant="body2">
+                  {location.state?.message || 'Your booking has been confirmed.'}
                 </Typography>
               </Alert>
             )}
@@ -364,68 +370,74 @@ const UserProfile = () => {
 
         {/* Profile Header */}
         <Zoom in={true}>
-          <MinimalCard sx={{ mb: 3 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, flexWrap: 'wrap' }}>
-                <SimpleAvatar
+          <CompactCard sx={{ mb: 2 }}>
+            <CardContent sx={{ p: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                <SmallAvatar
                   src={user.imageUrl}
                 >
-                  <PersonIcon sx={{ fontSize: 40 }} />
-                </SimpleAvatar>
+                  <PersonIcon sx={{ fontSize: 32 }} />
+                </SmallAvatar>
                 <Box sx={{ flex: 1 }}>
                   <Typography 
-                    variant="h3" 
+                    variant="h5" 
                     gutterBottom
                     sx={{
                       fontWeight: '600',
                       color: '#333',
-                      mb: 1
+                      mb: 0.5,
+                      fontSize: '1.25rem'
                     }}
                   >
                     {user.fullName || user.emailAddresses[0].emailAddress}
                   </Typography>
-                  <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                     {user.emailAddresses[0].emailAddress}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                     <Chip 
                       label={`Member since ${new Date(user.createdAt).getFullYear()}`} 
+                      size="small"
                       sx={{ 
                         backgroundColor: '#f5f5f5',
                         color: '#666',
                         fontWeight: '500',
-                        borderRadius: '6px'
+                        borderRadius: '4px',
+                        height: '20px'
                       }} 
                     />
                     <Chip 
-                      icon={<StarIcon sx={{ color: '#ffb300 !important', fontSize: '16px !important' }} />} 
+                      icon={<StarIcon sx={{ color: '#ffb300 !important', fontSize: '14px !important' }} />} 
                       label={`${bookings.length} Trips`} 
+                      size="small"
                       sx={{ 
                         backgroundColor: '#f5f5f5',
                         color: '#666',
                         fontWeight: '500',
-                        borderRadius: '6px'
+                        borderRadius: '4px',
+                        height: '20px'
                       }} 
                     />
                   </Box>
                 </Box>
                 <Box>
-                  <SubtleButton
+                  <CompactButton
                     variant="outlined"
-                    startIcon={<RefreshIcon />}
+                    startIcon={<RefreshIcon sx={{ fontSize: '16px !important' }} />}
                     onClick={fetchUserProfile}
                     disabled={loading}
+                    size="small"
                   >
                     {loading ? 'Refreshing...' : 'Refresh'}
-                  </SubtleButton>
+                  </CompactButton>
                 </Box>
               </Box>
             </CardContent>
-          </MinimalCard>
+          </CompactCard>
         </Zoom>
 
         {/* Tabs */}
-        <MinimalCard>
+        <CompactCard>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs 
               value={tabValue} 
@@ -433,28 +445,30 @@ const UserProfile = () => {
               variant="fullWidth"
               sx={{
                 '& .MuiTab-root': {
-                  fontSize: '1rem',
+                  fontSize: '0.875rem',
                   fontWeight: '500',
-                  py: 2,
+                  py: 1.5,
+                  px: 1,
                   color: '#666',
-                  textTransform: 'none'
+                  textTransform: 'none',
+                  minHeight: '40px'
                 },
                 '& .Mui-selected': {
                   color: '#1976d2'
                 },
                 '& .MuiTabs-indicator': {
                   backgroundColor: '#1976d2',
-                  height: '3px'
+                  height: '2px'
                 }
               }}
             >
               <Tab
-                icon={<BookmarkIcon />}
+                icon={<BookmarkIcon sx={{ fontSize: '16px !important' }} />}
                 label="My Bookings"
                 iconPosition="start"
               />
               <Tab
-                icon={<AddIcon />}
+                icon={<AddIcon sx={{ fontSize: '16px !important' }} />}
                 label="Add Package"
                 iconPosition="start"
               />
@@ -463,28 +477,28 @@ const UserProfile = () => {
 
           {/* My Bookings Tab */}
           <TabPanel value={tabValue} index={0}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h4" component="h2" sx={{ fontWeight: '600', color: '#333' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6" component="h2" sx={{ fontWeight: '600', color: '#333', fontSize: '1.125rem' }}>
                 My Bookings ({bookings.length})
               </Typography>
             </Box>
             {bookings.length === 0 ? (
-              <Box sx={{ textAlign: 'center', py: 6 }}>
+              <Box sx={{ textAlign: 'center', py: 4 }}>
                 <Zoom in={true}>
-                  <Box sx={{ mb: 3 }}>
-                    <BookmarkIcon sx={{ fontSize: 60, color: '#bdbdbd', mb: 2 }} />
+                  <Box sx={{ mb: 2 }}>
+                    <BookmarkIcon sx={{ fontSize: 40, color: '#bdbdbd', mb: 1 }} />
                   </Box>
                 </Zoom>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: '500', color: '#333', mb: 1 }}>
+                <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: '500', color: '#333', mb: 1 }}>
                   No bookings yet
                 </Typography>
-                <Typography variant="body1" sx={{ color: '#666', mb: 3 }}>
+                <Typography variant="body2" sx={{ color: '#666', mb: 2 }}>
                   Start exploring our amazing travel packages!
                 </Typography>
-                <Zoom in={true} style={{ transitionDelay: '200ms' }}>
+                <Zoom in={true} style={{ transitionDelay: '150ms' }}>
                   <ActiveButton
                     variant="contained"
-                    size="medium"
+                    size="small"
                     href="/"
                   >
                     Browse Hotels
@@ -492,7 +506,7 @@ const UserProfile = () => {
                 </Zoom>
               </Box>
             ) : (
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 {bookings.map((booking, index) => {
                   // Use the package data directly from the booking if available through the backend
                   // Otherwise fall back to the bookingDetails state
@@ -503,18 +517,18 @@ const UserProfile = () => {
                   
                   return (
                     <Grid item xs={12} md={6} key={booking.id}>
-                      <Zoom in={true} style={{ transitionDelay: `${index * 100}ms` }}>
-                        <MinimalCard sx={{ height: '100%' }}>
-                          <CardContent>
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                      <Zoom in={true} style={{ transitionDelay: `${index * 80}ms` }}>
+                        <CompactCard sx={{ height: '100%' }}>
+                          <CardContent sx={{ p: 1.5 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
                               <Box>
-                                <Typography variant="h6" sx={{ fontWeight: '600', color: '#333', mb: 1 }}>
+                                <Typography variant="body1" sx={{ fontWeight: '600', color: '#333', mb: 0.5, fontSize: '0.95rem' }}>
                                   {isPackageDataAvailable ? packageData.name : `Package #${booking.packageId}`}
                                 </Typography>
                                 {isPackageDataAvailable && (
                                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <LocationIcon sx={{ fontSize: 16, mr: 1, color: '#757575' }} />
-                                    <Typography variant="body2" color="text.secondary">
+                                    <LocationIcon sx={{ fontSize: 14, mr: 0.5, color: '#757575' }} />
+                                    <Typography variant="caption" color="text.secondary">
                                       {packageData.location || 'Location not available'}
                                     </Typography>
                                   </Box>
@@ -527,88 +541,92 @@ const UserProfile = () => {
                                 size="small"
                                 sx={{
                                   fontWeight: '500',
-                                  borderRadius: '4px'
+                                  borderRadius: '3px',
+                                  height: '20px',
+                                  fontSize: '0.65rem'
                                 }}
                               />
                             </Box>
                             
                             {isPackageDataAvailable ? (
                               <>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                  <CalendarIcon sx={{ fontSize: 16, mr: 1, color: '#757575' }} />
-                                  <Typography variant="body2" color="text.secondary">
+                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+                                  <CalendarIcon sx={{ fontSize: 14, mr: 0.5, color: '#757575' }} />
+                                  <Typography variant="caption" color="text.secondary">
                                     {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A'} - 
                                     {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}
                                   </Typography>
                                 </Box>
                                 
-                                <Divider sx={{ my: 2 }} />
+                                <Divider sx={{ my: 1.5 }} />
                                 
-                                <Grid container spacing={2}>
+                                <Grid container spacing={1.5}>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 0.25, display: 'block' }}>
                                       Guests
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontWeight: '500', color: '#333' }}>
+                                    <Typography variant="body2" sx={{ fontWeight: '500', color: '#333' }}>
                                       {booking.guests || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 0.25, display: 'block' }}>
                                       Duration
                                     </Typography>
-                                    <Typography variant="body1" sx={{ fontWeight: '500', color: '#333' }}>
+                                    <Typography variant="body2" sx={{ fontWeight: '500', color: '#333' }}>
                                       {packageData.duration ? `${packageData.duration} days` : 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={12}>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 0.25, display: 'block' }}>
                                       Total Price
                                     </Typography>
-                                    <Typography variant="h6" sx={{ fontWeight: '600', color: '#1976d2' }}>
+                                    <Typography variant="body1" sx={{ fontWeight: '600', color: '#1976d2' }}>
                                       ₹{booking.totalPrice?.toLocaleString() || ((packageData.price || 0) * (booking.guests || 1)).toLocaleString() || 'N/A'}
                                     </Typography>
                                   </Grid>
                                 </Grid>
                               </>
                             ) : (
-                              <Box sx={{ py: 2 }}>
+                              <Box sx={{ py: 1 }}>
                                 <Alert 
                                   severity="info" 
                                   sx={{ 
-                                    mb: 2,
+                                    mb: 1.5,
                                     backgroundColor: '#e3f2fd',
-                                    borderRadius: 1
+                                    borderRadius: 1,
+                                    py: 0.5,
+                                    px: 1
                                   }}
                                 >
-                                  <Typography variant="body2">
-                                    Package details are currently unavailable.
+                                  <Typography variant="caption">
+                                    Package details unavailable.
                                   </Typography>
                                 </Alert>
                                 
-                                <Grid container spacing={2}>
+                                <Grid container spacing={1.5}>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 0.25, display: 'block' }}>
                                       Booking Dates
                                     </Typography>
-                                    <Typography variant="body1">
+                                    <Typography variant="body2">
                                       {booking.startDate ? new Date(booking.startDate).toLocaleDateString() : 'N/A'} - 
                                       {booking.endDate ? new Date(booking.endDate).toLocaleDateString() : 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={6}>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 0.25, display: 'block' }}>
                                       Guests
                                     </Typography>
-                                    <Typography variant="body1">
+                                    <Typography variant="body2">
                                       {booking.guests || 'N/A'}
                                     </Typography>
                                   </Grid>
                                   <Grid item xs={12}>
-                                    <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+                                    <Typography variant="caption" color="text.secondary" sx={{ mb: 0.25, display: 'block' }}>
                                       Total Price
                                     </Typography>
-                                    <Typography variant="h6" sx={{ color: '#1976d2' }}>
+                                    <Typography variant="body1" sx={{ color: '#1976d2' }}>
                                       ₹{booking.totalPrice?.toLocaleString() || 'N/A'}
                                     </Typography>
                                   </Grid>
@@ -616,26 +634,28 @@ const UserProfile = () => {
                               </Box>
                             )}
                             
-                            <Box sx={{ mt: 3, display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-                              <SubtleButton
+                            <Box sx={{ mt: 2, display: 'flex', gap: 0.75, justifyContent: 'flex-end' }}>
+                              <CompactButton
                                 variant="outlined"
                                 size="small"
                                 href={`/packages/${booking.packageId}`}
+                                sx={{ p: '4px 8px', fontSize: '0.75rem' }}
                               >
-                                View Details
-                              </SubtleButton>
+                                View
+                              </CompactButton>
                               {booking.status === 'confirmed' && (
                                 <ActiveButton
                                   variant="contained"
                                   size="small"
                                   color="success"
+                                  sx={{ p: '4px 8px', fontSize: '0.75rem' }}
                                 >
-                                  Download Voucher
+                                  Voucher
                                 </ActiveButton>
                               )}
                             </Box>
                           </CardContent>
-                        </MinimalCard>
+                        </CompactCard>
                       </Zoom>
                     </Grid>
                   );
@@ -648,7 +668,7 @@ const UserProfile = () => {
           <TabPanel value={tabValue} index={1}>
             <AddPackage />
           </TabPanel>
-        </MinimalCard>
+        </CompactCard>
       </Container>
     </>
   );
