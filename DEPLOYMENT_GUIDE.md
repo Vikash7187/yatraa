@@ -96,6 +96,7 @@ Once deployed, note the URL provided by Render (it will be something like `https
 1. **CORS Errors**: Make sure your frontend URL is in the CORS origins list in `server.js`
 2. **Environment Variables Not Loading**: Check that they're set correctly in your deployment platform
 3. **API Connection Failures**: Verify the `VITE_API_BASE_URL` is set correctly in Vercel
+4. **Missing Dependencies**: Ensure all required dependencies are in the backend package.json (like date-fns)
 
 ### Checking Logs
 
@@ -117,3 +118,4 @@ If you encounter issues:
 1. Check the deployment logs in both platforms
 2. Verify all environment variables are set correctly
 3. Ensure CORS is configured properly for your frontend domain
+4. Make sure all dependencies are properly listed in backend package.json
