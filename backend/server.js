@@ -612,6 +612,8 @@ const corsOptions = {
       'https://yatraa-lilac.vercel.app',
       // Allow any vercel.app domain (for flexibility)
       'https://*.vercel.app',
+      // Render deployment domains
+      'https://*.onrender.com',
       // Add your specific Vercel domain here once you have it
     ];
     
