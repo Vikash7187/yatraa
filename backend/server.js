@@ -1023,4 +1023,10 @@ app.listen(PORT, () => {
   console.log(`🔍 Check availability endpoint: http://localhost:${PORT}/api/check-availability`);
   console.log(`📅 Available dates endpoint: http://localhost:${PORT}/api/available-dates`);
   console.log(`🔗 CORS enabled for origins: ${corsOptions.origin ? corsOptions.origin.toString() : 'All origins allowed'}`);
+  
+  // Production environment info
+  if (process.env.NODE_ENV === 'production') {
+    console.log(`🔧 Running in ${process.env.NODE_ENV} mode`);
+    console.log(`🔧 PORT environment variable: ${process.env.PORT || 'Not set, using default 3003'}`);
+  }
 });
